@@ -1,0 +1,258 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>synyx-plugin</groupId>
+  <artifactId>synyx-plugin</artifactId>
+  <packaging>pom</packaging>
+  <name>Synyx plugin</name>
+  <version>0.1-SNAPSHOT</version>
+  <description>Simple plugin infrastructure</description>
+  
+  <organization>
+		<name>Synyx GmbH &amp; Co. KG</name>
+		<url>http://www.synyx.org</url>
+	</organization>
+	
+  <modules>
+  	<module>plugin-core</module>
+  	<module>plugin-metadata</module>
+  </modules>
+  
+  <developers>
+		<developer>
+			<id>gierke_cvs</id>
+			<name>Oliver Gierke</name>
+			<email>gierke@synyx.de</email>
+			<organization>Synyx GmbH &amp; Co. KG</organization>
+			<organizationUrl>http://www.synyx.de</organizationUrl>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Package JavaDocs -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- 
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>
+				<archive>
+					<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+				</archive>
+			</configuration>
+		      </plugin>
+ 
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>configplugin</classifier>
+							<includes>
+								
+								<include>**/*.handlers</include>
+								<include>**/*.schemas</include>
+								<include>**/config/*</include>
+								<include>**/domain/*</include>
+								<include>**/dao/**/*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+-->
+
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<version>2.0.8</version>
+				<executions>
+		          <execution>
+		            <goals>
+		              <goal>generate-html</goal>
+		              <goal>generate-pdf</goal>
+		            </goals>
+		            <phase>pre-site</phase>
+		          </execution>
+		        </executions>
+						
+				<dependencies>
+					<dependency>
+						<groupId>org.docbook</groupId>
+						<artifactId>docbook-xml</artifactId>
+						<version>4.4</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<sourceDirectory>
+						${basedir}/src/doc
+					</sourceDirectory>
+					<targetDirectory>
+						${basedir}/target/doc
+					</targetDirectory>
+
+					<foCustomization>
+						src/doc/layout/pdf/fo-pdf.xsl
+					</foCustomization>
+					
+					<htmlCustomization>
+						src/doc/layout/html/fo-html.xsl
+					</htmlCustomization>
+					
+					<htmlStylesheet>
+						resources/styles.css
+					</htmlStylesheet>
+					<chunkedOutput>true</chunkedOutput>
+
+					<fonts>
+						<font>
+							<name>StellaLining</name>
+							<style>normal</style>
+							<weight>normal</weight>
+							<embedFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiR__.ttf
+							</embedFile>
+							<metricsFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiR__.xml
+							</metricsFile>
+						</font>
+						<font>
+							<name>StellaLining</name>
+							<style>italic</style>
+							<weight>normal</weight>
+							<embedFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiI__.ttf
+							</embedFile>
+							<metricsFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiI__.xml
+							</metricsFile>
+						</font>
+						<font>
+							<name>StellaLining</name>
+							<style>normal</style>
+							<weight>bold</weight>
+							<embedFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiB__.ttf
+							</embedFile>
+							<metricsFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiB__.xml
+							</metricsFile>
+						</font>
+						<font>
+							<name>StellaLining</name>
+							<style>italic</style>
+							<weight>bold</weight>
+							<embedFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiBI_.ttf
+							</embedFile>
+							<metricsFile>
+								${basedir}/src/doc/layout/pdf/fonts/SteLiBI_.xml
+							</metricsFile>
+						</font>
+					</fonts>
+
+					<preProcess>
+						<copy todir="${basedir}/target/doc/images">
+							<!-- Copy layout images -->
+							<fileset dir="${basedir}/src/doc/layout/pdf/images" />
+							<fileset dir="${basedir}/src/doc/layout/html/images" />
+							<!-- Copy content images -->
+							<fileset dir="${basedir}/src/doc/images" />
+						</copy>
+						<copy todir="${basedir}/target/doc/resources">
+							<fileset dir="${basedir}/src/doc/layout/html/resources" />
+						</copy>
+					</preProcess>
+
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<targetJdk>1.5</targetJdk>
+				</configuration>
+			</plugin>
+		      
+		    <plugin>
+		    	<groupId>org.codehaus.mojo</groupId>
+			    <artifactId>javancss-maven-plugin</artifactId>
+			    <version>2.0-beta-2</version>
+		    </plugin>
+		    
+		    <plugin>
+		    	<groupId>org.apache.maven.plugins</groupId>
+		    	<artifactId>maven-release-plugin</artifactId>
+		    	<configuration>
+		    		<preparationGoals>clean verify docbkx:generate-pdf site:site</preparationGoals>
+		    		<scmCommentPrefix> * [maven-release-plugin] - </scmCommentPrefix>
+		    	</configuration>
+		    </plugin>
+		    
+					
+		</plugins>
+	</reporting>
+	
+</project>
