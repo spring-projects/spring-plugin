@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns="http://www.synyx.org/schema/plugin"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	targetNamespace="http://www.synyx.org/schema/plugin"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/tool"/>
+	
+
+	<xsd:element name="list" type="pluginType">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports identifier="@id" type="java.util.List" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>
+	
+	<xsd:element name="registry" type="pluginType">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports identifier="@id" type="org.synyx.plugin.core.PluginRegistry" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>
+	
+	<xsd:complexType name="pluginType">
+		<xsd:attribute name="id" type="xsd:string" />
+		<xsd:attribute name="class" type="classType" />
+	</xsd:complexType>
+	
+	<xsd:simpleType name="classType">
+		<xsd:annotation>
+			<xsd:appinfo>
+                <tool:annotation kind="direct">
+                     <tool:expected-type type="java.lang.Class" />
+                 </tool:annotation>
+             </xsd:appinfo>
+		</xsd:annotation>
+		<xsd:union memberTypes="xsd:string" />
+	</xsd:simpleType>
+
+</xsd:schema>
