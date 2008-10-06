@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:plugin="http://www.synyx.org/schema/plugin"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.synyx.org/schema/plugin http://www.synyx.org/schema/plugin/plugin-config.xsd">
+
+	<plugin:list id="foo" class="org.synyx.plugin.core.SamplePlugin" />
+	
+	<plugin:registry id="bar" class="org.synyx.plugin.core.SamplePlugin" />
+	
+	<bean class="org.synyx.plugin.core.SamplePluginImplementation" />
+
+</beans>
