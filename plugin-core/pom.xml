@@ -1,50 +1,57 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.synyx.plugin</groupId>
-  <artifactId>plugin-core</artifactId>
-  <name>Core plugin</name>
-  <version>0.1-SNAPSHOT</version>
-  
-  <properties>
-  	<spring-version>2.5.5</spring-version>
-  </properties>
-  
-  <dependencies>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-aop</artifactId>
-  		<version>${spring-version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-context</artifactId>
-  		<version>${spring-version}</version>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-test</artifactId>
-  		<version>${spring-version}</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.4</version>
-  		<scope>test</scope>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>log4j</groupId>
-  		<artifactId>log4j</artifactId>
-  		<version>1.2.15</version>
-  		<scope>test</scope>
-  	</dependency>
-  
-  </dependencies>
-  <description>Core plugin infrastructure</description>
-  
-  <build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.synyx.plugin</groupId>
+	<artifactId>plugin-core</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>Plugin Core</name>
+	<description>Core plugin infrastructure</description>
+
+	<parent>
+		<artifactId>synyx-plugin</artifactId>
+		<groupId>org.synyx.plugin</groupId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<spring-version>[2.5,3.0)</spring-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
