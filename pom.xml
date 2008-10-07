@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>synyx-plugin</groupId>
+  <groupId>org.synyx.plugin</groupId>
   <artifactId>synyx-plugin</artifactId>
   <packaging>pom</packaging>
   <name>Synyx plugin</name>
@@ -16,6 +16,7 @@
   	<module>plugin-core</module>
   	<module>plugin-metadata</module>
   </modules>
+  <inceptionYear>2008</inceptionYear>
   
   <developers>
 		<developer>
