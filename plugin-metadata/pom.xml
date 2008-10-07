@@ -1,34 +1,31 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.synyx.plugin</groupId>
-  <artifactId>plugin-metadata</artifactId>
-  <name>Extension package for metadata based plugins</name>
-  <version>0.1-SNAPSHOT</version>
-  
-  <dependencies>
-  	<dependency>
-  		<groupId>org.synyx.plugin</groupId>
-  		<artifactId>plugin-core</artifactId>
-  		<version>0.1-SNAPSHOT</version>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>commons-lang</groupId>
-  		<artifactId>commons-lang</artifactId>
-  		<version>2.4</version>
-  	</dependency>
-  </dependencies>
-  
-  <build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.synyx.plugin</groupId>
+	<artifactId>plugin-metadata</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>Plugin metadata</name>
+	<description>Extension package for metadata based plugins</description>
 	
+	<parent>
+		<artifactId>synyx-plugin</artifactId>
+		<groupId>org.synyx.plugin</groupId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.synyx.plugin</groupId>
+			<artifactId>plugin-core</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>
+	</dependencies>
+
 </project>
