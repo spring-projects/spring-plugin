@@ -1,6 +1,6 @@
 package org.synyx.plugin.core.support;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +8,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -20,11 +17,30 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.ManagedList;
-import org.springframework.util.StringUtils;
 import org.synyx.plugin.core.PluginRegistry;
 
 
 /**
+ * Simple {@link BeanFactoryPostProcessor} to autocreate lists of the configured
+ * {@code lists} property. The post processor will register
+ * {@link ListFactoryBean}s for each list named with the given key containing
+ * all beans of the {@link org.springframework.context.ApplicationContext}
+ * implementing the interface defines as lists value. E.g.:
+ * 
+ * <pre>
+ * &lt;bean class=&quot;org.synyx.plugin.core.support.BeanListFactoryPostProcessor&quot;&gt;
+ *    &lt;property name=&quot;lists&quot;&gt;
+ *       &lt;map&gt;
+ *          &lt;entry key=&quot;beanName&quot; value=&quot;org.synyx.plugin.core.Plugin&quot; /&gt;
+ *       &lt;/map&gt;
+ *    &lt;/property&gt;
+ * &lt;/bean&gt;
+ * </pre>
+ * 
+ * This would register all Spring beans implementing the
+ * {@link org.synyx.plugin.core.Plugin} interface in a list bean with the name
+ * {@coder beanName}.
+ * 
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class BeanListBeanFactoryPostProcessor implements
@@ -34,6 +50,8 @@ public class BeanListBeanFactoryPostProcessor implements
             LogFactory.getLog(BeanListBeanFactoryPostProcessor.class);
 
     private Map<String, Class<?>> lists = new HashMap<String, Class<?>>();
+
+    private boolean initFactories = false;
 
 
     /**
@@ -47,6 +65,23 @@ public class BeanListBeanFactoryPostProcessor implements
     public void setLists(Map<String, Class<?>> lists) {
 
         this.lists = lists;
+    }
+
+
+    /**
+     * Setter to activate {@link org.springframework.beans.factory.FactoryBean}
+     * scanning. This allows auto-registration of factory bean targets (the
+     * objects actually created by the factory bean} but comes with the drawback
+     * of having to initialize those factories eagerly. This can cause
+     * unpredictable behaviour if other {@link BeanFactoryPostProcessor}s would
+     * have been applied to these factories. Defaults to {@value #initFactories}
+     * .
+     * 
+     * @param initFactories the allowEagerInit to set
+     */
+    public void setInitFactories(boolean initFactories) {
+
+        this.initFactories = initFactories;
     }
 
 
@@ -161,7 +196,10 @@ public class BeanListBeanFactoryPostProcessor implements
     protected List<RuntimeBeanReference> getBeanReferencesOfType(
             ConfigurableListableBeanFactory beanFactory, Class<?> type) {
 
-        List<String> beanNames = getBeanCandidates(beanFactory, type);
+        // Lookup bean candidates either via Spring or manually
+        List<String> beanNames =
+                Arrays.asList(beanFactory.getBeanNamesForType(type, true,
+                        initFactories));
 
         List<RuntimeBeanReference> beanReferences =
                 new ManagedList(beanNames.size());
@@ -175,63 +213,5 @@ public class BeanListBeanFactoryPostProcessor implements
         }
 
         return (List<RuntimeBeanReference>) beanReferences;
-    }
-
-
-    /**
-     * Looks up candidate beans for the given type from the {@link BeanFactory}.
-     * Does <em>not</em> use Spring type lookup facilities as this initializes
-     * {@link FactoryBean}s eagerly breaking possible registered
-     * {@link BeanPostProcessor}s.
-     * <p>
-     * We traverse the entire {@link BeanFactory} hierarchy to lookup beans.
-     * 
-     * @param beanFactory
-     * @param type
-     * @return
-     */
-    private List<String> getBeanCandidates(
-            ConfigurableListableBeanFactory beanFactory, Class<?> type) {
-
-        List<String> candidates = new ArrayList<String>();
-
-        // None given or most top bean factory reached?
-        if (null == beanFactory) {
-            return candidates;
-        }
-
-        String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
-
-        for (String beanName : beanDefinitionNames) {
-
-            BeanDefinition beanDefinition =
-                    beanFactory.getBeanDefinition(beanName);
-
-            // No bean class available at all
-            if (!StringUtils.hasText(beanDefinition.getBeanClassName())) {
-                continue;
-            }
-
-            try {
-                Class<?> beanClass =
-                        Class.forName(beanDefinition.getBeanClassName());
-
-                if (type.isAssignableFrom(beanClass)) {
-                    candidates.add(beanName);
-                }
-
-            } catch (ClassNotFoundException e) {
-                continue;
-            }
-        }
-
-        // Traverse parent bean factories
-        if (beanFactory.getParentBeanFactory() instanceof ConfigurableListableBeanFactory) {
-            candidates.addAll(getBeanCandidates(
-                    (ConfigurableListableBeanFactory) beanFactory
-                            .getParentBeanFactory(), type));
-        }
-
-        return candidates;
     }
 }
