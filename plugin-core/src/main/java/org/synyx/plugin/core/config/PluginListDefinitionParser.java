@@ -3,6 +3,7 @@ package org.synyx.plugin.core.config;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 
@@ -42,6 +43,24 @@ public class PluginListDefinitionParser extends
         map.put(element.getAttribute("id"), element.getAttribute("class"));
 
         builder.addPropertyValue("lists", map);
+
+        String initFactories = element.getAttribute("init-factories");
+
+        if (StringUtils.hasText(initFactories)) {
+            builder.addPropertyValue("allowEagerInit", initFactories);
+        }
     }
 
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.springframework.beans.factory.xml.AbstractBeanDefinitionParser#
+     * shouldGenerateId()
+     */
+    @Override
+    protected boolean shouldGenerateId() {
+
+        return true;
+    }
 }
