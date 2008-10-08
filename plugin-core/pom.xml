@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.synyx.plugin</groupId>
 	<artifactId>plugin-core</artifactId>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 
 	<name>Plugin Core</name>
 	<description>Core plugin infrastructure</description>
@@ -10,7 +10,7 @@
 	<parent>
 		<artifactId>synyx-plugin</artifactId>
 		<groupId>org.synyx.plugin</groupId>
-		<version>0.1</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
