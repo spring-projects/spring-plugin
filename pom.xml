@@ -256,4 +256,30 @@
 		</plugins>
 	</reporting>
 	
+	<scm>
+		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin</url>
+		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin</connection>
+		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synys-plugin</developerConnection>
+	</scm>
+	
+	<ciManagement>
+		<system>Hudson</system>
+	</ciManagement>
+	
+	<issueManagement>
+		<system>Trac</system>
+		<url>http://trac.synyx.org/synyx-plugin</url>
+	</issueManagement>
+	
+	<distributionManagement>
+		<site>
+			<id>trac.synyx.de</id>
+			<url>scp://trac.synyx.de:24/home/trac/instances/minos2/htdocs/mvn</url>
+		</site>
+		<repository>
+			<id>maven2.synyx.de</id>
+			<url>scp://maven2.synyx.de:24/home/mvn/public_html/repository</url>
+		</repository>
+	</distributionManagement>
+	
 </project>
