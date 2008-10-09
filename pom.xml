@@ -4,7 +4,7 @@
   <artifactId>synyx-plugin</artifactId>
   <packaging>pom</packaging>
   <name>Synyx plugin</name>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <description>Simple plugin infrastructure</description>
   
   <organization>
@@ -114,9 +114,9 @@
 	</reporting>
 	
 	<scm>
-		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin/tags/synyx-plugin-0.1</url>
-		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin/tags/synyx-plugin-0.1</connection>
-		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synyx-plugin/tags/synyx-plugin-0.1</developerConnection>
+		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin</url>
+		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin</connection>
+		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synyx-plugin</developerConnection>
 	</scm>
 	
 	<ciManagement>
