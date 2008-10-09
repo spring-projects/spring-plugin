@@ -70,43 +70,6 @@
 				</executions>
 			</plugin>
 			
-			<!-- 
-			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<configuration>
-				<archive>
-					<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-				</archive>
-			</configuration>
-		      </plugin>
- 
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<classifier>configplugin</classifier>
-							<includes>
-								
-								<include>**/*.handlers</include>
-								<include>**/*.schemas</include>
-								<include>**/config/*</include>
-								<include>**/domain/*</include>
-								<include>**/dao/**/*</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
--->
-
 			<plugin>
 				<groupId>com.agilejava.docbkx</groupId>
 				<artifactId>docbkx-maven-plugin</artifactId>
@@ -257,9 +220,9 @@
 	</reporting>
 	
 	<scm>
-		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin/tags/synyx-plugin-0.1</url>
-		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin/tags/synyx-plugin-0.1</connection>
-		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synys-plugin/tags/synyx-plugin-0.1</developerConnection>
+		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin</url>
+		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin</connection>
+		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synyx-plugin</developerConnection>
 	</scm>
 	
 	<ciManagement>
