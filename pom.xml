@@ -4,7 +4,7 @@
   <artifactId>synyx-plugin</artifactId>
   <packaging>pom</packaging>
   <name>Synyx plugin</name>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.1-SNAPSHOT</version>
   <description>Simple plugin infrastructure</description>
   
   <organization>

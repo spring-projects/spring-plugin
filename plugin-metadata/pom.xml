@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.synyx.plugin</groupId>
 	<artifactId>plugin-metadata</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 
 	<name>Plugin metadata</name>
 	<description>Extension package for metadata based plugins</description>
@@ -10,14 +10,14 @@
 	<parent>
 		<artifactId>synyx-plugin</artifactId>
 		<groupId>org.synyx.plugin</groupId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.synyx.plugin</groupId>
 			<artifactId>plugin-core</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
