@@ -131,7 +131,7 @@
 	<distributionManagement>
 		<site>
 			<id>trac.synyx.de</id>
-			<url>scp://trac.synyx.de:24/home/trac/instances/minos2/htdocs/mvn</url>
+			<url>scp://trac.synyx.de:24/home/trac/opensource/synyx-plugin/htdocs/mvn</url>
 		</site>
 		<repository>
 			<id>maven2.synyx.de</id>
