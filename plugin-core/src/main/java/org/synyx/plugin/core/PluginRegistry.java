@@ -20,11 +20,24 @@ public class PluginRegistry<T extends Plugin<S>, S> implements Iterable<T> {
 
 
     /**
-     * Constructor of {@code PluginRegistry}.
+     * Creates a new {@code PluginRegistry}.
      */
     public PluginRegistry() {
 
         plugins = new ArrayList<T>();
+    }
+
+
+    /**
+     * Creates a new {@link PluginRegistry}.
+     * 
+     * @param <T>
+     * @param <S>
+     * @return
+     */
+    public static <T extends Plugin<S>, S> PluginRegistry<T, S> create() {
+
+        return new PluginRegistry<T, S>();
     }
 
 

@@ -12,6 +12,8 @@ import org.synyx.plugin.core.SamplePlugin;
 
 
 /**
+ * Integration test to simply check if the configuration gets parsed correctly.
+ * 
  * @author Oliver Gierke - gierke@synyx.de
  */
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -8,6 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+/**
+ * Unit test for {@link PluginRegistry}.
+ * 
+ * @author Oliver Gierke - gierke@synyx.de
+ */
 public class PluginRegistryUnitTest {
 
     private SamplePlugin provider;
@@ -24,7 +29,7 @@ public class PluginRegistryUnitTest {
 
         provider = new SamplePluginImplementation();
 
-        registry = new PluginRegistry<SamplePlugin, String>();
+        registry = PluginRegistry.create();
         registry.setPlugins(Arrays.asList(provider));
     }
 
