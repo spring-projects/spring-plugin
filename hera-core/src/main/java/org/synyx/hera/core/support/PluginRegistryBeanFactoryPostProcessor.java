@@ -1,10 +1,10 @@
-package org.synyx.plugin.core.support;
+package org.synyx.hera.core.support;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.synyx.plugin.core.PluginRegistry;
+import org.synyx.hera.core.PluginRegistry;
 
 
 /**
@@ -12,7 +12,7 @@ import org.synyx.plugin.core.PluginRegistry;
  * from the {@link BeanFactory} hierarchy and registers {@link PluginRegistry}
  * instances for them.
  * 
- * @see org.synyx.plugin.core.support.BeanListBeanFactoryPostProcessor
+ * @see org.synyx.hera.core.support.BeanListBeanFactoryPostProcessor
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class PluginRegistryBeanFactoryPostProcessor extends

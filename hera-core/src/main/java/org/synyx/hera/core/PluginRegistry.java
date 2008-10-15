@@ -1,4 +1,4 @@
-package org.synyx.plugin.core;
+package org.synyx.hera.core;
 
 import java.util.ArrayList;
 import java.util.Iterator;

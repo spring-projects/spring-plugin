@@ -14,15 +14,14 @@
  * the License.
  */
 
-package org.synyx.plugin.core.config;
+package org.synyx.hera.core.config;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 
 /**
- * Simple namespace handler for {@literal dao-config} namespace.
+ * Simple namespace handler for {@literal plugin-config} namespace.
  * 
- * @author Eberhard Wolff
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class PluginNamespaceHandler extends NamespaceHandlerSupport {

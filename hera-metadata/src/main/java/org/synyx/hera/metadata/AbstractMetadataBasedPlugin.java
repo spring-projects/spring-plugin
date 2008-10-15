@@ -1,6 +1,6 @@
-package org.synyx.plugin.metadata;
+package org.synyx.hera.metadata;
 
-import org.synyx.plugin.core.Plugin;
+import org.synyx.hera.core.Plugin;
 
 
 /**

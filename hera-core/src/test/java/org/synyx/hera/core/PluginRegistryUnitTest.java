@@ -1,4 +1,4 @@
-package org.synyx.plugin.core;
+package org.synyx.hera.core;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +29,7 @@ public class PluginRegistryUnitTest {
 
         provider = new SamplePluginImplementation();
 
-        registry = PluginRegistry.create();
+        registry = new PluginRegistry<SamplePlugin, String>();
         registry.setPlugins(Arrays.asList(provider));
     }
 

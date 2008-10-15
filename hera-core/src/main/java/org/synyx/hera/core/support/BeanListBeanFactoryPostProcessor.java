@@ -1,4 +1,4 @@
-package org.synyx.plugin.core.support;
+package org.synyx.hera.core.support;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.ManagedList;
-import org.synyx.plugin.core.PluginRegistry;
+import org.synyx.hera.core.PluginRegistry;
 
 
 /**
@@ -38,7 +38,7 @@ import org.synyx.plugin.core.PluginRegistry;
  * </pre>
  * 
  * This would register all Spring beans implementing the
- * {@link org.synyx.plugin.core.Plugin} interface in a list bean with the name
+ * {@link org.synyx.hera.core.Plugin} interface in a list bean with the name
  * {@coder beanName}.
  * 
  * @author Oliver Gierke - gierke@synyx.de

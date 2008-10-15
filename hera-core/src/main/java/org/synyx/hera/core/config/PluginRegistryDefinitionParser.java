@@ -1,4 +1,4 @@
-package org.synyx.plugin.core.config;
+package org.synyx.hera.core.config;
 
 import org.w3c.dom.Element;
 
@@ -18,6 +18,6 @@ public class PluginRegistryDefinitionParser extends PluginListDefinitionParser {
     @Override
     protected String getBeanClassName(Element element) {
 
-        return "org.synyx.plugin.core.support.PluginRegistryBeanFactoryPostProcessor";
+        return PACKAGE + "PluginRegistryBeanFactoryPostProcessor";
     }
 }

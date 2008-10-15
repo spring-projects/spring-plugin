@@ -1,4 +1,4 @@
-package org.synyx.plugin.core;
+package org.synyx.hera.core;
 
 /**
  * Central interface for plugins for the system. This interface is meant to be

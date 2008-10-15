@@ -1,4 +1,4 @@
-package org.synyx.plugin.core;
+package org.synyx.hera.core;
 
 /**
  * @author Oliver Gierke - gierke@synyx.de

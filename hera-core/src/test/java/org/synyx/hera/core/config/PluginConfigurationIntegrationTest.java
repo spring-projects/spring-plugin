@@ -1,4 +1,4 @@
-package org.synyx.plugin.core.config;
+package org.synyx.hera.core.config;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.synyx.plugin.core.PluginRegistry;
-import org.synyx.plugin.core.SamplePlugin;
+import org.synyx.hera.core.PluginRegistry;
+import org.synyx.hera.core.SamplePlugin;
 
 
 /**

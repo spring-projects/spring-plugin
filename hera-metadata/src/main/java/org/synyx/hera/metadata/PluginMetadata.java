@@ -1,4 +1,4 @@
-package org.synyx.plugin.metadata;
+package org.synyx.hera.metadata;
 
 /**
  * Basic interface to define a set of metadata information for plugins.

@@ -1,4 +1,4 @@
-package org.synyx.plugin.core.config;
+package org.synyx.hera.core.config;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -13,6 +13,9 @@ import org.w3c.dom.Element;
 public class PluginListDefinitionParser extends
         AbstractSingleBeanDefinitionParser {
 
+    protected static final String PACKAGE = "org.synyx.hera.core.support.";
+
+
     /*
      * (non-Javadoc)
      * 
@@ -23,7 +26,7 @@ public class PluginListDefinitionParser extends
     @Override
     protected String getBeanClassName(Element element) {
 
-        return "org.synyx.plugin.core.support.BeanListBeanFactoryPostProcessor";
+        return PACKAGE + "BeanListBeanFactoryPostProcessor";
     }
 
 

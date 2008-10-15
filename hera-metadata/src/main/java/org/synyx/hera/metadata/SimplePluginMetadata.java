@@ -1,4 +1,4 @@
-package org.synyx.plugin.metadata;
+package org.synyx.hera.metadata;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
