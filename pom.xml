@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.synyx.plugin</groupId>
-  <artifactId>synyx-plugin</artifactId>
+  <groupId>org.synyx.hera</groupId>
+  <artifactId>hera</artifactId>
   <packaging>pom</packaging>
-  <name>Synyx plugin</name>
+  <name>Hera</name>
   <version>0.2-SNAPSHOT</version>
   <description>Simple plugin infrastructure</description>
   
@@ -11,11 +11,6 @@
 		<name>Synyx GmbH &amp; Co. KG</name>
 		<url>http://www.synyx.org</url>
 	</organization>
-	
-  <modules>
-  	<module>plugin-core</module>
-  	<module>plugin-metadata</module>
-  </modules>
   <inceptionYear>2008</inceptionYear>
   
   <developers>
@@ -72,6 +67,10 @@
 
 		</plugins>
 	</build>
+	<modules>
+		<module>hera-core</module>
+		<module>hera-metadata</module>
+	</modules>
 
 	<reporting>
 		<plugins>
@@ -114,9 +113,9 @@
 	</reporting>
 	
 	<scm>
-		<url>http://svn.synyx.org/synyx/opensource/synyx-plugin</url>
-		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/synyx-plugin</connection>
-		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/synyx-plugin</developerConnection>
+		<url>http://svn.synyx.org/synyx/opensource/hera</url>
+		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/hera</connection>
+		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/hera</developerConnection>
 	</scm>
 	
 	<ciManagement>
@@ -125,17 +124,17 @@
 	
 	<issueManagement>
 		<system>Trac</system>
-		<url>http://trac.synyx.org/synyx-plugin</url>
+		<url>http://trac.synyx.org/hera</url>
 	</issueManagement>
 	
 	<distributionManagement>
 		<site>
 			<id>trac.synyx.de</id>
-			<url>scp://trac.synyx.de:24/home/trac/opensource/synyx-plugin/htdocs/mvn</url>
+			<url>scp://trac.synyx.de:24/home/trac/opensource/hera/htdocs/mvn</url>
 		</site>
 		<repository>
 			<id>maven2.synyx.de</id>
-			<url>scp://maven2.synyx.de:24/home/mvn/public_html/repository</url>
+			<url>scp://maven2.synyx.de:24/home/mvn/hera/repository</url>
 		</repository>
 	</distributionManagement>
 	
