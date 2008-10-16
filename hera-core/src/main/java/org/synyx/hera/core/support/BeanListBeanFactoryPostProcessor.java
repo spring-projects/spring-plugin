@@ -32,6 +32,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.ManagedList;
+import org.springframework.core.Ordered;
 import org.synyx.hera.core.PluginRegistry;
 
 
@@ -59,7 +60,7 @@ import org.synyx.hera.core.PluginRegistry;
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class BeanListBeanFactoryPostProcessor implements
-        BeanFactoryPostProcessor {
+        BeanFactoryPostProcessor, Ordered {
 
     private static final Log log =
             LogFactory.getLog(BeanListBeanFactoryPostProcessor.class);
@@ -228,5 +229,17 @@ public class BeanListBeanFactoryPostProcessor implements
         }
 
         return (List<RuntimeBeanReference>) beanReferences;
+    }
+
+
+    /**
+     * Declare lowest precedence to ensure all other
+     * {@link BeanFactoryPostProcessor}s have already been applied.
+     * 
+     * @see org.springframework.core.Ordered#getOrder()
+     */
+    public int getOrder() {
+
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }
