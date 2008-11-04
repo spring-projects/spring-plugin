@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter>
+  <title>Core</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Host system provides a plugin interface providers have to implement.
+    Core system is build to hold a container of instances of this interface
+    and works with them.</para>
+
+    <example>
+      <title>Basic example of plugin interface and host</title>
+
+      <programlisting language="java">/**
+ * Interface contract for the providers to be implemented.
+ */
+public interface MyPluginInterface {
+
+  public void bar();
+}
+
+
+/**
+ * A host application class working with instances of the plugin 
+ * interface.
+ */
+public class HostImpl implements Host {
+
+  private List&lt;MyPluginInterface&gt; plugins;
+
+  /**
+   * Setter to inject the plugins
+   */
+  public void setPlugins(List&lt;MyPluginInterface&gt; plugins) {
+    this.plugins = plugins;
+  }
+
+  /**
+   * Some business method actually working with the given plugins.
+   */
+  public void someBusinessMethod() {
+
+    for (MyPluginInterface plugin : plugins) {
+      plugin.bar();
+    }
+  }
+}</programlisting>
+    </example>
+
+    <para>This is the way you would typically construct a host component in
+    general. Leveraging dependency injection via setters allows flexible usage
+    in a variety of environments. Thus you could easily provide a factory
+    class that is able to lookup
+    <interfacename>MyPluginInterface</interfacename> implementations from the
+    classpath, instantiate them and inject them into HostImpl.</para>
+
+    <para>Using Spring as component container you could configure something
+    like this:</para>
+
+    <example>
+      <title>Configuring HostImpl with Spring</title>
+
+      <programlisting language="xml">&lt;bean id="host" class="com.acme.HostImpl"&gt;
+  &lt;property name="plugins"&gt;
+    &lt;list&gt;
+      &lt;bean class="MyPluginImplementation" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+    </example>
+
+    <para>This is pretty much well known to Spring developers and let's us
+    face the wall that this is rather static. Everytime you want to add a new
+    plugin implementation instance you have to modify configuration of the
+    core. Let's see how we can get this dance a little more.</para>
+  </section>
+
+  <section id="core.collecting-beans">
+    <title>Collecting Spring beans dynamically</title>
+
+    <para>With the <classname>BeanListBeanFactoryPostProcessor</classname>
+    <productname>Hera</productname> provides a Spring container extension,
+    that allows to lookup beans of a given type in the current
+    <interfacename>ApplicationContext</interfacename> and register them as
+    list under a given name. Take a look at the configuration now:</para>
+
+    <example>
+      <title>Host and plugin configuration with Hera support</title>
+
+      <programlisting lang="" language="xml">&lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
+
+&lt;bean id="host" class="com.acme.HostImpl"&gt;
+  &lt;property name="plugins" ref="plugins" /&gt;
+&lt;/bean&gt;
+
+&lt;bean class="org.synyx.hera.plugin.support.BeanListBeanFactoryPostProcessor"&gt;
+  &lt;property name="lists"&gt;
+    &lt;map&gt;
+      &lt;entry key="plugins" value="org.acme.MyPluginInterface" /&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+
+      <programlisting language="xml">&lt;!-- In a file called plugins.xml in the plugin project --&gt;
+&lt;bean class="MyPluginimplementation" /&gt;</programlisting>
+    </example>
+
+    <para>You can see that we include a wildcarded configurationfile that
+    allows plugin projects to easily contribute plugin implementations by
+    declaring them as beans in configuration files matching the wildcarded
+    path. If you use Spring 2.5 component scanning you don't have to use the
+    import trick at all as Spring would detect the implementation
+    automatically as long as it is annotated with <code>@Component</code>,
+    <code>@Service</code> a.s.o.</para>
+
+    <para>The <classname>BeanListBeanFactoryPostProcessor</classname> in turn
+    allows registering a map of lists to be created, where the maps entry key
+    is the id under which the list will be registered and the entry's value is
+    the type to be looked up.</para>
+
+    <note>
+      <para>The design of the
+      <classname>BeanListBeanFactoryPostProcessor</classname> might seem a
+      little confusing at first (especially to set a map on a property named
+      lists). This is due to the posibility to register more than one list to
+      be looked up. We think about dropping this functionality for the sake of
+      simplicity in future versions.</para>
+    </note>
+
+    <simplesect>
+      <title>A whole lotta XML - namespace to help!</title>
+
+      <para>Actually this already serves a lot of requirements we listed in
+      <xref linkend="preface.context" />. Nevertheless the amount of XML to be
+      written is quite large. Furthermore it's rather not intuitive to
+      configure a bean id as key, and a type as value. We can heavily shrink
+      the XML required to a single line by providing a Spring namespace
+      boiling configuration down to this:</para>
+
+      <example>
+        <title>Host configuration using the plugin namespace</title>
+
+        <programlisting language="xml">&lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
+
+&lt;bean id="host" class="com.acme.HostImpl"&gt;
+  &lt;property name="plugins" ref="plugins" /&gt;
+&lt;/bean&gt;
+
+&lt;plugin:list id="plugins" class="org.acme.MyPluginInterface" /&gt;</programlisting>
+      </example>
+
+      <para>Suggested you have added the namespace XSD into Eclipse and
+      installed Spring IDE, you should get code completion on filling the
+      class attribute.</para>
+    </simplesect>
+  </section>
+
+  <section>
+    <title>Plugin beans</title>
+
+    <para>Using plain interfaces and
+    <classname>BeanListBeanFactoryPostProcessor</classname> offers an easy way
+    to dynamically lookup beans in Spring environments. Nevertheless, very
+    often you face the situation that you want to have dedicated access to a
+    subset of all plugins, choose plugins by a given criteria or use a decent
+    default plugin or the like. Thus we need a basic infrastructure interface
+    for plugin interfaces to extend and a more sophisticated plugin
+    container.</para>
+
+    <simplesect>
+      <title>Plugin</title>
+
+      <para>Hera's central infrastructure interfacte is
+      <interfacename>Plugin&lt;S&gt;</interfacename>, where S defines the
+      delimiter type you want to let implementations decide on, whether they
+      shall be invoked or not. Thus the plugin implementation have to
+      implement <methodname>supports(S delimiter)</methodname> to come to the
+      decision. Consider the following example:</para>
+
+      <example>
+        <title></title>
+
+        <programlisting language="java">public enum ProductType {
+
+  SOFTWARE, HARDWARE;
+}
+
+public interface ProductProcessor extends Plugin&lt;ProductType&gt; {
+
+  public void process(Product product);
+}</programlisting>
+      </example>
+
+      <para>This design would allow plugin providers to implement
+      <methodname>supports(ProductType productType)</methodname> to decide
+      which product types they want to process and provide actual processing
+      logic in <methodname>process(Product product)</methodname>.</para>
+    </simplesect>
+
+    <simplesect>
+      <title>PluginRegistry</title>
+
+      <para>Using a <interfacename>List</interfacename> as plugin container as
+      well as the <interfacename>Plugin</interfacename> interface you can now
+      select plugins supporting the given delimiter. To not reimplement the
+      lookup logic for common cases Hera provides a
+      <classname>PluginRegistry&lt;T extends Plugin&lt;S&gt;,
+      S&gt;</classname> that provides sophisticated methods to access certain
+      plugins:</para>
+
+      <example>
+        <title>Usage of the PluginRegistry</title>
+
+        <programlisting language="java">PluginRegistry&lt;ProductProcessor, ProductType&gt; registry = 
+  PluginRegistry.create();
+
+// Add plugin instances
+registry.add(new FooImplementation());
+
+// Returns the first plugin supporting SOFTWARE
+registry.getPluginFor(ProductType.SOFTWARE);
+
+// Returns the first plugin supporting SOFTWARE, 
+// or DefaultPlugin if none found
+registry.getPluginFor(ProductType.SOFTWARE, new DefaultPlugin());
+
+// Returns all plugins supporting HARDWARE,
+// throwing the given exception if none found
+registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");</programlisting>
+      </example>
+    </simplesect>
+
+    <simplesect>
+      <title>Configuration and namespace</title>
+
+      <para>Similar to the
+      <classname>BeanListBeanFactoryPostProcessor</classname> described in
+      <xref linkend="core.collecting-beans" /> Hera provides a
+      <classname>PluginRegistryBeanFactoryPostProcessor</classname> to
+      automatically lookup beans of a dedicated type to be aggregated in a
+      <classname>PluginRegistry</classname>. Note that the type has to be
+      assignable to <interfacename>Plugin</interfacename> to let the registry
+      work as expected.</para>
+
+      <para>Furthermore there is also an element in the namespace to shrink
+      down configuration XML:</para>
+
+      <example>
+        <title>Using the XML namespace to configure a registry</title>
+
+        <programlisting language="xml">&lt;plugin:registry id="plugins" class="com.acme.MyPluginInterface" /&gt;</programlisting>
+      </example>
+    </simplesect>
+  </section>
+</chapter>
