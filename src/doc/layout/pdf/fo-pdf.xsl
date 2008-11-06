@@ -188,7 +188,7 @@
     <xsl:param name="hyphenate">true</xsl:param>
     
     <!-- Links -->
-    <xsl:param name="xref.with.number.and.title" select="1"/>
+    <xsl:param name="xref.with.number.and.title" select="0"/>
     
     <xsl:attribute-set name="xref.properties">
 	  <xsl:attribute name="color">
