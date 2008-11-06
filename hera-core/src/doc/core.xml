@@ -179,7 +179,7 @@ public class HostImpl implements Host {
       decision. Consider the following example:</para>
 
       <example>
-        <title></title>
+        <title>Usage of Plugin interface</title>
 
         <programlisting language="java">public enum ProductType {
 
@@ -198,7 +198,7 @@ public interface ProductProcessor extends Plugin&lt;ProductType&gt; {
       logic in <methodname>process(Product product)</methodname>.</para>
     </simplesect>
 
-    <simplesect>
+    <simplesect id="core.plugin-registry">
       <title>PluginRegistry</title>
 
       <para>Using a <interfacename>List</interfacename> as plugin container as
