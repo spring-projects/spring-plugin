@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter>
+<chapter id="metadata">
   <title>Metadata</title>
 
-  <para>TODO</para>
+  <para>For plugin architectures it is essential to capture metadata
+  information about plugin instances. A very core set of metadata (name,
+  version) also serves as identifier of a plugin and thus can be used. The
+  Hera metadata module provides support to capture metadata.</para>
+
+  <section id="metadata.core-concepts">
+    <title>Core concepts</title>
+
+    <para>The metadata module actually builds around two core interfaces,
+    <interfacename>PluginMetadata</interfacename> and
+    <interfacename>MetadataProvider</interfacename>:</para>
+
+    <example>
+      <title>Core concepts</title>
+
+      <programlisting language="java">public interface PluginMetadata {
+
+  String getName();
+
+  String getVersion();
+}
+
+
+public interface MetadataProvider {
+
+  PluginMetadata getMetadata();
+}</programlisting>
+    </example>
+
+    <para>The <interfacename>PluginMetadata</interfacename> interface captures
+    the required properties to define an identifyable plugin. This means, that
+    implementations should ensure uniqueness through these two properties.
+    With <classname>SimplePluginMetadata</classname> Hera provides a Java bean
+    style class to capture metadata. Of course applications can and should
+    provide extended metadata information according to their needs. The very
+    narrow interface is only targeted at integrating the metadata concept with
+    the <classname>PluginRegistry</classname> (see <xref
+    linkend="core.plugin-registry" />) without bothering developers with too
+    much information required.</para>
+
+    <para>The MetadataProvider interface is to be used in application plugin
+    interfaces to indicate that they can provide metadata. To ease plugin
+    implementation we provide AbstractMetadataBasedPlugin that uses the
+    internal metadata to implement supports(..) method of Plugin. Extending
+    this base class plugins with metadata as selection criteria can easily be
+    build. This way you could store the metadata in user specific
+    configuration files and use this to select a distinct plugin specific to a
+    given user.</para>
+  </section>
 </chapter>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book  [
-  <!ENTITY core SYSTEM "../../hera-core/src/doc/core.xml">
-  <!ENTITY metadata SYSTEM "../../hera-metadata/src/doc/metadata.xml">
+<!DOCTYPE book [
+<!ENTITY core SYSTEM "../../hera-core/src/doc/core.xml">
+<!ENTITY metadata SYSTEM "../../hera-metadata/src/doc/metadata.xml">
 ]>
 <!-- PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" -->
@@ -49,7 +49,19 @@
           <surname>Gierke</surname>
         </author>
 
-        <revremark>Initial draft </revremark>
+        <revremark>Initial draft</revremark>
+      </revision>
+
+      <revision>
+        <date>05.11.2008</date>
+
+        <author>
+          <firstname>Oliver</firstname>
+
+          <surname>Gierke</surname>
+        </author>
+
+        <revremark>Added metadata module documentation</revremark>
       </revision>
     </revhistory>
   </bookinfo>
@@ -127,6 +139,7 @@
   </preface>
 
   &core;
+
   &metadata;
 
   <glossary>
