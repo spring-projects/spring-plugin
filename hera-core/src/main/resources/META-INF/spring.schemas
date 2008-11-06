@@ -1,1 +1,1 @@
-http\://www.synyx.org/schema/hera/plugin-config.xsd=org/synyx/hera/core/config/plugin-config.xsd
+http\://schemas.synyx.org/hera/hera.xsd=org/synyx/hera/core/config/hera.xsd

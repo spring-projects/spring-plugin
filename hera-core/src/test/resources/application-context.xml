@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:plugin="http://www.synyx.org/schema/hera"
+	xmlns:plugin="http://schemas.synyx.org/hera"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.synyx.org/schema/hera http://www.synyx.org/schema/hera/plugin-config.xsd">
+		http://schemas.synyx.org/hera http://schemas.synyx.org/hera/hera.xsd">
 
 	<plugin:list id="foo" class="org.synyx.hera.core.SamplePlugin" />
 	

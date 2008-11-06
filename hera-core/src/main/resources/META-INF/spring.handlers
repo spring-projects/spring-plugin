@@ -1,1 +1,1 @@
-http\://www.synyx.org/schema/hera=org.synyx.hera.core.config.PluginNamespaceHandler
+http\://schemas.synyx.org/hera=org.synyx.hera.core.config.PluginNamespaceHandler
