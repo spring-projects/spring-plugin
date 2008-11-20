@@ -42,13 +42,14 @@ public interface MetadataProvider {
     linkend="core.plugin-registry" />) without bothering developers with too
     much information required.</para>
 
-    <para>The MetadataProvider interface is to be used in application plugin
-    interfaces to indicate that they can provide metadata. To ease plugin
-    implementation we provide AbstractMetadataBasedPlugin that uses the
-    internal metadata to implement supports(..) method of Plugin. Extending
-    this base class plugins with metadata as selection criteria can easily be
-    build. This way you could store the metadata in user specific
-    configuration files and use this to select a distinct plugin specific to a
-    given user.</para>
+    <para>The <interfacename>MetadataProvider</interfacename> interface is to
+    be used in application plugin interfaces to indicate that they can provide
+    metadata. To ease plugin implementation we provide
+    <classname>AbstractMetadataBasedPlugin</classname> that uses the internal
+    metadata to implement <methodname>supports(..)</methodname> method of
+    <interfacename>Plugin</interfacename>. Extending this base class plugins
+    with metadata as selection criteria can easily be build. This way you
+    could store the metadata in user specific configuration files and use this
+    to select a distinct plugin specific to a given user.</para>
   </section>
 </chapter>
