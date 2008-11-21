@@ -81,14 +81,14 @@
 		        </executions>
 				<inherited>false</inherited>
 				<dependencies>
-					<!-- 
+					
 					<dependency>
                         <groupId>offo.hyphenation</groupId>
                         <artifactId>fop-hyph</artifactId>
                         <version>0.1</version>
                         <scope>runtime</scope>
                     </dependency>
-                    -->
+                    
 					<dependency>
 						<groupId>org.docbook</groupId>
 						<artifactId>docbook-xml</artifactId>
@@ -248,7 +248,7 @@
 		</site>
 		<repository>
 			<id>maven2.synyx.de</id>
-			<url>scp://maven2.synyx.de:24/home/mvn/hera/repository</url>
+			<url>scp://maven2.synyx.de:24/home/mvn/public_html/repository</url>
 		</repository>
 	</distributionManagement>
 	
