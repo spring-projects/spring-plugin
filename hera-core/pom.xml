@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.synyx.hera</groupId>
 	<artifactId>hera-core</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 
 	<name>Hera Core</name>
 	<description>Core plugin infrastructure</description>
@@ -10,7 +10,7 @@
 	<parent>
 		<artifactId>hera</artifactId>
 		<groupId>org.synyx.hera</groupId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2</version>
 	</parent>
 
 	<properties>
