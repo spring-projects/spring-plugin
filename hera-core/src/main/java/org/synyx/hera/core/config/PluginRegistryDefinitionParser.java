@@ -15,12 +15,9 @@
  */
 package org.synyx.hera.core.config;
 
-import org.w3c.dom.Element;
-
-
 /**
  * Simple extension of {@link PluginListDefinitionParser}. Simply registers a
- * {@code PluginListDefinitionParser} instead of the original class.
+ * {@code PluginRegistryBeanFactoryPostProcessor} instead of the original class.
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */
@@ -34,7 +31,7 @@ public class PluginRegistryDefinitionParser extends PluginListDefinitionParser {
      * #getBeanClassName(org.w3c.dom.Element)
      */
     @Override
-    protected String getBeanClassName(Element element) {
+    protected String getPostProcessorName() {
 
         return PACKAGE + "PluginRegistryBeanFactoryPostProcessor";
     }

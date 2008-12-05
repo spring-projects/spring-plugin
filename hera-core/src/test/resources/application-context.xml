@@ -10,5 +10,16 @@
 	<plugin:registry id="bar" class="org.synyx.hera.core.SamplePlugin" />
 	
 	<bean class="org.synyx.hera.core.SamplePluginImplementation" />
-
+	
+	<bean id="host" class="org.synyx.hera.core.SamplePluginHost">
+		<property name="registry" ref="bar" />
+	</bean>
+	
+	<!-- Uncommented till TODO in PluginListDefinitionParser is resolved -->
+	<bean id="otherHost" class="org.synyx.hera.core.SamplePluginHost">
+		<property name="registry">
+			<plugin:registry id="tadaa" class="org.synyx.hera.core.SamplePlugin" />
+		</property>
+	</bean>
+	
 </beans>
