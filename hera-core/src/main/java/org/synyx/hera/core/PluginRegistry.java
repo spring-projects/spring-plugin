@@ -51,7 +51,7 @@ public class PluginRegistry<T extends Plugin<S>, S> implements Iterable<T> {
      * @param <S>
      * @return
      */
-    public static <T extends Plugin<S>, S> PluginRegistry<T, S> create() {
+    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create() {
 
         return new PluginRegistry<T, S>();
     }

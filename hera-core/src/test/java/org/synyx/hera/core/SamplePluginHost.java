@@ -6,7 +6,7 @@ package org.synyx.hera.core;
 public class SamplePluginHost {
 
     private PluginRegistry<SamplePlugin, String> registry =
-            new PluginRegistry<SamplePlugin, String>();
+            PluginRegistry.create();
 
 
     /**
