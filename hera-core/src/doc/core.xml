@@ -154,6 +154,37 @@ public class HostImpl implements Host {
       installed Spring IDE, you should get code completion on filling the
       class attribute.</para>
     </simplesect>
+
+    <simplesect>
+      <title>Using inner beans</title>
+
+      <note>
+        <para>This feature is only available for version 0.3 and above!</para>
+      </note>
+
+      <para>The listing above features an indirection for the
+      <code>plugin</code> bean definition. Defining the plugin list as top
+      level bean can have advantages: you easily could place all plugin lists
+      in a dedicated configuration file, presenting all application extension
+      points in one single place. Nevertheless you also might choose to define
+      the list directly in the property declaration:</para>
+
+      <example>
+        <title>Using internal bean definition</title>
+
+        <programlisting language="xml">&lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
+
+&lt;bean id="host" class="com.acme.HostImpl"&gt;
+  &lt;property name="plugins"&gt;
+    &lt;plugin:list class="org.acme.MyPluginInterface" /&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+      </example>
+
+      <para>This way you have a more compact configuration, paying the prica
+      of tangling all extention points though possibly various config
+      files.</para>
+    </simplesect>
   </section>
 
   <section>
