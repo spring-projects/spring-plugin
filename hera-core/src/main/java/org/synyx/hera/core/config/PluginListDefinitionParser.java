@@ -170,7 +170,7 @@ public class PluginListDefinitionParser extends AbstractBeanDefinitionParser {
         String initFactories = element.getAttribute("init-factories");
 
         if (StringUtils.hasText(initFactories)) {
-            builder.addPropertyValue("allowEagerInit", initFactories);
+            builder.addPropertyValue("initFactories", initFactories);
         }
 
         return getSourcedBeanDefinition(builder, element, context);

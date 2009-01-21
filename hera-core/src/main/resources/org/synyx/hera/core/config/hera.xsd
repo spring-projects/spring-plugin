@@ -32,7 +32,7 @@
 	<xsd:complexType name="pluginType">
 		<xsd:attribute name="id" type="xsd:string" />
 		<xsd:attribute name="class" type="classType" />
-		<xsd:attribute name="init-factories" type="xsd:boolean" />
+		<xsd:attribute name="init-factories" type="xsd:boolean" default="false" />
 	</xsd:complexType>
 	
 	<xsd:simpleType name="classType">
