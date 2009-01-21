@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.synyx.hera</groupId>
 	<artifactId>hera-metadata</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.3.1</version>
 
 	<name>Hera Metadata Extension</name>
 	<description>Extension package for metadata based plugins</description>
@@ -10,14 +10,14 @@
 	<parent>
 		<artifactId>hera</artifactId>
 		<groupId>org.synyx.hera</groupId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.3.1</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.synyx.hera</groupId>
 			<artifactId>hera-core</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.3.1</version>
 		</dependency>
 
 		<dependency>
