@@ -19,13 +19,13 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.synyx.hera.core.PluginRegistry;
+import org.synyx.hera.core.OrderAwarePluginRegistry;
 
 
 /**
  * This {@link BeanFactoryPostProcessor} automatically looksup bean instances
- * from the {@link BeanFactory} hierarchy and registers {@link PluginRegistry}
- * instances for them.
+ * from the {@link BeanFactory} hierarchy and registers
+ * {@link OrderAwarePluginRegistry} instances for them.
  * 
  * @see org.synyx.hera.core.support.BeanListBeanFactoryPostProcessor
  * @author Oliver Gierke - gierke@synyx.de
@@ -36,12 +36,13 @@ public class PluginRegistryBeanFactoryPostProcessor extends
     /**
      * Additionally wraps the
      * {@link org.springframework.beans.factory.config.ListFactoryBean}
-     * {@link BeanDefinition} into a {@link PluginRegistry}.
+     * {@link BeanDefinition} into a {@link OrderAwarePluginRegistry}.
      * 
      * @see com.synyx.minos.core.plugin.support.BeanListBeanFactoryPostProcessor#
      *      wrapBeanDefinition
      *      (org.springframework.beans.factory.config.BeanDefinition)
-     * @return a {@link BeanDefinition} containing a {@link PluginRegistry}
+     * @return a {@link BeanDefinition} containing a
+     *         {@link OrderAwarePluginRegistry}
      */
     @Override
     protected BeanDefinition wrapListBeanDefinition(
@@ -49,7 +50,8 @@ public class PluginRegistryBeanFactoryPostProcessor extends
 
         // Create PluginRegistry bean definition to wrap actual bean definition
         BeanDefinitionBuilder builder =
-                BeanDefinitionBuilder.rootBeanDefinition(PluginRegistry.class);
+                BeanDefinitionBuilder
+                        .rootBeanDefinition(OrderAwarePluginRegistry.class);
 
         builder.addPropertyValue("plugins", beanDefinition);
 

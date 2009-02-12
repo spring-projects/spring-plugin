@@ -33,7 +33,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.core.Ordered;
-import org.synyx.hera.core.PluginRegistry;
+import org.synyx.hera.core.SimplePluginRegistry;
 
 
 /**
@@ -72,7 +72,7 @@ public class BeanListBeanFactoryPostProcessor implements
 
     /**
      * Setter to inject required plugin registry configuration. The map's keys
-     * will be used as bean ids for the resulting {@link PluginRegistry}
+     * will be used as bean ids for the resulting {@link SimplePluginRegistry}
      * instances. These registry instances will contain all beans having the
      * given type.
      * 
