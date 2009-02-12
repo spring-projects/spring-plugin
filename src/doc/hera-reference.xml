@@ -29,12 +29,12 @@
       </author>
     </authorgroup>
 
-    <releaseinfo>V0.3</releaseinfo>
+    <releaseinfo>V0.3.1</releaseinfo>
 
-    <pubdate>21.11.2008</pubdate>
+    <pubdate>24.01.2009</pubdate>
 
     <copyright>
-      <year>2008</year>
+      <year>2009</year>
 
       <holder>Synyx GmbH &amp; Co. KG</holder>
     </copyright>
@@ -62,6 +62,17 @@
         </author>
 
         <revremark>Added metadata module documentation</revremark>
+      </revision>
+	<revision>
+        <date>24.01.2009</date>
+
+        <author>
+          <firstname>Oliver</firstname>
+
+          <surname>Gierke</surname>
+        </author>
+
+        <revremark>Added remark to inner bean usage</revremark>
       </revision>
     </revhistory>
   </bookinfo>
