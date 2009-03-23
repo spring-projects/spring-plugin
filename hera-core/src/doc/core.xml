@@ -237,14 +237,14 @@ public interface ProductProcessor extends Plugin&lt;ProductType&gt; {
       select plugins supporting the given delimiter. To not reimplement the
       lookup logic for common cases Hera provides a
       <classname>PluginRegistry&lt;T extends Plugin&lt;S&gt;,
-      S&gt;</classname> that provides sophisticated methods to access certain
-      plugins:</para>
+      S&gt;</classname> interface that provides sophisticated methods to
+      access certain plugins:</para>
 
       <example>
         <title>Usage of the PluginRegistry</title>
 
         <programlisting language="java">PluginRegistry&lt;ProductProcessor, ProductType&gt; registry = 
-  PluginRegistry.create();
+  SimplePluginRegistry.create();
 
 // Add plugin instances
 registry.add(new FooImplementation());
@@ -282,6 +282,33 @@ registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");</programl
 
         <programlisting language="xml">&lt;plugin:registry id="plugins" class="com.acme.MyPluginInterface" /&gt;</programlisting>
       </example>
+    </simplesect>
+
+    <simplesect>
+      <title>Ordering plugins</title>
+
+      <para>Declaring plugin beans sometimes it is necessary to preserve a
+      certain order of plugins. Suppose you have a plugin host that already
+      defines one plugin that shall always be executed after all plugins
+      declared by extensions. Actually the Spring container typically returnes
+      beans in the order they were declared, so that you could import you
+      wildcarded config files right before declaring the default plugin.
+      Unfortunately the order of the beans is not contracted to be preserved
+      for the Spring container. Thus we need a different solution.</para>
+
+      <para>Spring provides two ways to order beans. First, you can implement
+      <interfacename>Ordered</interfacename> interface and implement
+      <methodname>getOrder</methodname> to place a plugin at a certain point
+      in the list. Secondly you can user the <classname>@Order</classname>
+      annotation. For more information on ordering capabilities of Spring see
+      the <ulink url="???">section on this topic in the Spring reference
+      documentation</ulink>.</para>
+
+      <para>Using the Hera namespace you will get a
+      <interfacename>PluginRegistry</interfacename> instance that is capable
+      of preserving the order defined by the mentioned means. Using Hera
+      programatically use
+      <classname>OrderAwarePluginRegistry</classname>.</para>
     </simplesect>
   </section>
 </chapter>
