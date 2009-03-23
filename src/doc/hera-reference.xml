@@ -29,9 +29,9 @@
       </author>
     </authorgroup>
 
-    <releaseinfo>V0.3.1</releaseinfo>
+    <releaseinfo>V0.4</releaseinfo>
 
-    <pubdate>24.01.2009</pubdate>
+    <pubdate>23.03.2009</pubdate>
 
     <copyright>
       <year>2009</year>
@@ -63,7 +63,8 @@
 
         <revremark>Added metadata module documentation</revremark>
       </revision>
-	<revision>
+
+      <revision>
         <date>24.01.2009</date>
 
         <author>
@@ -73,6 +74,18 @@
         </author>
 
         <revremark>Added remark to inner bean usage</revremark>
+      </revision>
+
+      <revision>
+        <date>23.03.2009</date>
+
+        <author>
+          <firstname>Oliver</firstname>
+
+          <surname>Gierke</surname>
+        </author>
+
+        <revremark>Added section on plugin ordering</revremark>
       </revision>
     </revhistory>
   </bookinfo>
