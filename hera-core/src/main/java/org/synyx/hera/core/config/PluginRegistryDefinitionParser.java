@@ -33,6 +33,6 @@ public class PluginRegistryDefinitionParser extends PluginListDefinitionParser {
     @Override
     protected String getPostProcessorName() {
 
-        return PACKAGE + "PluginRegistryBeanFactoryPostProcessor";
+        return PACKAGE + "PluginRegistryFactoryBean";
     }
 }

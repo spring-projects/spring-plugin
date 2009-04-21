@@ -39,11 +39,19 @@ public class PluginConfigurationIntegrationTest {
     @Qualifier("otherHost")
     SamplePluginHost otherHost;
 
+    @Autowired
+    SamplePlugin plugin;
+
 
     @Test
     public void test() throws Exception {
 
+        assertNotNull(samplePlugins);
+
         assertSame(pluginRegistry, host.getRegistry());
         assertNotSame(pluginRegistry, otherHost.getRegistry());
+
+        assertTrue(samplePlugins.contains(plugin));
+        assertTrue(pluginRegistry.contains(plugin));
     }
 }
