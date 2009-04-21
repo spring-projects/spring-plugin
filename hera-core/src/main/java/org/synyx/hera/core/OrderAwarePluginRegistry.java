@@ -29,9 +29,27 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * @param <S>
      * @return
      */
-    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
+    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create() {
 
         return new OrderAwarePluginRegistry<T, S>();
+    }
+
+
+    /**
+     * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+     * 
+     * @param <S>
+     * @param <T>
+     * @param plugins
+     * @return
+     */
+    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create(
+            List<T> plugins) {
+
+        PluginRegistry<T, S> registry = create();
+        registry.setPlugins(plugins);
+
+        return registry;
     }
 
 

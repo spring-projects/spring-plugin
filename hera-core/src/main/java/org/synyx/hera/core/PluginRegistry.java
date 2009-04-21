@@ -30,6 +30,14 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 
 
     /**
+     * Removes a given plugin from the registry.
+     * 
+     * @param plugin
+     */
+    boolean removePlugin(T plugin);
+
+
+    /**
      * Returns the first plugin found for the given originating system. Thus,
      * further configured plugins are ignored.
      * 
@@ -107,4 +115,12 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
      */
     int countPlugins();
 
+
+    /**
+     * Returns whether the registry contains a given plugin.
+     * 
+     * @param plugin
+     * @return
+     */
+    boolean contains(T plugin);
 }

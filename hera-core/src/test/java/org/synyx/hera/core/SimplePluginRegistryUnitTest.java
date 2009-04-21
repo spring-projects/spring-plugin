@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 public class SimplePluginRegistryUnitTest {
 
-    private SamplePlugin provider;
+    private SamplePlugin plugin;
 
     private PluginRegistry<SamplePlugin, String> registry;
 
@@ -43,10 +43,22 @@ public class SimplePluginRegistryUnitTest {
     @Before
     public void setUp() {
 
-        provider = new SamplePluginImplementation();
+        plugin = new SamplePluginImplementation();
 
-        registry = new SimplePluginRegistry<SamplePlugin, String>();
-        registry.setPlugins(Arrays.asList(provider));
+        registry = SimplePluginRegistry.create(Arrays.asList(plugin));
+    }
+
+
+    /**
+     * Asserts that the registry contains the plugin it was initialized with.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void assertRegistryInitialized() throws Exception {
+
+        assertEquals(1, registry.countPlugins());
+        assertTrue(registry.contains(plugin));
     }
 
 

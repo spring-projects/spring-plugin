@@ -58,6 +58,23 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     }
 
 
+    /**
+     * Creates a new {@link SimplePluginRegistry}.
+     * 
+     * @param <T>
+     * @param <S>
+     * @return
+     */
+    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create(
+            List<T> plugins) {
+
+        PluginRegistry<T, S> registry = create();
+        registry.setPlugins(plugins);
+
+        return registry;
+    }
+
+
     /*
      * (non-Javadoc)
      * 
@@ -78,6 +95,19 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     public void addPlugin(T plugin) {
 
         this.plugins.add(plugin);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.synyx.hera.core.PluginRegistry#removePlugin(org.synyx.hera.core.Plugin
+     * )
+     */
+    public boolean removePlugin(T plugin) {
+
+        return this.plugins.remove(plugin);
     }
 
 
@@ -203,6 +233,18 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     protected List<? extends T> getPlugins() {
 
         return plugins;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.synyx.hera.core.PluginRegistry#contains(org.synyx.hera.core.Plugin)
+     */
+    public boolean contains(T plugin) {
+
+        return this.plugins.contains(plugin);
     }
 
 
