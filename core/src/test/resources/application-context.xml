@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:plugin="http://schemas.synyx.org/hera"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://schemas.synyx.org/hera http://schemas.synyx.org/hera/hera.xsd">
+
+	<plugin:list id="foo" class="org.synyx.hera.core.SamplePlugin" />
+	
+	<plugin:registry id="bar" class="org.synyx.hera.core.SamplePlugin" />
+	
+	<bean class="org.synyx.hera.core.SamplePluginImplementation" />
+	
+	<bean id="host" class="org.synyx.hera.core.SamplePluginHost">
+		<property name="registry" ref="bar" />
+	</bean>
+
+	<bean id="otherHost" class="org.synyx.hera.core.SamplePluginHost">
+		<property name="registry">
+			<plugin:registry id="tadaa" class="org.synyx.hera.core.SamplePlugin" />
+		</property>
+	</bean>
+	
+</beans>
