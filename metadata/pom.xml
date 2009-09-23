@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.synyx.hera</groupId>
-			<artifactId>hera-core</artifactId>
+			<artifactId>org.synyx.hera.core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
