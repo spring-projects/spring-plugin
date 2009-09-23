@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book [
-<!ENTITY core SYSTEM "../../hera-core/src/doc/core.xml">
-<!ENTITY metadata SYSTEM "../../hera-metadata/src/doc/metadata.xml">
+<!ENTITY core SYSTEM "../../core/src/doc/core.xml">
+<!ENTITY metadata SYSTEM "../../metadata/src/doc/metadata.xml">
 ]>
 <!-- PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" -->
@@ -31,7 +31,7 @@
 
     <releaseinfo>V0.4</releaseinfo>
 
-    <pubdate>23.03.2009</pubdate>
+    <pubdate>23.09.2009</pubdate>
 
     <copyright>
       <year>2009</year>
