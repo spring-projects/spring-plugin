@@ -12,7 +12,7 @@
 	</parent>
 
 	<properties>
-		<spring-version>[2.5,3.0)</spring-version>
+		<spring-version>2.5.6.SEC01</spring-version>
 	</properties>
 
 	<dependencies>
