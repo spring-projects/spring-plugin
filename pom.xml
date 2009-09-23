@@ -279,8 +279,8 @@
 	
 	<distributionManagement>
 		<site>
-			<id>trac.synyx.de</id>
-			<url>scp://trac.synyx.de:24/home/trac/opensource/hera/htdocs/mvn</url>
+			<id>static.synyx.org</id>
+			<url>scp://static.synyx.org/home/public/public_html/hera/site</url>
 		</site>
 		<repository>
 			<id>nexus.synyx.de</id>
