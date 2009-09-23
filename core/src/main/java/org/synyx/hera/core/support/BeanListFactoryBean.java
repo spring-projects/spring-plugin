@@ -15,10 +15,13 @@
  */
 package org.synyx.hera.core.support;
 
-import java.awt.List;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 
 /**
@@ -30,12 +33,19 @@ import org.springframework.context.ApplicationContext;
 public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T>
         implements FactoryBean {
 
+    private static final Comparator<Object> COMPARATOR =
+            new AnnotationAwareOrderComparator();
+
+
     /*
      * (non-Javadoc)
      * 
      * @see org.springframework.beans.factory.FactoryBean#getObject()
      */
     public Object getObject() throws Exception {
+
+        List<T> beans = getBeans();
+        Collections.sort(beans, COMPARATOR);
 
         return getBeans();
     }
