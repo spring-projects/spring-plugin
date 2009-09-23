@@ -283,9 +283,13 @@
 			<url>scp://trac.synyx.de:24/home/trac/opensource/hera/htdocs/mvn</url>
 		</site>
 		<repository>
-			<id>maven2.synyx.de</id>
-			<url>scp://maven2.synyx.de:24/home/mvn/public_html/repository</url>
+			<id>nexus.synyx.de</id>
+			<url>http://nexus.synyx.de/content/repositories/public-releases</url>
 		</repository>
+		<snapshotRepository>
+			<id>nexus.synyx.de</id>
+			<url>http://nexus.synyx.de/content/repositories/public-snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
 	
 </project>
