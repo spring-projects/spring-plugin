@@ -66,9 +66,9 @@ public abstract class AbstractTypeAwareSupport<T> implements
      * 
      * @return
      */
+    @SuppressWarnings("unchecked")
     protected List<T> getBeans() {
 
-        @SuppressWarnings("unchecked")
         Map<String, T> pluginMap = context.getBeansOfType(type);
 
         return new ArrayList<T>(pluginMap.values());
