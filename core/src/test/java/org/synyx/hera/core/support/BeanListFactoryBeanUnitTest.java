@@ -60,6 +60,21 @@ public class BeanListFactoryBeanUnitTest {
     }
 
 
+    @Test
+    public void returnsEmptyListIfNoBeansFound() throws Exception {
+
+        expect(context.getBeansOfType(Ordered.class)).andReturn(
+                new HashMap<String, Ordered>());
+        replay(context);
+
+        Object result = factory.getObject();
+        assertTrue(result instanceof List<?>);
+
+        List<Ordered> members = (List) result;
+        assertTrue(members.isEmpty());
+    }
+
+
     /**
      * Returns an {@link Ordered} with the given order.
      * 
