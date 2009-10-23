@@ -35,7 +35,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends
      * 
      * @see org.springframework.beans.factory.FactoryBean#getObject()
      */
-    public Object getObject() throws Exception {
+    public Object getObject() {
 
         return OrderAwarePluginRegistry.create(getBeans());
     }

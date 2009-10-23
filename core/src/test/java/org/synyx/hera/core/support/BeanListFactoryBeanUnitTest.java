@@ -53,7 +53,7 @@ public class BeanListFactoryBeanUnitTest {
         Object result = factory.getObject();
         assertTrue(result instanceof List<?>);
 
-        List<Ordered> members = (List) result;
+        List<Ordered> members = type(result);
 
         assertEquals(0, members.indexOf(second));
         assertEquals(1, members.indexOf(first));
@@ -70,8 +70,15 @@ public class BeanListFactoryBeanUnitTest {
         Object result = factory.getObject();
         assertTrue(result instanceof List<?>);
 
-        List<Ordered> members = (List) result;
+        List<Ordered> members = type(result);
         assertTrue(members.isEmpty());
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private <T> List<T> type(Object list) {
+
+        return (List<T>) list;
     }
 
 

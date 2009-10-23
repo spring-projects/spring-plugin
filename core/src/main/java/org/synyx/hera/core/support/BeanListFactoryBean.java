@@ -20,19 +20,20 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 
 /**
  * Factory to create bean lists for a given type. Exposes all beans of the
- * configured type that can be found in the {@link ApplicationContext}.
+ * configured type that can be found in the
+ * {@link org.springframework.context.ApplicationContext}.
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T>
         implements FactoryBean {
 
+    @SuppressWarnings("unchecked")
     private static final Comparator<Object> COMPARATOR =
             new AnnotationAwareOrderComparator();
 
@@ -42,7 +43,7 @@ public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T>
      * 
      * @see org.springframework.beans.factory.FactoryBean#getObject()
      */
-    public Object getObject() throws Exception {
+    public Object getObject() {
 
         List<T> beans = getBeans();
         Collections.sort(beans, COMPARATOR);

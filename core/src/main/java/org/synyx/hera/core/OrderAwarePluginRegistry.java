@@ -4,14 +4,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.core.annotation.Order;
 
 
 /**
  * {@link PluginRegistry} implementation that can handle {@link Plugin}s using
- * the {@link Ordered} interface or {@link Order} annotation.
+ * the {@link org.springframework.core.Ordered} interface or
+ * {@link org.springframework.core.annotation.Order} annotation.
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */

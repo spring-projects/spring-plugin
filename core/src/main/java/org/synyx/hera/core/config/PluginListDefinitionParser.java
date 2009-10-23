@@ -15,7 +15,6 @@
  */
 package org.synyx.hera.core.config;
 
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
@@ -35,8 +34,9 @@ public class PluginListDefinitionParser extends AbstractBeanDefinitionParser {
 
 
     /**
-     * Returns the name of the {@link BeanFactoryPostProcessor} to be
-     * registered.
+     * Returns the name of the
+     * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
+     * to be registered.
      * 
      * @return
      */

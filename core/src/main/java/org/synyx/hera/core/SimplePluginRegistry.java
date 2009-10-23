@@ -118,10 +118,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     public T getPluginFor(S delimiter) {
 
-        List<T> plugins = getPluginsFor(delimiter);
+        List<T> result = getPluginsFor(delimiter);
 
-        if (0 < plugins.size()) {
-            return plugins.get(0);
+        if (0 < result.size()) {
+            return result.get(0);
         }
 
         return null;
@@ -172,13 +172,13 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     public <E extends Exception> List<T> getPluginsFor(S delimiter, E ex)
             throws E {
 
-        List<T> plugins = getPluginsFor(delimiter);
+        List<T> result = getPluginsFor(delimiter);
 
-        if (0 == plugins.size()) {
+        if (0 == result.size()) {
             throw ex;
         }
 
-        return plugins;
+        return result;
     }
 
 

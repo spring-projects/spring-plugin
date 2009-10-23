@@ -28,5 +28,5 @@ public interface MetadataProvider {
      * 
      * @return the plugins metadata
      */
-    public PluginMetadata getMetadata();
+    PluginMetadata getMetadata();
 }
