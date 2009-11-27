@@ -79,7 +79,7 @@ public class HostImpl implements Host {
   <section id="core.collecting-beans">
     <title>Collecting Spring beans dynamically</title>
 
-    <para>With the <classname>BeanListBeanFactoryPostProcessor</classname>
+    <para>With the <classname>BeanListBeanFactory</classname>
     <productname>Hera</productname> provides a Spring container extension,
     that allows to lookup beans of a given type in the current
     <interfacename>ApplicationContext</interfacename> and register them as
@@ -94,7 +94,7 @@ public class HostImpl implements Host {
   &lt;property name="plugins" ref="plugins" /&gt;
 &lt;/bean&gt;
 
-&lt;bean class="org.synyx.hera.plugin.support.BeanListBeanFactoryPostProcessor"&gt;
+&lt;bean class="org.synyx.hera.plugin.support.BeanListBeanFactory"&gt;
   &lt;property name="lists"&gt;
     &lt;map&gt;
       &lt;entry key="plugins" value="org.acme.MyPluginInterface" /&gt;
@@ -114,18 +114,17 @@ public class HostImpl implements Host {
     automatically as long as it is annotated with <code>@Component</code>,
     <code>@Service</code> a.s.o.</para>
 
-    <para>The <classname>BeanListBeanFactoryPostProcessor</classname> in turn
-    allows registering a map of lists to be created, where the maps entry key
-    is the id under which the list will be registered and the entry's value is
-    the type to be looked up.</para>
+    <para>The <classname>BeanListBeanFactory</classname> in turn allows
+    registering a map of lists to be created, where the maps entry key is the
+    id under which the list will be registered and the entry's value is the
+    type to be looked up.</para>
 
     <note>
-      <para>The design of the
-      <classname>BeanListBeanFactoryPostProcessor</classname> might seem a
-      little confusing at first (especially to set a map on a property named
-      lists). This is due to the posibility to register more than one list to
-      be looked up. We think about dropping this functionality for the sake of
-      simplicity in future versions.</para>
+      <para>The design of the <classname>BeanListBeanFactory</classname> might
+      seem a little confusing at first (especially to set a map on a property
+      named lists). This is due to the posibility to register more than one
+      list to be looked up. We think about dropping this functionality for the
+      sake of simplicity in future versions.</para>
     </note>
 
     <simplesect>
@@ -194,12 +193,12 @@ public class HostImpl implements Host {
     <title>Plugin beans</title>
 
     <para>Using plain interfaces and
-    <classname>BeanListBeanFactoryPostProcessor</classname> offers an easy way
-    to dynamically lookup beans in Spring environments. Nevertheless, very
-    often you face the situation that you want to have dedicated access to a
-    subset of all plugins, choose plugins by a given criteria or use a decent
-    default plugin or the like. Thus we need a basic infrastructure interface
-    for plugin interfaces to extend and a more sophisticated plugin
+    <classname>BeanListBeanFactory</classname> offers an easy way to
+    dynamically lookup beans in Spring environments. Nevertheless, very often
+    you face the situation that you want to have dedicated access to a subset
+    of all plugins, choose plugins by a given criteria or use a decent default
+    plugin or the like. Thus we need a basic infrastructure interface for
+    plugin interfaces to extend and a more sophisticated plugin
     container.</para>
 
     <simplesect>
@@ -268,11 +267,10 @@ registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");</programl
     <simplesect>
       <title>Configuration and namespace</title>
 
-      <para>Similar to the
-      <classname>BeanListBeanFactoryPostProcessor</classname> described in
-      <xref linkend="core.collecting-beans" /> Hera provides a
-      <classname>PluginRegistryBeanFactoryPostProcessor</classname> to
-      automatically lookup beans of a dedicated type to be aggregated in a
+      <para>Similar to the <classname>BeanListBeanFactory</classname>
+      described in <xref linkend="core.collecting-beans" /> Hera provides a
+      <classname>PluginRegistryBeanFactory</classname> to automatically lookup
+      beans of a dedicated type to be aggregated in a
       <classname>PluginRegistry</classname>. Note that the type has to be
       assignable to <interfacename>Plugin</interfacename> to let the registry
       work as expected.</para>
