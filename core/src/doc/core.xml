@@ -141,13 +141,20 @@ public class HostImpl implements Host {
       <example>
         <title>Host configuration using the plugin namespace</title>
 
-        <programlisting language="xml">&lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
+        <programlisting language="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:plugin="http://schemas.synyx.org/hera"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://schemas.synyx.org/hera http://schemas.synyx.org/hera/hera.xsd"&gt;
 
-&lt;bean id="host" class="com.acme.HostImpl"&gt;
-  &lt;property name="plugins" ref="plugins" /&gt;
-&lt;/bean&gt;
+  &lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
 
-&lt;plugin:list id="plugins" class="org.acme.MyPluginInterface" /&gt;</programlisting>
+  &lt;bean id="host" class="com.acme.HostImpl"&gt;
+    &lt;property name="plugins" ref="plugins" /&gt;
+  &lt;/bean&gt;
+
+  &lt;plugin:list id="plugins" class="org.acme.MyPluginInterface" /&gt;
+&lt;/beans&gt;</programlisting>
       </example>
 
       <para>Suggested you have added the namespace XSD into Eclipse and
@@ -157,10 +164,6 @@ public class HostImpl implements Host {
 
     <simplesect>
       <title>Using inner beans</title>
-
-      <note>
-        <para>This feature is only available for version 0.3 and above!</para>
-      </note>
 
       <para>The listing above features an indirection for the
       <code>plugin</code> bean definition. Defining the plugin list as top
