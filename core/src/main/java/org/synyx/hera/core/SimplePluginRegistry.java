@@ -251,6 +251,17 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     /*
      * (non-Javadoc)
      * 
+     * @see org.synyx.hera.core.PluginRegistry#hasPluginFor(java.lang.Object)
+     */
+    public boolean hasPluginFor(S delimter) {
+
+        return null != getPluginFor(delimter);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Iterable#iterator()
      */
     public Iterator<T> iterator() {

@@ -123,4 +123,14 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
      * @return
      */
     boolean contains(T plugin);
+
+
+    /**
+     * Returns whether the registry contains a {@link Plugin} matching the given
+     * delimiter.
+     * 
+     * @param delimiter
+     * @return
+     */
+    boolean hasPluginFor(S delimiter);
 }
