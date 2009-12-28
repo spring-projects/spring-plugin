@@ -14,30 +14,6 @@ import java.util.List;
 public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 
     /**
-     * Register plugins.
-     * 
-     * @param plugins the plugins to set
-     */
-    void setPlugins(List<? extends T> plugins);
-
-
-    /**
-     * Adds a given plugin to the registry.
-     * 
-     * @param plugin
-     */
-    void addPlugin(T plugin);
-
-
-    /**
-     * Removes a given plugin from the registry.
-     * 
-     * @param plugin
-     */
-    boolean removePlugin(T plugin);
-
-
-    /**
      * Returns the first plugin found for the given originating system. Thus,
      * further configured plugins are ignored.
      * 

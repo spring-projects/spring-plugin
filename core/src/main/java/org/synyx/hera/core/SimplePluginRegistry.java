@@ -30,7 +30,7 @@ import java.util.List;
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class SimplePluginRegistry<T extends Plugin<S>, S> implements
-        PluginRegistry<T, S> {
+        MutablePluginRegistry<T, S> {
 
     // Registered plugins
     private List<T> plugins;
@@ -78,7 +78,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     /*
      * (non-Javadoc)
      * 
-     * @see org.synyx.hera.core.PluginRegistry#setPlugins(java.util.List)
+     * @see org.synyx.hera.core.MutablePluginRegistry#setPlugins(java.util.List)
      */
     public void setPlugins(List<? extends T> plugins) {
 
@@ -90,7 +90,9 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     /*
      * (non-Javadoc)
      * 
-     * @see org.synyx.hera.core.PluginRegistry#addPlugin(T)
+     * @see
+     * org.synyx.hera.core.MutablePluginRegistry#addPlugin(org.synyx.hera.core
+     * .Plugin)
      */
     public void addPlugin(T plugin) {
 
@@ -102,8 +104,8 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * (non-Javadoc)
      * 
      * @see
-     * org.synyx.hera.core.PluginRegistry#removePlugin(org.synyx.hera.core.Plugin
-     * )
+     * org.synyx.hera.core.MutablePluginRegistry#removePlugin(org.synyx.hera
+     * .core.Plugin)
      */
     public boolean removePlugin(T plugin) {
 
