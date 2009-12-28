@@ -19,12 +19,13 @@ import org.springframework.core.annotation.Order;
 public class OrderAwarePluginRegistryUnitTest extends
         SimplePluginRegistryUnitTest {
 
-    private PluginRegistry<TestPlugin, String> registry;
+    private OrderAwarePluginRegistry<TestPlugin, String> registry;
 
     private TestPlugin firstPlugin;
     private TestPlugin secondPlugin;
 
 
+    @Override
     @Before
     public void setUp() {
 
