@@ -52,7 +52,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * @param <S>
      * @return
      */
-    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create() {
+    public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
 
         return new SimplePluginRegistry<T, S>();
     }
@@ -65,10 +65,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * @param <S>
      * @return
      */
-    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create(
-            List<T> plugins) {
+    public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create(
+            List<? extends T> plugins) {
 
-        PluginRegistry<T, S> registry = create();
+        SimplePluginRegistry<T, S> registry = create();
         registry.setPlugins(plugins);
 
         return registry;

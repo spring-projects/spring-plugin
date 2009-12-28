@@ -18,7 +18,25 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
         SimplePluginRegistry<T, S> {
 
     @SuppressWarnings("unchecked")
-    private Comparator<T> comparator = new AnnotationAwareOrderComparator();
+    private static final Comparator<Object> DEFAULT_COMPARATOR =
+            new AnnotationAwareOrderComparator();
+
+    private static final Comparator<Object> REVERSE_COMPARATOR =
+            new Comparator<Object>() {
+
+                public int compare(Object o1, Object o2) {
+
+                    return -1 * DEFAULT_COMPARATOR.compare(o1, o2);
+                }
+            };
+
+    private Comparator<Object> comparator;
+
+
+    protected OrderAwarePluginRegistry(Comparator<Object> comparator) {
+
+        this.comparator = comparator;
+    }
 
 
     /**
@@ -28,9 +46,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * @param <S>
      * @return
      */
-    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create() {
+    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
 
-        return new OrderAwarePluginRegistry<T, S>();
+        return new OrderAwarePluginRegistry<T, S>(DEFAULT_COMPARATOR);
     }
 
 
@@ -42,10 +60,30 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * @param plugins
      * @return
      */
-    public static <S, T extends Plugin<S>> PluginRegistry<T, S> create(
-            List<T> plugins) {
+    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(
+            List<? extends T> plugins) {
 
-        PluginRegistry<T, S> registry = create();
+        OrderAwarePluginRegistry<T, S> registry = create();
+        registry.setPlugins(plugins);
+
+        return registry;
+    }
+
+
+    /**
+     * Creates a new {@link OrderAwarePluginRegistry} with the given plugins and
+     * the order of the plugins reverted.
+     * 
+     * @param <S>
+     * @param <T>
+     * @param plugins
+     * @return
+     */
+    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> createReverse(
+            List<? extends T> plugins) {
+
+        OrderAwarePluginRegistry<T, S> registry =
+                new OrderAwarePluginRegistry<T, S>(REVERSE_COMPARATOR);
         registry.setPlugins(plugins);
 
         return registry;
@@ -76,5 +114,17 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
 
         super.addPlugin(plugin);
         Collections.sort(getPlugins(), comparator);
+    }
+
+
+    /**
+     * Returns a new {@link OrderAwarePluginRegistry} with the order of the
+     * plugins reverted.
+     * 
+     * @return
+     */
+    public OrderAwarePluginRegistry<T, S> reverse() {
+
+        return createReverse(getPlugins());
     }
 }
