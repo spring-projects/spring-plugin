@@ -67,11 +67,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
             Comparator<? super T> comparator) {
 
         super(plugins);
-
-        this.comparator = DEFAULT_COMPARATOR;
-        if (comparator != null) {
-            this.comparator = comparator;
-        }
+        setComparator(comparator);
     }
 
 
@@ -150,6 +146,26 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     }
 
 
+    /**
+     * Sets the comparator to use. Resorts the contained {@link Plugin}s if any
+     * available.
+     * 
+     * @param comparator the comparator to set
+     */
+    private void setComparator(Comparator<? super T> comparator) {
+
+        this.comparator = DEFAULT_COMPARATOR;
+
+        if (comparator != null) {
+            this.comparator = comparator;
+        }
+
+        if (plugins != null) {
+            Collections.sort(plugins, comparator);
+        }
+    }
+
+
     /*
      * (non-Javadoc)
      * 
@@ -173,7 +189,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     public OrderAwarePluginRegistry<T, S> addPlugin(T plugin) {
 
         super.addPlugin(plugin);
-        Collections.sort(getPlugins(), comparator);
+        Collections.sort(plugins, comparator);
         return this;
     }
 
@@ -187,7 +203,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     @SuppressWarnings("unchecked")
     public OrderAwarePluginRegistry<T, S> reverse() {
 
-        return create(getPlugins(), new RevertingComparator(comparator));
+        return create(plugins, new RevertingComparator(comparator));
     }
 
     /**

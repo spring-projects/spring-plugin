@@ -17,6 +17,7 @@
 package org.synyx.hera.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,8 +33,7 @@ import java.util.List;
 public class SimplePluginRegistry<T extends Plugin<S>, S> implements
         MutablePluginRegistry<T, S> {
 
-    // Registered plugins
-    private List<T> plugins;
+    protected List<T> plugins;
 
 
     /**
@@ -84,7 +84,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     public void setPlugins(List<? extends T> plugins) {
 
         this.plugins = new ArrayList<T>();
-        this.plugins.addAll(plugins);
+
+        if (plugins != null) {
+            this.plugins.addAll(plugins);
+        }
     }
 
 
@@ -96,6 +99,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * .Plugin)
      */
     public SimplePluginRegistry<T, S> addPlugin(T plugin) {
+
+        if (null == plugin) {
+            throw new IllegalArgumentException("Plugin must not be null!");
+        }
 
         this.plugins.add(plugin);
         return this;
