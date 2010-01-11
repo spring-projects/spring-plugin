@@ -24,39 +24,60 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 
 /**
- * {@link PluginRegistry} implementation that can handle {@link Plugin}s using
- * the {@link org.springframework.core.Ordered} interface or
- * {@link org.springframework.core.annotation.Order} annotation.
+ * {@link PluginRegistry} implementation that be made aware of a certain
+ * ordering of {@link Plugin}s. By default it orders {@link Plugin}s by
+ * regarding {@link org.springframework.core.Ordered} interface or
+ * {@link org.springframework.core.annotation.Order} annotation. To alter
+ * ordering behaviour use one of the factory methods accepting a
+ * {@link Comparator} as parameter.
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */
 public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
         SimplePluginRegistry<T, S> {
 
+    /**
+     * Comparator regarding {@link org.springframework.core.Ordered} interface
+     * or {@link org.springframework.core.annotation.Order} annotation.
+     */
     @SuppressWarnings("unchecked")
     private static final Comparator<Object> DEFAULT_COMPARATOR =
             new AnnotationAwareOrderComparator();
 
-    private static final Comparator<Object> REVERSE_COMPARATOR =
-            new Comparator<Object>() {
+    /**
+     * Comparator reverting the {@value #DEFAULT_COMPARATOR}.
+     */
+    private static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR =
+            new RevertingComparator<Object>(DEFAULT_COMPARATOR);
 
-                public int compare(Object o1, Object o2) {
-
-                    return -1 * DEFAULT_COMPARATOR.compare(o1, o2);
-                }
-            };
-
-    private Comparator<Object> comparator;
+    private Comparator<? super T> comparator;
 
 
-    protected OrderAwarePluginRegistry(Comparator<Object> comparator) {
+    /**
+     * Creates a new {@link OrderAwarePluginRegistry} with the given
+     * {@link Plugin}s and {@link Comparator}.
+     * 
+     * @param plugins the {@link Plugin}s to be contained in the registry or
+     *            {@literal null} if the registry shall be empty initally.
+     * @param comparator the {@link Comparator} to be used for ordering the
+     *            {@link Plugin}s or {@literal null} if the {@code
+     *            #DEFAULT_COMPARATOR} shall be used.
+     */
+    protected OrderAwarePluginRegistry(List<? extends T> plugins,
+            Comparator<? super T> comparator) {
 
-        this.comparator = comparator;
+        super(plugins);
+
+        this.comparator = DEFAULT_COMPARATOR;
+        if (comparator != null) {
+            this.comparator = comparator;
+        }
     }
 
 
     /**
-     * Creates a new {@link SimplePluginRegistry}.
+     * Creates a new {@link OrderAwarePluginRegistry} using the {@code
+     * #DEFAULT_COMPARATOR}.
      * 
      * @param <T>
      * @param <S>
@@ -64,7 +85,22 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      */
     public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
 
-        return new OrderAwarePluginRegistry<T, S>(DEFAULT_COMPARATOR);
+        return create(null, null);
+    }
+
+
+    /**
+     * Creates a new {@link OrderAwarePluginRegistry} using the given
+     * {@link Comparator} for ordering contained {@link Plugin}s.
+     * 
+     * @param <T>
+     * @param <S>
+     * @return
+     */
+    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(
+            Comparator<? super T> comparator) {
+
+        return create(null, comparator);
     }
 
 
@@ -79,10 +115,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(
             List<? extends T> plugins) {
 
-        OrderAwarePluginRegistry<T, S> registry = create();
-        registry.setPlugins(plugins);
-
-        return registry;
+        return create(plugins, DEFAULT_COMPARATOR);
     }
 
 
@@ -98,11 +131,22 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> createReverse(
             List<? extends T> plugins) {
 
-        OrderAwarePluginRegistry<T, S> registry =
-                new OrderAwarePluginRegistry<T, S>(REVERSE_COMPARATOR);
-        registry.setPlugins(plugins);
+        return create(plugins, DEFAULT_REVERSE_COMPARATOR);
+    }
 
-        return registry;
+
+    /**
+     * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+     * 
+     * @param <S>
+     * @param <T>
+     * @param plugins
+     * @return
+     */
+    public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(
+            List<? extends T> plugins, Comparator<? super T> comparator) {
+
+        return new OrderAwarePluginRegistry<T, S>(plugins, comparator);
     }
 
 
@@ -139,8 +183,41 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * 
      * @return
      */
+    @SuppressWarnings("unchecked")
     public OrderAwarePluginRegistry<T, S> reverse() {
 
-        return createReverse(getPlugins());
+        return create(getPlugins(), new RevertingComparator(comparator));
+    }
+
+    /**
+     * Comparator to revert the ordering of the given delegate.
+     * 
+     * @author Oliver Gierke - gierke@synyx.de
+     */
+    private static final class RevertingComparator<T> implements Comparator<T> {
+
+        private final Comparator<? super T> delegate;
+
+
+        /**
+         * Creates a new {@link RevertingComparator}.
+         * 
+         * @param delegate
+         */
+        public RevertingComparator(Comparator<? super T> delegate) {
+
+            this.delegate = delegate;
+        }
+
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(T first, T second) {
+
+            return -1 * delegate.compare(first, second);
+        }
     }
 }
