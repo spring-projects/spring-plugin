@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * Basic implementation of {@link PluginRegistry}. Simply holds all given
- * plugins in a list.
+ * plugins in a list dropping {@literal null} values silently on adding.
  * 
  * @param <T> the concrete plugin interface
  * @param <S> the delimiter type
@@ -42,9 +42,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     protected SimplePluginRegistry(List<? extends T> plugins) {
 
-        this.plugins =
-                null == plugins ? new ArrayList<T>()
-                        : new ArrayList<T>(plugins);
+        this.plugins = filterNulls(plugins);
     }
 
 
@@ -83,11 +81,32 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     public void setPlugins(List<? extends T> plugins) {
 
-        this.plugins = new ArrayList<T>();
+        this.plugins = filterNulls(plugins);
+    }
 
-        if (plugins != null) {
-            this.plugins.addAll(plugins);
+
+    /**
+     * Filters {@literal null} values from the given list.
+     * 
+     * @param plugins
+     * @return an empty {@link List} if the given list is {@literal null} or
+     *         empty, or the original list without its {@literal null} elements.
+     */
+    private List<T> filterNulls(List<? extends T> plugins) {
+
+        if (plugins == null || plugins.isEmpty()) {
+            return new ArrayList<T>();
         }
+
+        List<T> result = new ArrayList<T>();
+
+        for (T plugin : plugins) {
+            if (plugin != null) {
+                result.add(plugin);
+            }
+        }
+
+        return result;
     }
 
 
@@ -100,11 +119,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     public SimplePluginRegistry<T, S> addPlugin(T plugin) {
 
-        if (null == plugin) {
-            throw new IllegalArgumentException("Plugin must not be null!");
+        if (plugin != null) {
+            this.plugins.add(plugin);
         }
 
-        this.plugins.add(plugin);
         return this;
     }
 
@@ -211,12 +229,11 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * 
      * @see org.synyx.hera.core.PluginRegistry#getPluginsFor(S, java.util.List)
      */
-    public List<? extends T> getPluginsFor(S delimiter,
-            List<? extends T> plugins) {
+    public List<T> getPluginsFor(S delimiter, List<? extends T> plugins) {
 
         List<T> candidates = getPluginsFor(delimiter);
 
-        return candidates.size() == 0 ? plugins : candidates;
+        return candidates.size() == 0 ? new ArrayList<T>(plugins) : candidates;
     }
 
 
@@ -239,7 +256,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * 
      * @return all plugins of the registry
      */
-    public List<? extends T> getPlugins() {
+    public List<T> getPlugins() {
 
         return Collections.unmodifiableList(plugins);
     }

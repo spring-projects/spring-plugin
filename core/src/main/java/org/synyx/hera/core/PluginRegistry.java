@@ -97,7 +97,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
      * @return all {@link Plugin}s supporting the given delimiter or the given
      *         {@link Plugin}s if none found
      */
-    List<? extends T> getPluginsFor(S delimiter, List<? extends T> plugins);
+    List<T> getPluginsFor(S delimiter, List<? extends T> plugins);
 
 
     /**
@@ -134,5 +134,5 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
      * 
      * @return
      */
-    List<? extends Plugin<S>> getPlugins();
+    List<T> getPlugins();
 }
