@@ -31,11 +31,12 @@ import org.junit.Test;
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */
-public class SimplePluginRegistryUnitTest {
+public class SimplePluginRegistryUnitTest extends
+        AbstractMutablePluginRegistryUnitTest {
 
     private SamplePlugin plugin;
 
-    private PluginRegistry<SamplePlugin, String> registry;
+    private SimplePluginRegistry<SamplePlugin, String> registry;
 
 
     /**
@@ -47,7 +48,20 @@ public class SimplePluginRegistryUnitTest {
 
         plugin = new SamplePluginImplementation();
 
-        registry = SimplePluginRegistry.create(Arrays.asList(plugin));
+        registry = SimplePluginRegistry.create();
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.synyx.hera.core.AbstractMutablePluginRegistryUnitTest#getRegistry()
+     */
+    @Override
+    protected MutablePluginRegistry<SamplePlugin, String> getRegistry() {
+
+        return SimplePluginRegistry.create();
     }
 
 
@@ -59,7 +73,9 @@ public class SimplePluginRegistryUnitTest {
     @Test
     public void assertRegistryInitialized() throws Exception {
 
-        assertEquals(1, registry.countPlugins());
+        registry.addPlugin(plugin);
+
+        assertThat(registry.countPlugins(), is(1));
         assertTrue(registry.contains(plugin));
     }
 
@@ -71,14 +87,16 @@ public class SimplePluginRegistryUnitTest {
     @Test
     public void assertFindsEmailNotificationProvider() {
 
-        String metadata = "FOO";
+        registry.addPlugin(plugin);
 
-        List<SamplePlugin> plugins = registry.getPluginsFor(metadata);
-        assertNotNull(plugins);
-        assertEquals(1, plugins.size());
+        String delimiter = "FOO";
+
+        List<SamplePlugin> plugins = registry.getPluginsFor(delimiter);
+        assertThat(plugins, is(notNullValue()));
+        assertThat(plugins.size(), is(1));
 
         SamplePlugin provider = plugins.get(0);
-        assertTrue(provider instanceof SamplePluginImplementation);
+        assertThat(provider, is(instanceOf(SamplePluginImplementation.class)));
     }
 
 
@@ -110,7 +128,8 @@ public class SimplePluginRegistryUnitTest {
 
         SamplePlugin defaultPlugin = new SamplePluginImplementation();
 
-        assertEquals(defaultPlugin, registry.getPluginFor("BAR", defaultPlugin));
+        assertThat(registry.getPluginFor("BAR", defaultPlugin),
+                is(defaultPlugin));
     }
 
 
@@ -123,7 +142,38 @@ public class SimplePluginRegistryUnitTest {
         List<? extends SamplePlugin> defaultPlugins =
                 Arrays.asList(new SamplePluginImplementation());
 
-        assertEquals(defaultPlugins, registry.getPluginsFor("BAR",
-                defaultPlugins));
+        List<SamplePlugin> result =
+                registry.getPluginsFor("BAR", defaultPlugins);
+        assertTrue(result.containsAll(defaultPlugins));
+    }
+
+
+    @Test
+    public void handlesAddingNullPluginsCorrecty() throws Exception {
+
+        registry.addPlugin(null);
+
+        assertThat(registry.countPlugins(), is(0));
+    }
+
+
+    @Test
+    public void doesNotAddNullsOnSettingPlugins() throws Exception {
+
+        registry.setPlugins(Arrays.asList(null, plugin, null));
+
+        assertThat(registry.countPlugins(), is(1));
+        assertThat(registry.getPlugins().size(), is(1));
+    }
+
+
+    @Test
+    public void dropsNullValuesOnCreation() throws Exception {
+
+        registry =
+                SimplePluginRegistry.create(Arrays.asList(null, plugin, null));
+
+        assertThat(registry.countPlugins(), is(1));
+        assertThat(registry.getPlugins().size(), is(1));
     }
 }

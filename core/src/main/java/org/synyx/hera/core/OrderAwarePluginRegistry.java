@@ -174,8 +174,12 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     @Override
     public void setPlugins(List<? extends T> plugins) {
 
-        Collections.sort(plugins, comparator);
         super.setPlugins(plugins);
+
+        if (!this.plugins.isEmpty()) {
+            Collections.sort(this.plugins, comparator);
+        }
+
     }
 
 

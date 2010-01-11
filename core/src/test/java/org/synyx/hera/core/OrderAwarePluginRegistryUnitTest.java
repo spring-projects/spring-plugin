@@ -55,6 +55,18 @@ public class OrderAwarePluginRegistryUnitTest extends
     }
 
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.synyx.hera.core.SimplePluginRegistryUnitTest#getRegistry()
+     */
+    @Override
+    protected OrderAwarePluginRegistry<SamplePlugin, String> getRegistry() {
+
+        return OrderAwarePluginRegistry.create();
+    }
+
+
     /**
      * Adds the plugin implementations in order of their names, expecting the
      * registry to order them correctly.
@@ -66,7 +78,7 @@ public class OrderAwarePluginRegistryUnitTest extends
 
         registry.setPlugins(Arrays.asList(firstPlugin, secondPlugin));
 
-        assertOrder();
+        assertOrder(registry, secondPlugin, firstPlugin);
     }
 
 
@@ -76,19 +88,40 @@ public class OrderAwarePluginRegistryUnitTest extends
         registry.setPlugins(Arrays.asList(firstPlugin));
         registry.addPlugin(secondPlugin);
 
-        assertOrder();
+        assertOrder(registry, secondPlugin, firstPlugin);
     }
 
 
-    private void assertOrder() {
+    private void assertOrder(PluginRegistry<TestPlugin, String> registry,
+            TestPlugin... plugins) {
 
-        List<TestPlugin> plugins = registry.getPluginsFor(null);
+        List<TestPlugin> result = registry.getPluginsFor(null);
 
-        assertEquals(2, plugins.size());
-        assertEquals(secondPlugin, plugins.get(0));
-        assertEquals(firstPlugin, plugins.get(1));
+        assertThat(plugins.length, is(result.size()));
 
-        assertEquals(secondPlugin, registry.getPluginFor(null));
+        for (int i = 0; i < plugins.length; i++) {
+            assertThat(result.get(i), is(result.get(i)));
+        }
+
+        assertThat(registry.getPluginFor(null), is(plugins[0]));
+    }
+
+
+    @Test
+    public void createsRevertedRegistryCorrectly() throws Exception {
+
+        basicPrepare();
+        PluginRegistry<TestPlugin, String> reverse = registry.reverse();
+
+        assertOrder(registry, secondPlugin, firstPlugin);
+        assertOrder(reverse, firstPlugin, secondPlugin);
+    }
+
+
+    private void basicPrepare() {
+
+        registry.setPlugins(Arrays.asList(firstPlugin, secondPlugin));
+        assertOrder(registry, secondPlugin, firstPlugin);
     }
 
     /**
