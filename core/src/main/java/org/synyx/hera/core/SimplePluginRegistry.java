@@ -229,14 +229,12 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * to access all plugins. For distinguished access to certain plugins favour
      * accessor methods like {link #getPluginFor} over this one. This method
      * should only be used for testing purposes to check registry configuration.
-     * <p>
-     * TODO: decide whether to make this method public
      * 
      * @return all plugins of the registry
      */
-    protected List<? extends T> getPlugins() {
+    public List<? extends T> getPlugins() {
 
-        return plugins;
+        return Collections.unmodifiableList(plugins);
     }
 
 

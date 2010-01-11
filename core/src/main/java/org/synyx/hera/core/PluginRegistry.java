@@ -109,4 +109,14 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
      * @return
      */
     boolean hasPluginFor(S delimiter);
+
+
+    /**
+     * Returns all {@link Plugin}s contained in this registry. Will return an
+     * immutable {@link List} to prevent outside modifications of the
+     * {@link PluginRegistry} content.
+     * 
+     * @return
+     */
+    List<? extends Plugin<S>> getPlugins();
 }
