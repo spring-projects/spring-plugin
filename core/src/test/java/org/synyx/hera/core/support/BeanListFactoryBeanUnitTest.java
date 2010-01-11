@@ -1,7 +1,7 @@
 package org.synyx.hera.core.support;
 
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 
@@ -18,16 +21,17 @@ import org.springframework.core.Ordered;
  * 
  * @author Oliver Gierke - gierke@synyx.de
  */
+@RunWith(MockitoJUnitRunner.class)
 public class BeanListFactoryBeanUnitTest {
 
     private BeanListFactoryBean<Ordered> factory;
+
+    @Mock
     private ApplicationContext context;
 
 
     @Before
     public void setUp() {
-
-        context = createNiceMock(ApplicationContext.class);
 
         factory = new BeanListFactoryBean<Ordered>();
         factory.setApplicationContext(context);
@@ -46,9 +50,7 @@ public class BeanListFactoryBeanUnitTest {
         beans.put("first", first);
         beans.put("second", second);
 
-        expect(context.getBeansOfType(Ordered.class)).andReturn(beans)
-                .anyTimes();
-        replay(context);
+        when(context.getBeansOfType(Ordered.class)).thenReturn(beans);
 
         Object result = factory.getObject();
         assertTrue(result instanceof List<?>);
@@ -63,9 +65,8 @@ public class BeanListFactoryBeanUnitTest {
     @Test
     public void returnsEmptyListIfNoBeansFound() throws Exception {
 
-        expect(context.getBeansOfType(Ordered.class)).andReturn(
+        when(context.getBeansOfType(Ordered.class)).thenReturn(
                 new HashMap<String, Ordered>());
-        replay(context);
 
         Object result = factory.getObject();
         assertTrue(result instanceof List<?>);
