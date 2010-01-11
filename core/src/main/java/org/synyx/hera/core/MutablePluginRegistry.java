@@ -41,7 +41,7 @@ public interface MutablePluginRegistry<T extends Plugin<S>, S> extends
      * 
      * @param plugin
      */
-    void addPlugin(T plugin);
+    MutablePluginRegistry<T, S> addPlugin(T plugin);
 
 
     /**

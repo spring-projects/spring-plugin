@@ -170,10 +170,11 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * org.synyx.hera.core.PluginRegistry#addPlugin(org.synyx.hera.core.Plugin)
      */
     @Override
-    public void addPlugin(T plugin) {
+    public OrderAwarePluginRegistry<T, S> addPlugin(T plugin) {
 
         super.addPlugin(plugin);
         Collections.sort(getPlugins(), comparator);
+        return this;
     }
 
 

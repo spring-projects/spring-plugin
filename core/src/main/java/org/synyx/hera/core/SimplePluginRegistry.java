@@ -96,9 +96,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      * org.synyx.hera.core.MutablePluginRegistry#addPlugin(org.synyx.hera.core
      * .Plugin)
      */
-    public void addPlugin(T plugin) {
+    public SimplePluginRegistry<T, S> addPlugin(T plugin) {
 
         this.plugins.add(plugin);
+        return this;
     }
 
 
