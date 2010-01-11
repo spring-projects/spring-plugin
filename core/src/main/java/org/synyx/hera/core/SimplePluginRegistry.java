@@ -17,6 +17,7 @@
 package org.synyx.hera.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,16 +33,19 @@ import java.util.List;
 public class SimplePluginRegistry<T extends Plugin<S>, S> implements
         MutablePluginRegistry<T, S> {
 
+    private final List<T> EMPTY_LIST = Collections.emptyList();
+
     // Registered plugins
     private List<T> plugins;
 
 
     /**
-     * Creates a new {@code PluginRegistry}.
+     * Creates a new {@code SimplePluginRegistry}. Will create an empty registry
+     * if {@literal null} is provided.
      */
-    public SimplePluginRegistry() {
+    protected SimplePluginRegistry(List<? extends T> plugins) {
 
-        plugins = new ArrayList<T>();
+        this.plugins = null == plugins ? EMPTY_LIST : new ArrayList<T>(plugins);
     }
 
 
@@ -54,12 +58,13 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
 
-        return new SimplePluginRegistry<T, S>();
+        return new SimplePluginRegistry<T, S>(null);
     }
 
 
     /**
-     * Creates a new {@link SimplePluginRegistry}.
+     * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin}
+     * s.
      * 
      * @param <T>
      * @param <S>
@@ -68,10 +73,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
     public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create(
             List<? extends T> plugins) {
 
-        SimplePluginRegistry<T, S> registry = create();
-        registry.setPlugins(plugins);
-
-        return registry;
+        return new SimplePluginRegistry<T, S>(plugins);
     }
 
 
