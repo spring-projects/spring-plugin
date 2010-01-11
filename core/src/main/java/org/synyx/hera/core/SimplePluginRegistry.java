@@ -17,7 +17,6 @@
 package org.synyx.hera.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,8 +32,6 @@ import java.util.List;
 public class SimplePluginRegistry<T extends Plugin<S>, S> implements
         MutablePluginRegistry<T, S> {
 
-    private final List<T> EMPTY_LIST = Collections.emptyList();
-
     // Registered plugins
     private List<T> plugins;
 
@@ -45,7 +42,9 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements
      */
     protected SimplePluginRegistry(List<? extends T> plugins) {
 
-        this.plugins = null == plugins ? EMPTY_LIST : new ArrayList<T>(plugins);
+        this.plugins =
+                null == plugins ? new ArrayList<T>()
+                        : new ArrayList<T>(plugins);
     }
 
 
