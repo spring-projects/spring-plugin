@@ -16,6 +16,7 @@
 
 package org.synyx.hera.core;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -215,7 +216,10 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * 
      * @author Oliver Gierke - gierke@synyx.de
      */
-    private static final class RevertingComparator<T> implements Comparator<T> {
+    private static final class RevertingComparator<T> implements Comparator<T>,
+            Serializable {
+
+        private static final long serialVersionUID = 5296103845985772391L;
 
         private final Comparator<? super T> delegate;
 
