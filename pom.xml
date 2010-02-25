@@ -4,7 +4,7 @@
   <artifactId>org.synyx.hera</artifactId>
   <packaging>pom</packaging>
   <name>Hera</name>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
   <description>Simple plugin infrastructure</description>
   
   <organization>
@@ -263,9 +263,9 @@
 	</reporting>
 	
 	<scm>
-		<url>http://svn.synyx.org/synyx/opensource/hera</url>
-		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/hera</connection>
-		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/hera</developerConnection>
+		<url>http://svn.synyx.org/synyx/opensource/hera/tags/org.synyx.hera-0.6</url>
+		<connection>scm:svn:http://svn.synyx.org/synyx/opensource/hera/tags/org.synyx.hera-0.6</connection>
+		<developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/hera/tags/org.synyx.hera-0.6</developerConnection>
 	</scm>
 	
 	<ciManagement>
