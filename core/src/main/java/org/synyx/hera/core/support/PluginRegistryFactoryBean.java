@@ -46,8 +46,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends
      * 
      * @see org.springframework.beans.factory.FactoryBean#getObjectType()
      */
-    @SuppressWarnings("unchecked")
-    public Class getObjectType() {
+    public Class<?> getObjectType() {
 
         return PluginRegistry.class;
     }

@@ -16,12 +16,12 @@
 
 package org.synyx.hera.core;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.util.comparator.InvertibleComparator;
 
 
 /**
@@ -48,8 +48,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     /**
      * Comparator reverting the {@value #DEFAULT_COMPARATOR}.
      */
+    @SuppressWarnings("unchecked")
     private static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR =
-            new RevertingComparator<Object>(DEFAULT_COMPARATOR);
+            new InvertibleComparator(DEFAULT_COMPARATOR, false);
 
     private Comparator<? super T> comparator;
 
@@ -61,8 +62,8 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
      * @param plugins the {@link Plugin}s to be contained in the registry or
      *            {@literal null} if the registry shall be empty initally.
      * @param comparator the {@link Comparator} to be used for ordering the
-     *            {@link Plugin}s or {@literal null} if the {@code
-     *            #DEFAULT_COMPARATOR} shall be used.
+     *            {@link Plugin}s or {@literal null} if the
+     *            {@code #DEFAULT_COMPARATOR} shall be used.
      */
     protected OrderAwarePluginRegistry(List<? extends T> plugins,
             Comparator<? super T> comparator) {
@@ -73,8 +74,8 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
 
 
     /**
-     * Creates a new {@link OrderAwarePluginRegistry} using the {@code
-     * #DEFAULT_COMPARATOR}.
+     * Creates a new {@link OrderAwarePluginRegistry} using the
+     * {@code #DEFAULT_COMPARATOR}.
      * 
      * @param <T>
      * @param <S>
@@ -208,41 +209,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends
     @SuppressWarnings("unchecked")
     public OrderAwarePluginRegistry<T, S> reverse() {
 
-        return create(plugins, new RevertingComparator(comparator));
-    }
-
-    /**
-     * Comparator to revert the ordering of the given delegate.
-     * 
-     * @author Oliver Gierke - gierke@synyx.de
-     */
-    private static final class RevertingComparator<T> implements Comparator<T>,
-            Serializable {
-
-        private static final long serialVersionUID = 5296103845985772391L;
-
-        private final Comparator<? super T> delegate;
-
-
-        /**
-         * Creates a new {@link RevertingComparator}.
-         * 
-         * @param delegate
-         */
-        public RevertingComparator(Comparator<? super T> delegate) {
-
-            this.delegate = delegate;
-        }
-
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         */
-        public int compare(T first, T second) {
-
-            return -1 * delegate.compare(first, second);
-        }
+        return create(plugins, new InvertibleComparator(comparator, false));
     }
 }

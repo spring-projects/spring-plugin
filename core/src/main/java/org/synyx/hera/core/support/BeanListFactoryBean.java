@@ -57,8 +57,7 @@ public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T>
      * 
      * @see org.springframework.beans.factory.FactoryBean#getObjectType()
      */
-    @SuppressWarnings("unchecked")
-    public Class getObjectType() {
+    public Class<?> getObjectType() {
 
         return List.class;
     }
