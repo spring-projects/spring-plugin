@@ -5,7 +5,7 @@
     <artifactId>org.synyx.hera</artifactId>
     <packaging>pom</packaging>
     <name>Hera</name>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.7.0.BUILD-SNAPSHOT</version>
     <description>Simple plugin infrastructure</description>
 
     <organization>
