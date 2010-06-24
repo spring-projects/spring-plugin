@@ -1,0 +1,4 @@
+# Tooling related information for the Hera namespace
+http\://schemas.synyx.org/hera@name=Hera Namespace
+http\://schemas.synyx.org/hera@prefix=hera
+http\://schemas.synyx.org/hera@icon=org/springframework/beans/factory/xml/spring-beans.gif
