@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -44,8 +43,7 @@ public abstract class AbstractTypeAwareSupport<T> implements
      * org.springframework.context.ApplicationContextAware#setApplicationContext
      * (org.springframework.context.ApplicationContext)
      */
-    public void setApplicationContext(ApplicationContext context)
-            throws BeansException {
+    public void setApplicationContext(ApplicationContext context) {
 
         this.context = context;
     }
