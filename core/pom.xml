@@ -11,10 +11,6 @@
 		<version>0.7.0.BUILD-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<spring.version>2.5.6.SEC01</spring.version>
-	</properties>
-
 	<dependencies>
 	
 		<dependency>

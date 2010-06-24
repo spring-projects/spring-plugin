@@ -16,8 +16,7 @@
 
 package org.synyx.hera.metadata;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import static org.springframework.util.ObjectUtils.*;
 
 
 /**
@@ -86,15 +85,18 @@ public class SimplePluginMetadata implements PluginMetadata {
     @Override
     public boolean equals(Object obj) {
 
+        if (this == obj) {
+            return true;
+        }
+
         if (!(obj instanceof PluginMetadata)) {
             return false;
         }
 
         PluginMetadata that = (PluginMetadata) obj;
 
-        boolean sameName = StringUtils.equals(this.getName(), that.getName());
-        boolean sameVersion =
-                StringUtils.equals(this.getName(), that.getName());
+        boolean sameName = nullSafeEquals(this.getName(), that.getName());
+        boolean sameVersion = nullSafeEquals(this.getName(), that.getName());
 
         return sameName && sameVersion;
     }
@@ -108,6 +110,6 @@ public class SimplePluginMetadata implements PluginMetadata {
     @Override
     public int hashCode() {
 
-        return ObjectUtils.hashCode(name) + ObjectUtils.hashCode(version);
+        return nullSafeHashCode(name) + nullSafeHashCode(version);
     }
 }

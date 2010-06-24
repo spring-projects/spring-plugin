@@ -7,4 +7,5 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Template: 
  ${project.artifactId}.*;version="${project.version}"
 Import-Template: 
- org.springframework.*;version="${spring.version:[=.=.=.=,+2.0.0)}"
+ org.springframework.*;version="${spring.version:[=.=.=.=,+2.0.0)}",
+ org.w3c.dom.*;version="0.0.0"

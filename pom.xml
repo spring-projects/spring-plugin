@@ -18,6 +18,10 @@
         <module>core</module>
         <module>metadata</module>
     </modules>
+    
+    <properties>
+        <spring.version>2.5.6.SEC02</spring.version>
+    </properties>
 
     <developers>
         <developer>
@@ -160,6 +164,9 @@
 						<phase>process-classes</phase>
 					</execution>
 				</executions>
+                <configuration>
+                    <failOnWarnings>true</failOnWarnings>
+                </configuration>
      		</plugin>
 
             <plugin>
