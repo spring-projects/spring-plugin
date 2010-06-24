@@ -20,11 +20,12 @@
   
   <developers>
 		<developer>
-			<id>gierke_cvs</id>
+			<id>gierke</id>
 			<name>Oliver Gierke</name>
-			<email>gierke@synyx.de</email>
-			<organization>Synyx GmbH &amp; Co. KG</organization>
-			<organizationUrl>http://www.synyx.de</organizationUrl>
+			<email>ogierke@vmware.com</email>
+            <url>http://www.olivergierke.de</url>
+			<organization>SpringSource - a division of VMware</organization>
+			<organizationUrl>http://www.springsource.com</organizationUrl>
 			<roles>
 				<role>Project lead</role>
 			</roles>
@@ -51,22 +52,6 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Package JavaDocs -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<phase>deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -222,6 +207,59 @@
 
 		</plugins>
 	</build>
+    
+    <profiles>        
+        <profile>
+            <!--  Additional plugins for deploy step -->
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>                
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!--  Sign artifacts -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <keyname>${gpg.key}</keyname>
+                                    <passphrase>${gpg.password}</passphrase>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <!-- Package JavaDoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                </plugins>
+            </build>
+        </profile>
+        
+    </profiles>
 
 	<reporting>
 		<plugins>
@@ -229,16 +267,19 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.5</version>
 			</plugin>
 			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0-beta-2</version>
 			</plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
+                <version>2.4</version>
 				<configuration>
 					<targetJdk>1.5</targetJdk>
 				</configuration>
@@ -253,6 +294,7 @@
 		    <plugin>
 		    	<groupId>org.apache.maven.plugins</groupId>
 		    	<artifactId>maven-release-plugin</artifactId>
+                <version>2.0</version>
 		    	<configuration>
 		    		<preparationGoals>clean verify site:site site:deploy</preparationGoals>
 		    		<scmCommentPrefix> * [maven-release-plugin] - </scmCommentPrefix>
@@ -273,8 +315,8 @@
 	</ciManagement>
 	
 	<issueManagement>
-		<system>Trac</system>
-		<url>http://trac.synyx.org/hera</url>
+		<system>Redmine</system>
+		<url>http://hera.synyx.org</url>
 	</issueManagement>
 	
 	<distributionManagement>
@@ -291,5 +333,27 @@
 			<url>http://nexus.synyx.de/content/repositories/public-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+    
+    <repositories>
+        
+        <repository>
+            <id>com.springsource.repository.bundles.release</id>
+            <name>SpringSource Enterprise Bundle Repository - Release Bundles</name>
+            <url>http://repository.springsource.com/maven/bundles/release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <repository>
+            <id>com.springsource.repository.bundles.external</id>
+            <name>SpringSource Enterprise Bundle Repository - External Bundles</name>
+            <url>http://repository.springsource.com/maven/bundles/external</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+    </repositories>
 	
 </project>
