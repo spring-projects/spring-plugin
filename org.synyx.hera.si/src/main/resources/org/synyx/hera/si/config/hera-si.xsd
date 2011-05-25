@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns="http://schemas.synyx.org/hera/si" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:tool="http://www.springframework.org/schema/tool"
+    targetNamespace="http://schemas.synyx.org/hera/si" elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/tool" />
+
+    <xsd:element name="dynamic-service-activator">
+    	<xsd:annotation>
+    		<xsd:appinfo>
+    			<xsd:documentation>
+    				This service activator will be backed by a Hera Plugin registry that
+    				allows dynamic invocation of Spring beans implementing the plugin 
+    				interface defined in "plugin-type". We will dynamically pick up all 
+    				Spring beans implementing that interface and create a PluginRegistry
+    				of those. See org.synyx.hera.si.PluginRegistryAwareMessageHandler for
+    				details.
+    			</xsd:documentation>
+    		</xsd:appinfo>
+    	</xsd:annotation>
+    	<xsd:complexType>
+    		<xsd:attribute name="input-channel" type="xsd:string" use="required">
+    			<xsd:annotation>
+    				<xsd:documentation>The input channel to listen to.</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    		<xsd:attribute name="plugin-type" type="xsd:string" use="required">
+    			<xsd:annotation>
+    				<xsd:documentation>The type of Spring beans to dynamically pick up.</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    		<xsd:attribute name="method" type="xsd:string" use="required">
+    			<xsd:annotation>
+    				<xsd:documentation>The method to be invoked on the plugin(s) selected.</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    		<xsd:attribute name="output-channel" type="xsd:string">
+    			<xsd:annotation>
+    				<xsd:documentation>The output channel to publish invocation results to.</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    		<xsd:attribute name="delimiter" type="xsd:string">
+    			<xsd:annotation>
+    				<xsd:documentation>
+    					A SpEL expression to extract the delimiter to be used from the 
+    					incoming Message. If not set the entire Message will be used as
+    					delimiter.
+    				</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    		<xsd:attribute name="invocation-arguments" type="xsd:string">
+    			<xsd:annotation>
+    				<xsd:documentation>
+    					A SpEL expression to extract the arguments for the actual method 
+    					invocation.
+    				</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
