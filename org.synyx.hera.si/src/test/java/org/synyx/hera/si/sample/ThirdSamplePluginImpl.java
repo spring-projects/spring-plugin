@@ -18,12 +18,12 @@ package org.synyx.hera.si.sample;
 import org.springframework.core.annotation.Order;
 
 /**
- * Sample implementation of {@link SamplePlugin} supporting {@code BAR} delimiter.
+ * Third sample implementation of {@link SamplePlugin} also supporting {@code BAR) but with lower precendence.
  * 
  * @author Oliver Gierke
  */
-@Order(10)
-public class SecondSamplePluginImpl implements SamplePlugin {
+@Order(20)
+class ThirdSamplePluginImpl implements SamplePlugin {
 
 	/* (non-Javadoc)
 	 * @see org.synyx.hera.core.Plugin#supports(java.lang.Object)
@@ -37,6 +37,6 @@ public class SecondSamplePluginImpl implements SamplePlugin {
 	 */
 	public String myBusinessMethod(String message) {
 		System.out.println("Second plugin invoked! " + message);
-		return "Second";
+		return "Third";
 	}
 }

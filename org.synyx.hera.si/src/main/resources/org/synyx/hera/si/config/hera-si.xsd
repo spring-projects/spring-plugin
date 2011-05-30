@@ -26,7 +26,7 @@
     				<xsd:documentation>The input channel to listen to.</xsd:documentation>
     			</xsd:annotation>
     		</xsd:attribute>
-    		<xsd:attribute name="plugin-type" type="xsd:string" use="required">
+    		<xsd:attribute name="plugin-type" type="classType" use="required">
     			<xsd:annotation>
     				<xsd:documentation>The type of Spring beans to dynamically pick up.</xsd:documentation>
     			</xsd:annotation>
@@ -58,7 +58,33 @@
     				</xsd:documentation>
     			</xsd:annotation>
     		</xsd:attribute>
+    		<xsd:attribute name="plugin-lookup-method" type="pluginLookupMethod" default="one">
+    			<xsd:annotation>
+    				<xsd:documentation>
+    					Defines whether to invoke the first plugin matching the delimiter 
+    					(default) or all found. Order of the plugins will be considered. 
+    				</xsd:documentation>
+    			</xsd:annotation>
+    		</xsd:attribute>
     	</xsd:complexType>
     </xsd:element>
+    
+    <xsd:simpleType name="pluginLookupMethod">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="one" />
+    		<xsd:enumeration value="all" />
+    	</xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="classType">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <tool:annotation kind="direct">
+                    <tool:expected-type type="java.lang.Class" />
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:union memberTypes="xsd:string" />
+    </xsd:simpleType>
 
 </xsd:schema>

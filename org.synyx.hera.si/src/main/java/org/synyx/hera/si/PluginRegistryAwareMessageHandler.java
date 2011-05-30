@@ -18,9 +18,14 @@ package org.synyx.hera.si;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -30,6 +35,8 @@ import org.springframework.integration.handler.AbstractReplyProducingMessageHand
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
+import org.synyx.hera.core.OrderAwarePluginRegistry;
 import org.synyx.hera.core.Plugin;
 import org.synyx.hera.core.PluginRegistry;
 
@@ -41,19 +48,17 @@ import org.synyx.hera.core.PluginRegistry;
  */
 public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMessageHandler {
 
-	private enum InvocationMethod {
-		ONE, ALL;
-	}
+	private static final Log LOG = LogFactory.getLog(PluginRegistryAwareMessageHandler.class);
 
 	private final PluginRegistry<? extends Plugin<?>, Object> registry;
 	private final Class<? extends Plugin<?>> pluginType;
-	private final Class<?> delimitzerType;
+	private final Class<?> delimiterType;
 	private final SpelExpressionParser parser = new SpelExpressionParser();
 
 	private Expression delimiterExpression;
 	private Expression invocationArgumentsExpression;
 	private String serviceMethodName;
-	private InvocationMethod invocationMethod = InvocationMethod.ONE;
+	private PluginLookupMethod pluginLookupMethod = PluginLookupMethod.getDefault();
 
 	/**
 	 * Creates a new {@link PluginRegistryAwareMessageHandler} for the given {@link PluginRegistry}, pluginType and a
@@ -74,7 +79,26 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 		this.registry = (PluginRegistry<? extends Plugin<?>, Object>) registry;
 		this.serviceMethodName = serviceMethodName;
 		this.pluginType = pluginType;
-		this.delimitzerType = GenericTypeResolver.resolveTypeArgument(pluginType, Plugin.class);
+		this.delimiterType = GenericTypeResolver.resolveTypeArgument(pluginType, Plugin.class);
+
+		verify();
+	}
+
+	private final void verify() {
+
+		boolean methodFound = false;
+
+		for (Method candidate : pluginType.getMethods()) {
+			if (candidate.getName().equals(serviceMethodName)) {
+				methodFound = true;
+				break;
+			}
+		}
+
+		if (!methodFound) {
+			throw new IllegalArgumentException(String.format("Not method %s found for type %s!", serviceMethodName,
+					pluginType));
+		}
 	}
 
 	/**
@@ -98,6 +122,16 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 		this.invocationArgumentsExpression = parser.parseExpression(expression);
 	}
 
+	/**
+	 * Configures the method to be used when looking up plugins to invoke.
+	 * 
+	 * @see PluginLookupMethod
+	 * @param pluginLookupMethod the invocationMethod to set
+	 */
+	public void setPluginLookupMethod(PluginLookupMethod pluginLookupMethod) {
+		this.pluginLookupMethod = pluginLookupMethod == null ? PluginLookupMethod.getDefault() : pluginLookupMethod;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.integration.handler.AbstractReplyProducingMessageHandler#handleRequestMessage(org.springframework.integration.Message)
@@ -108,18 +142,32 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 
 		Object delimiter = getDelimiter(requestMessage);
 
-		switch (invocationMethod) {
+		switch (pluginLookupMethod) {
+
 		case ALL:
+			if (LOG.isDebugEnabled()) {
+				LOG.debug(String.format("Looking up plugins for delimiter %s", delimiter));
+			}
 			return invokePlugins(registry.getPluginsFor(delimiter), requestMessage);
+
 		case ONE:
-		default:
+			if (LOG.isDebugEnabled()) {
+				LOG.debug(String.format("Looking up plugin for delimiter %s", delimiter));
+			}
 			List<Object> results = invokePlugins(Arrays.asList(registry.getPluginFor(delimiter)), requestMessage);
 			return results.isEmpty() ? null : results.get(0);
+
+		default:
+			throw new IllegalStateException(String.format("Unsupported plugin lookup method %s!", pluginLookupMethod));
 		}
 	}
 
-	private List<Object> invokePlugins(Iterable<? extends Plugin<?>> plugins, Message<?> message) {
+	private List<Object> invokePlugins(Collection<? extends Plugin<?>> plugins, Message<?> message) {
 		List<Object> results = new ArrayList<Object>();
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(String.format("Invoking plugin(s) %s with message %s",
+					StringUtils.collectionToCommaDelimitedString(plugins), message));
+		}
 
 		for (Plugin<?> plugin : plugins) {
 
@@ -132,6 +180,11 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 				throw new MessageHandlingException(message, String.format(
 						"Did not find a method %s on %s taking the following parameters %s", serviceMethodName,
 						pluginType.getName(), Arrays.toString(types)));
+			}
+
+			if (LOG.isDebugEnabled()) {
+				LOG.debug(String.format("Invoke plugin method %s using arguments %s", businessMethod,
+						Arrays.toString(invocationArguments)));
 			}
 
 			Object result = ReflectionUtils.invokeMethod(businessMethod, plugin, invocationArguments);
@@ -160,9 +213,9 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 			delimiter = delimiterExpression.getValue(context);
 		}
 
-		Assert.isInstanceOf(delimitzerType, delimiter, String.format("Delimiter expression did "
+		Assert.isInstanceOf(delimiterType, delimiter, String.format("Delimiter expression did "
 				+ "not return a suitable delimiter! Make sure the expression evaluates to a suitable "
-				+ "type! Got %s but need %s", delimiter.getClass(), delimitzerType));
+				+ "type! Got %s but need %s", delimiter.getClass(), delimiterType));
 
 		return delimiter;
 	}
@@ -200,5 +253,37 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 			result[i] = sourceElement == null ? null : sourceElement.getClass();
 		}
 		return result;
+	}
+
+
+	/**
+	 * Lookup methods for plugins.
+	 *
+	 * @author Oliver Gierke
+	 */
+	private enum PluginLookupMethod {
+
+		/**
+		 * The first plugin supporting a given delimiter found will be invoked.
+		 */
+		ONE,
+
+		/**
+		 * All plugins supporting a given delimiter will be invoked. Plugin order will be considered.
+		 * 
+		 * @see OrderAwarePluginRegistry
+		 * @see Order
+		 * @see Ordered
+		 */
+		ALL;
+
+		/**
+		 * Returns the default {@link PluginLookupMethod}.
+		 * 
+		 * @return
+		 */
+		static PluginLookupMethod getDefault() {
+			return ONE;
+		}
 	}
 }
