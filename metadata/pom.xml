@@ -8,7 +8,7 @@
 	<parent>
 		<artifactId>org.synyx.hera</artifactId>
 		<groupId>org.synyx.hera</groupId>
-		<version>0.7.0.BUILD-SNAPSHOT</version>
+		<version>0.7.0.RELEASE</version>
 	</parent>
 
 	<dependencies>
