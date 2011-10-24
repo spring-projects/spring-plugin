@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.integration.Message;
 import org.springframework.integration.MessageChannel;
+import org.springframework.integration.core.SubscribableChannel;
+import org.springframework.integration.handler.LoggingHandler;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,9 +40,14 @@ public class DynamicServiceActivatorNamespaceIntegrationTest {
 	@Qualifier("sampleChannel")
 	MessageChannel channel;
 
+	@Autowired
+	@Qualifier("foo")
+	SubscribableChannel sink;
+
 	@Test
 	public void invokesPluginBasedOnPayload() {
 
+		sink.subscribe(new LoggingHandler("DEBUG"));
 		Message<String> message = MessageBuilder.withPayload("FOO").build();
 		channel.send(message);
 	}

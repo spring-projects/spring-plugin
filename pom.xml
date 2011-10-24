@@ -17,7 +17,7 @@
     <modules>
         <module>core</module>
         <module>metadata</module>
-        <module>org.synyx.hera.si</module>
+        <module>si</module>
     </modules>
     
     <properties>

@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Template: 
  ${project.artifactId}.*;version="${project.version}"
 Import-Template: 
+ org.apache.commons.logging.*;version="[1.1.0,2.0.0)",
  org.synyx.hera.core.*;version="${project.version:[=.=.=.=,+1.0.0)}",
  org.springframework.*;version="${spring.version:[=.=.=.=,+2.0.0)}",
  org.springframework.integration.*;version="${spring.integration.version:[=.=.=.=,+1.0.0)}",
