@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.synyx.hera.si;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -53,8 +54,9 @@ public class PluginRegistryAwareMessageHandlerUnitTest {
 
 	@Before
 	public void setUp() {
+
 		registry = OrderAwarePluginRegistry
-		.create(Arrays.asList(new FirstSamplePluginImpl(), new SecondSamplePluginImpl()));
+				.create(Arrays.asList(new FirstSamplePluginImpl(), new SecondSamplePluginImpl()));
 
 		handler = new PluginRegistryAwareMessageHandler(registry, SamplePlugin.class, "myBusinessMethod");
 		handler.setOutputChannel(outputChannel);

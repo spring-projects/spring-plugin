@@ -18,6 +18,7 @@ package org.synyx.hera.metadata;
 
 import static org.springframework.util.ObjectUtils.*;
 
+import org.springframework.util.Assert;
 
 /**
  * Value object style implementation of {@code PluginMetadata}.
@@ -26,90 +27,78 @@ import static org.springframework.util.ObjectUtils.*;
  */
 public class SimplePluginMetadata implements PluginMetadata {
 
-    private String name;
-    private String version;
+	private final String name;
+	private final String version;
 
+	/**
+	 * Creates a new instance of {@code SimplePluginMetadata}.
+	 * 
+	 * @param name must not be {@literal null}.
+	 * @param version must not be {@literal null}.
+	 */
+	public SimplePluginMetadata(String name, String version) {
 
-    /**
-     * Creates a new instance of {@code SimplePluginMetadata}.
-     * 
-     * @param name
-     * @param version
-     */
-    public SimplePluginMetadata(String name, String version) {
+		Assert.hasText(name, "Name must not be null or empty!");
+		Assert.hasText(version, "Version must not be null or empty!");
 
-        this.name = name;
-        this.version = version;
-    }
+		this.name = name;
+		this.version = version;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.synyx.hera.metadata.PluginMetadata#getName()
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.synyx.minos.core.plugin.PluginMetadata#getName()
-     */
-    public String getName() {
+	/*
+	 * (non-Javadoc)
+	 * @see org.synyx.hera.metadata.PluginMetadata#getVersion()
+	 */
+	public String getVersion() {
+		return version;
+	}
 
-        return name;
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("%s:%s", getName(), getVersion());
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.synyx.minos.core.plugin.PluginMetadata#getVersion()
-     */
-    public String getVersion() {
+		if (this == obj) {
+			return true;
+		}
 
-        return version;
-    }
+		if (!(obj instanceof PluginMetadata)) {
+			return false;
+		}
 
+		PluginMetadata that = (PluginMetadata) obj;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
+		boolean sameName = nullSafeEquals(this.getName(), that.getName());
+		boolean sameVersion = nullSafeEquals(this.getName(), that.getName());
 
-        return String.format("%s:%s", getName(), getVersion());
-    }
+		return sameName && sameVersion;
+	}
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof PluginMetadata)) {
-            return false;
-        }
-
-        PluginMetadata that = (PluginMetadata) obj;
-
-        boolean sameName = nullSafeEquals(this.getName(), that.getName());
-        boolean sameVersion = nullSafeEquals(this.getName(), that.getName());
-
-        return sameName && sameVersion;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-
-        return nullSafeHashCode(name) + nullSafeHashCode(version);
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return nullSafeHashCode(name) + nullSafeHashCode(version);
+	}
 }

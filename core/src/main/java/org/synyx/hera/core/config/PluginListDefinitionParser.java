@@ -1,19 +1,18 @@
 /*
- * Copyright 2008-2010 the original author or authors.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * Copyright 2008-2012 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.synyx.hera.core.config;
 
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -22,79 +21,60 @@ import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-
 /**
- * Bean definition parser to register {@code <list />} elements from the plugin
- * namespace.
+ * Bean definition parser to register {@code <list />} elements from the plugin namespace.
  * 
- * @author Oliver Gierke - gierke@synyx.de
+ * @author Oliver Gierke
  */
 public class PluginListDefinitionParser extends AbstractBeanDefinitionParser {
 
-    protected static final String PACKAGE = "org.synyx.hera.core.support.";
+	protected static final String PACKAGE = "org.synyx.hera.core.support.";
 
+	/**
+	 * Returns the name of the {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor} to be registered.
+	 * 
+	 * @return
+	 */
+	protected String getPostProcessorName() {
+		return PACKAGE + "BeanListFactoryBean";
+	}
 
-    /**
-     * Returns the name of the
-     * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
-     * to be registered.
-     * 
-     * @return
-     */
-    protected String getPostProcessorName() {
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.xml.AbstractBeanDefinitionParser#parseInternal(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext)
+	 */
+	@Override
+	protected AbstractBeanDefinition parseInternal(Element element, ParserContext context) {
 
-        return PACKAGE + "BeanListFactoryBean";
-    }
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(getPostProcessorName());
+		builder.addPropertyValue("type", element.getAttribute("class"));
 
+		return getSourcedBeanDefinition(builder, element, context);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @seeorg.springframework.beans.factory.xml.AbstractBeanDefinitionParser#
-     * parseInternal(org.w3c.dom.Element,
-     * org.springframework.beans.factory.xml.ParserContext)
-     */
-    @Override
-    protected AbstractBeanDefinition parseInternal(Element element,
-            ParserContext context) {
+	/**
+	 * Returns the bean definition prepared by the builder and has connected it to the {@code source} object.
+	 * 
+	 * @param builder
+	 * @param source
+	 * @param context
+	 * @return
+	 */
+	private AbstractBeanDefinition getSourcedBeanDefinition(BeanDefinitionBuilder builder, Object source,
+			ParserContext context) {
 
-        BeanDefinitionBuilder builder =
-                BeanDefinitionBuilder
-                        .genericBeanDefinition(getPostProcessorName());
-        builder.addPropertyValue("type", element.getAttribute("class"));
+		AbstractBeanDefinition definition = builder.getRawBeanDefinition();
+		definition.setSource(context.extractSource(source));
 
-        return getSourcedBeanDefinition(builder, element, context);
-    }
+		return definition;
+	}
 
-
-    /**
-     * Returns the bean definition prepared by the builder and has connected it
-     * to the {@code source} object.
-     * 
-     * @param builder
-     * @param source
-     * @param context
-     * @return
-     */
-    private AbstractBeanDefinition getSourcedBeanDefinition(
-            BeanDefinitionBuilder builder, Object source, ParserContext context) {
-
-        AbstractBeanDefinition definition = builder.getRawBeanDefinition();
-        definition.setSource(context.extractSource(source));
-
-        return definition;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @seeorg.springframework.beans.factory.xml.AbstractBeanDefinitionParser#
-     * shouldGenerateIdAsFallback()
-     */
-    @Override
-    protected boolean shouldGenerateIdAsFallback() {
-
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.xml.AbstractBeanDefinitionParser#shouldGenerateIdAsFallback()
+	 */
+	@Override
+	protected boolean shouldGenerateIdAsFallback() {
+		return true;
+	}
 }

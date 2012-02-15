@@ -7,7 +7,6 @@
 
     <xsd:import namespace="http://www.springframework.org/schema/tool" />
 
-
     <xsd:element name="list" type="pluginType">
         <xsd:annotation>
             <xsd:documentation>
@@ -37,8 +36,7 @@
             </xsd:documentation>
             <xsd:appinfo>
                 <tool:annotation>
-                    <tool:exports identifier="@id"
-                        type="org.synyx.plugin.core.PluginRegistry" />
+                    <tool:exports identifier="@id" type="org.synyx.plugin.core.PluginRegistry" />
                 </tool:annotation>
             </xsd:appinfo>
         </xsd:annotation>
@@ -47,8 +45,7 @@
     <xsd:complexType name="pluginType">
         <xsd:attribute name="id" type="xsd:string" />
         <xsd:attribute name="class" type="classType" />
-        <xsd:attribute name="init-factories" type="xsd:boolean"
-            default="false" />
+        <xsd:attribute name="init-factories" type="xsd:boolean" default="false" />
     </xsd:complexType>
 
     <xsd:simpleType name="classType">

@@ -1,17 +1,17 @@
 /*
- * Copyright 2008-2010 the original author or authors.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * Copyright 2008-2012 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.synyx.hera.core;
@@ -25,155 +25,115 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  * Unit test for {@link SimplePluginRegistry}.
  * 
- * @author Oliver Gierke - gierke@synyx.de
+ * @author Oliver Gierke
  */
-public class SimplePluginRegistryUnitTest extends
-        AbstractMutablePluginRegistryUnitTest {
+public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryUnitTest {
 
-    private SamplePlugin plugin;
+	SamplePlugin plugin;
 
-    private SimplePluginRegistry<SamplePlugin, String> registry;
+	SimplePluginRegistry<SamplePlugin, String> registry;
 
+	/**
+	 * Initializes a {@code PluginRegistry} and equips it with an {@code EmailNotificationProvider}.
+	 */
+	@Before
+	public void setUp() {
 
-    /**
-     * Initializes a {@code PluginRegistry} and equips it with an {@code
-     * EmailNotificationProvider}.
-     */
-    @Before
-    public void setUp() {
+		plugin = new SamplePluginImplementation();
+		registry = SimplePluginRegistry.create();
+	}
 
-        plugin = new SamplePluginImplementation();
+	/*
+	 * (non-Javadoc)
+	 * @see org.synyx.hera.core.AbstractMutablePluginRegistryUnitTest#getRegistry()
+	 */
+	@Override
+	protected MutablePluginRegistry<SamplePlugin, String> getRegistry() {
 
-        registry = SimplePluginRegistry.create();
-    }
+		return SimplePluginRegistry.create();
+	}
 
+	/**
+	 * Asserts that the registry contains the plugin it was initialized with.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void assertRegistryInitialized() throws Exception {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.synyx.hera.core.AbstractMutablePluginRegistryUnitTest#getRegistry()
-     */
-    @Override
-    protected MutablePluginRegistry<SamplePlugin, String> getRegistry() {
+		registry.addPlugin(plugin);
 
-        return SimplePluginRegistry.create();
-    }
+		assertThat(registry.countPlugins(), is(1));
+		assertTrue(registry.contains(plugin));
+	}
 
+	/**
+	 * Asserts asking for a plugin with the {@code PluginMetadata} provided by the {@link EmailNotificationProvider}.
+	 */
+	@Test
+	public void assertFindsEmailNotificationProvider() {
 
-    /**
-     * Asserts that the registry contains the plugin it was initialized with.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void assertRegistryInitialized() throws Exception {
+		registry.addPlugin(plugin);
 
-        registry.addPlugin(plugin);
+		String delimiter = "FOO";
 
-        assertThat(registry.countPlugins(), is(1));
-        assertTrue(registry.contains(plugin));
-    }
+		List<SamplePlugin> plugins = registry.getPluginsFor(delimiter);
+		assertThat(plugins, is(notNullValue()));
+		assertThat(plugins.size(), is(1));
 
+		SamplePlugin provider = plugins.get(0);
+		assertThat(provider, is(instanceOf(SamplePluginImplementation.class)));
+	}
 
-    /**
-     * Asserts asking for a plugin with the {@code PluginMetadata} provided by
-     * the {@link EmailNotificationProvider}.
-     */
-    @Test
-    public void assertFindsEmailNotificationProvider() {
+	/**
+	 * Expects the given exception to be thrown if no {@link Plugin} found.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void throwsExceptionIfNoPluginFound() {
 
-        registry.addPlugin(plugin);
+		registry.getPluginFor("BAR", new IllegalArgumentException());
+	}
 
-        String delimiter = "FOO";
+	/**
+	 * Expects the given exception to be thrown if no {@link Plugin}s found.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void throwsExceptionIfNoPluginsFound() {
 
-        List<SamplePlugin> plugins = registry.getPluginsFor(delimiter);
-        assertThat(plugins, is(notNullValue()));
-        assertThat(plugins.size(), is(1));
+		registry.getPluginsFor("BAR", new IllegalArgumentException());
+	}
 
-        SamplePlugin provider = plugins.get(0);
-        assertThat(provider, is(instanceOf(SamplePluginImplementation.class)));
-    }
+	/**
+	 * Expect the defualt plugin to be returned if none found.
+	 */
+	@Test
+	public void returnsDefaultIfNoneFound() {
 
+		SamplePlugin defaultPlugin = new SamplePluginImplementation();
 
-    /**
-     * Expects the given exception to be thrown if no {@link Plugin} found.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsExceptionIfNoPluginFound() {
+		assertThat(registry.getPluginFor("BAR", defaultPlugin), is(defaultPlugin));
+	}
 
-        registry.getPluginFor("BAR", new IllegalArgumentException());
-    }
+	/**
+	 * Expect the given default plugins to be returned if none found.
+	 */
+	@Test
+	public void returnsDefaultsIfNoneFound() {
 
+		List<? extends SamplePlugin> defaultPlugins = Arrays.asList(new SamplePluginImplementation());
 
-    /**
-     * Expects the given exception to be thrown if no {@link Plugin}s found.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsExceptionIfNoPluginsFound() {
+		List<SamplePlugin> result = registry.getPluginsFor("BAR", defaultPlugins);
+		assertTrue(result.containsAll(defaultPlugins));
+	}
 
-        registry.getPluginsFor("BAR", new IllegalArgumentException());
-    }
+	@Test
+	public void handlesAddingNullPluginsCorrecty() throws Exception {
 
+		registry.addPlugin(null);
 
-    /**
-     * Expect the defualt plugin to be returned if none found.
-     */
-    @Test
-    public void returnsDefaultIfNoneFound() {
-
-        SamplePlugin defaultPlugin = new SamplePluginImplementation();
-
-        assertThat(registry.getPluginFor("BAR", defaultPlugin),
-                is(defaultPlugin));
-    }
-
-
-    /**
-     * Expect the given default plugins to be returned if none found.
-     */
-    @Test
-    public void returnsDefaultsIfNoneFound() {
-
-        List<? extends SamplePlugin> defaultPlugins =
-                Arrays.asList(new SamplePluginImplementation());
-
-        List<SamplePlugin> result =
-                registry.getPluginsFor("BAR", defaultPlugins);
-        assertTrue(result.containsAll(defaultPlugins));
-    }
-
-
-    @Test
-    public void handlesAddingNullPluginsCorrecty() throws Exception {
-
-        registry.addPlugin(null);
-
-        assertThat(registry.countPlugins(), is(0));
-    }
-
-
-    @Test
-    public void doesNotAddNullsOnSettingPlugins() throws Exception {
-
-        registry.setPlugins(Arrays.asList(null, plugin, null));
-
-        assertThat(registry.countPlugins(), is(1));
-        assertThat(registry.getPlugins().size(), is(1));
-    }
-
-
-    @Test
-    public void dropsNullValuesOnCreation() throws Exception {
-
-        registry =
-                SimplePluginRegistry.create(Arrays.asList(null, plugin, null));
-
-        assertThat(registry.countPlugins(), is(1));
-        assertThat(registry.getPlugins().size(), is(1));
-    }
+		assertThat(registry.countPlugins(), is(0));
+	}
 }

@@ -22,54 +22,41 @@ import java.util.List;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-
 /**
- * Factory to create bean lists for a given type. Exposes all beans of the
- * configured type that can be found in the
+ * Factory to create bean lists for a given type. Exposes all beans of the configured type that can be found in the
  * {@link org.springframework.context.ApplicationContext}.
  * 
- * @author Oliver Gierke - gierke@synyx.de
+ * @author Oliver Gierke
  */
-public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T>
-        implements FactoryBean {
+public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T> implements FactoryBean<List<T>> {
 
-    @SuppressWarnings("unchecked")
-    private static final Comparator<Object> COMPARATOR =
-            new AnnotationAwareOrderComparator();
+	private static final Comparator<Object> COMPARATOR = new AnnotationAwareOrderComparator();
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.FactoryBean#getObject()
+	 */
+	public List<T> getObject() {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.springframework.beans.factory.FactoryBean#getObject()
-     */
-    public Object getObject() {
+		List<T> beans = getBeans();
+		Collections.sort(beans, COMPARATOR);
 
-        List<T> beans = getBeans();
-        Collections.sort(beans, COMPARATOR);
+		return beans;
+	}
 
-        return beans;
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.FactoryBean#getObjectType()
+	 */
+	public Class<?> getObjectType() {
+		return List.class;
+	}
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.springframework.beans.factory.FactoryBean#getObjectType()
-     */
-    public Class<?> getObjectType() {
-
-        return List.class;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.springframework.beans.factory.FactoryBean#isSingleton()
-     */
-    public boolean isSingleton() {
-
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.FactoryBean#isSingleton()
+	 */
+	public boolean isSingleton() {
+		return true;
+	}
 }

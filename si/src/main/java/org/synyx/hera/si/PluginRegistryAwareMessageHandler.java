@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,6 +107,7 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	 * @param delimiterExpression the delimiterExpression to set
 	 */
 	public void setDelimiterExpression(String expression) {
+
 		Assert.hasText(expression);
 		this.delimiterExpression = parser.parseExpression(expression);
 	}
@@ -118,6 +119,7 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	 * @param invocationArgumentsExpression the invocationArgumentsExpression to set
 	 */
 	public void setInvocationArgumentsExpression(String expression) {
+
 		Assert.hasText(expression);
 		this.invocationArgumentsExpression = parser.parseExpression(expression);
 	}
@@ -134,7 +136,10 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.integration.handler.AbstractReplyProducingMessageHandler#handleRequestMessage(org.springframework.integration.Message)
+	 * 
+	 * @see
+	 * org.springframework.integration.handler.AbstractReplyProducingMessageHandler
+	 * #handleRequestMessage(org.springframework.integration.Message)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -163,6 +168,7 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	}
 
 	private List<Object> invokePlugins(Collection<? extends Plugin<?>> plugins, Message<?> message) {
+
 		List<Object> results = new ArrayList<Object>();
 		if (LOG.isDebugEnabled()) {
 			LOG.debug(String.format("Invoking plugin(s) %s with message %s",
@@ -247,6 +253,7 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	 * @return
 	 */
 	private Class<?>[] getTypes(Object[] source) {
+
 		Class<?>[] result = new Class<?>[source.length];
 		for (int i = 0; i < source.length; i++) {
 			Object sourceElement = source[i];
@@ -255,10 +262,9 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 		return result;
 	}
 
-
 	/**
 	 * Lookup methods for plugins.
-	 *
+	 * 
 	 * @author Oliver Gierke
 	 */
 	private enum PluginLookupMethod {

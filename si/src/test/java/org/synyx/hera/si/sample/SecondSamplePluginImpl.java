@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,16 @@ import org.springframework.core.annotation.Order;
 @Order(10)
 public class SecondSamplePluginImpl implements SamplePlugin {
 
-	/* (non-Javadoc)
+	/* 
+	 * (non-Javadoc)
 	 * @see org.synyx.hera.core.Plugin#supports(java.lang.Object)
 	 */
 	public boolean supports(String delimiter) {
 		return "BAR".equals(delimiter);
 	}
 
-	/* (non-Javadoc)
+	/* 
+	 * (non-Javadoc)
 	 * @see org.synyx.hera.si.sample.SamplePlugin#myBusinessMethod()
 	 */
 	public String myBusinessMethod(String message) {
