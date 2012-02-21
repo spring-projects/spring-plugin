@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.synyx.hera</groupId>
-    <artifactId>org.synyx.hera</artifactId>
+    <groupId>org.springframework.plugin</groupId>
+    <artifactId>spring-plugin</artifactId>
     <packaging>pom</packaging>
-    <name>Hera</name>
+    <name>Spring Plugin</name>
     <version>0.8.0.BUILD-SNAPSHOT</version>
     <description>Simple plugin infrastructure</description>
 
     <organization>
-        <name>Synyx GmbH &amp; Co. KG</name>
-        <url>http://www.synyx.org</url>
+        <name>SpringSource, a division of VMware</name>
+        <url>http://www.springsource.org</url>
     </organization>
     <inceptionYear>2008</inceptionYear>
-    <url>http://hera.synyx.org</url>
+    <url>https://github.com/SpringSource/spring-plugin</url>
     
     <licenses>
 		<license>
@@ -40,11 +40,11 @@
     <modules>
         <module>core</module>
         <module>metadata</module>
-        <module>si</module>
+        <module>integration</module>
     </modules>
     
     <properties>
-        <spring.version>3.0.6.RELEASE</spring.version>
+        <spring.version>3.0.7.RELEASE</spring.version>
     </properties>
 
     <developers>
@@ -82,7 +82,6 @@
 			<scope>test</scope>
 		</dependency>
     </dependencies>
-    
 
     <build>
         <plugins>
@@ -148,41 +147,6 @@
                     <htmlCustomization>src/doc/layout/html/fo-html.xsl</htmlCustomization>
                     <htmlStylesheet>resources/styles.css</htmlStylesheet>
                     <chunkedOutput>true</chunkedOutput>
-
-                    <fonts>
-                        <font>
-                            <name>StellaLining</name>
-                            <style>normal</style>
-                            <weight>normal</weight>
-                            <embedFile>${basedir}/src/doc/layout/pdf/fonts/SteLiR__.ttf</embedFile>
-                            <metricsFile>${basedir}/src/doc/layout/pdf/fonts/SteLiR__.xml</metricsFile>
-                        </font>
-                        <font>
-                            <name>StellaLining</name>
-                            <style>italic</style>
-                            <weight>normal</weight>
-                            <embedFile>${basedir}/src/doc/layout/pdf/fonts/SteLiI__.ttf</embedFile>
-                            <metricsFile>${basedir}/src/doc/layout/pdf/fonts/SteLiI__.xml</metricsFile>
-                        </font>
-                        <font>
-                            <name>StellaLining</name>
-                            <style>normal</style>
-                            <weight>bold</weight>
-                            <embedFile>${basedir}/src/doc/layout/pdf/fonts/SteLiB__.ttf</embedFile>
-                            <metricsFile>${basedir}/src/doc/layout/pdf/fonts/SteLiB__.xml</metricsFile>
-                        </font>
-                        <font>
-                            <name>StellaLining</name>
-                            <style>italic</style>
-                            <weight>bold</weight>
-                            <embedFile>
-                                ${basedir}/src/doc/layout/pdf/fonts/SteLiBI_.ttf
-							</embedFile>
-                            <metricsFile>
-                                ${basedir}/src/doc/layout/pdf/fonts/SteLiBI_.xml
-							</metricsFile>
-                        </font>
-                    </fonts>
 
                     <preProcess>
                         <copy todir="${basedir}/target/doc/images">
@@ -327,48 +291,22 @@
     </reporting>
 
     <scm>
-        <url>http://svn.synyx.org/synyx/opensource/hera</url>
-        <connection>scm:svn:http://svn.synyx.org/synyx/opensource/hera</connection>
-        <developerConnection>scm:svn:https://svn.synyx.de/svn/synyx/opensource/hera</developerConnection>
+        <url>https://github.com/SpringSource/spring-plugin</url>
     </scm>
 
     <ciManagement>
-        <system>Hudson</system>
+        <system>Bamboo</system>
     </ciManagement>
 
     <issueManagement>
-        <system>Redmine</system>
-        <url>http://hera.synyx.org</url>
+        <system>Github</system>
+        <url>https://github.com/SpringSource/spring-plugin/issues</url>
     </issueManagement>
-
-    <distributionManagement>
-        <site>
-            <id>static.synyx.org</id>
-            <url>scp://static.synyx.org/home/public/public_html/hera/site</url>
-        </site>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <repositories>
         <repository>
-            <id>com.springsource.repository.bundles.release</id>
-            <name>SpringSource Enterprise Bundle Repository - Release Bundles</name>
-            <url>http://repository.springsource.com/maven/bundles/release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>com.springsource.repository.bundles.external</id>
-            <name>SpringSource Enterprise Bundle Repository - External Bundles</name>
-            <url>http://repository.springsource.com/maven/bundles/external</url>
+            <id>spring-release</id>
+            <url>http://repo.springsource.org/libs-release</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -377,9 +315,11 @@
     
     <pluginRepositories>
         <pluginRepository>
-            <id>com.springsource.repository.bundles.release</id>
-            <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Release Bundles</name>
-            <url>http://repository.springsource.com/maven/bundles/release</url>
+            <id>spring-plugins</id>
+            <url>http://repo.springsource.org/plugins-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:plugin="http://schemas.synyx.org/hera"
+	xmlns:plugin="http://www.springframework.org/schema/plugin"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://schemas.synyx.org/hera http://schemas.synyx.org/hera/hera.xsd">
+		http://www.springframework.org/schema/plugin http://www.springframework.org/schema/plugin/spring-plugin.xsd">
 
-	<plugin:list id="foo" class="org.synyx.hera.core.SamplePlugin" />
+	<plugin:list id="foo" class="org.springframework.plugin.core.SamplePlugin" />
 	
-	<plugin:registry id="bar" class="org.synyx.hera.core.SamplePlugin" />
+	<plugin:registry id="bar" class="org.springframework.plugin.core.SamplePlugin" />
 	
-	<bean class="org.synyx.hera.core.SamplePluginImplementation" />
+	<bean class="org.springframework.plugin.core.SamplePluginImplementation" />
 	
-	<bean id="host" class="org.synyx.hera.core.SamplePluginHost">
+	<bean id="host" class="org.springframework.plugin.core.SamplePluginHost">
 		<property name="registry" ref="bar" />
 	</bean>
 
-	<bean id="otherHost" class="org.synyx.hera.core.SamplePluginHost">
+	<bean id="otherHost" class="org.springframework.plugin.core.SamplePluginHost">
 		<property name="registry">
-			<plugin:registry id="tadaa" class="org.synyx.hera.core.SamplePlugin" />
+			<plugin:registry id="tadaa" class="org.springframework.plugin.core.SamplePlugin" />
 		</property>
 	</bean>
 	

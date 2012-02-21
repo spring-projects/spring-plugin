@@ -1,11 +1,11 @@
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${project.artifactId}
 Bundle-Name: ${project.name}
-Bundle-Vendor: Synyx GmbH & Co. KG
+Bundle-Vendor: SpringSource, a division of VMware 
 Bundle-Version: ${project.version}
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: J2SE-1.6
 Export-Template: 
- ${project.artifactId}.*;version="${project.version}"
+ org.springframework.plugin.core.*;version="${project.version}"
 Import-Template: 
- org.springframework.*;version="${spring.version:[=.=.=.=,+2.0.0)}",
+ org.springframework.*;version="${spring.version:[=.=.=.=,+1.0.0)}",
  org.w3c.dom.*;version="0.0.0"

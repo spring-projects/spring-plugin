@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <chapter id="metadata">
   <title>Metadata</title>
 
   <para>For plugin architectures it is essential to capture metadata
   information about plugin instances. A very core set of metadata (name,
   version) also serves as identifier of a plugin and thus can be used. The
-  Hera metadata module provides support to capture metadata.</para>
+  Spring Plugin metadata module provides support to capture metadata.</para>
 
   <section id="metadata.core-concepts">
     <title>Core concepts</title>
@@ -34,11 +36,11 @@ public interface MetadataProvider {
     <para>The <interfacename>PluginMetadata</interfacename> interface captures
     the required properties to define an identifyable plugin. This means, that
     implementations should ensure uniqueness through these two properties.
-    With <classname>SimplePluginMetadata</classname> Hera provides a Java bean
-    style class to capture metadata. Of course applications can and should
-    provide extended metadata information according to their needs. The very
-    narrow interface is only targeted at integrating the metadata concept with
-    the <classname>PluginRegistry</classname> (see <xref
+    With <classname>SimplePluginMetadata</classname> Spring Plugin provides a
+    Java bean style class to capture metadata. Of course applications can and
+    should provide extended metadata information according to their needs. The
+    very narrow interface is only targeted at integrating the metadata concept
+    with the <classname>PluginRegistry</classname> (see <xref
     linkend="core.plugin-registry" />) without bothering developers with too
     much information required.</para>
 

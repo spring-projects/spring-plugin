@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <chapter>
   <title>Core</title>
 
@@ -80,13 +82,13 @@ public class HostImpl implements Host {
     <title>Collecting Spring beans dynamically</title>
 
     <para>With the <classname>BeanListBeanFactory</classname>
-    <productname>Hera</productname> provides a Spring container extension,
-    that allows to lookup beans of a given type in the current
+    <productname>Spring Plugin</productname> provides a Spring container
+    extension, that allows to lookup beans of a given type in the current
     <interfacename>ApplicationContext</interfacename> and register them as
     list under a given name. Take a look at the configuration now:</para>
 
     <example>
-      <title>Host and plugin configuration with Hera support</title>
+      <title>Host and plugin configuration with Spring Plugin support</title>
 
       <programlisting lang="" language="xml">&lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
 
@@ -94,7 +96,7 @@ public class HostImpl implements Host {
   &lt;property name="plugins" ref="plugins" /&gt;
 &lt;/bean&gt;
 
-&lt;bean class="org.synyx.hera.plugin.support.BeanListBeanFactory"&gt;
+&lt;bean class="org.springframework.plugin.support.BeanListBeanFactory"&gt;
   &lt;property name="lists"&gt;
     &lt;map&gt;
       &lt;entry key="plugins" value="org.acme.MyPluginInterface" /&gt;
@@ -141,10 +143,10 @@ public class HostImpl implements Host {
         <title>Host configuration using the plugin namespace</title>
 
         <programlisting language="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:plugin="http://schemas.synyx.org/hera"
+  xmlns:plugin="http://www.springframework.org/schema/plugin"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://schemas.synyx.org/hera http://schemas.synyx.org/hera/hera.xsd"&gt;
+    http://www.springframework.org/schema/plugin http://www.springframework.org/schema/plugin/spring-plugin.xsd"&gt;
 
   &lt;import resource="classpath*:com/acme/**/plugins.xml" /&gt;
 
@@ -237,7 +239,7 @@ public interface ProductProcessor extends Plugin&lt;ProductType&gt; {
       <para>Using a <interfacename>List</interfacename> as plugin container as
       well as the <interfacename>Plugin</interfacename> interface you can now
       select plugins supporting the given delimiter. To not reimplement the
-      lookup logic for common cases Hera provides a
+      lookup logic for common cases Spring Plugin provides a
       <classname>PluginRegistry&lt;T extends Plugin&lt;S&gt;,
       S&gt;</classname> interface that provides sophisticated methods to
       access certain plugins:</para>
@@ -268,9 +270,9 @@ registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");</programl
       <title>Configuration and namespace</title>
 
       <para>Similar to the <classname>BeanListBeanFactory</classname>
-      described in <xref linkend="core.collecting-beans" /> Hera provides a
-      <classname>PluginRegistryBeanFactory</classname> to automatically lookup
-      beans of a dedicated type to be aggregated in a
+      described in <xref linkend="core.collecting-beans" /> Spring Plugin
+      provides a <classname>PluginRegistryBeanFactory</classname> to
+      automatically lookup beans of a dedicated type to be aggregated in a
       <classname>PluginRegistry</classname>. Note that the type has to be
       assignable to <interfacename>Plugin</interfacename> to let the registry
       work as expected.</para>
@@ -305,10 +307,10 @@ registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");</programl
       the <ulink url="???">section on this topic in the Spring reference
       documentation</ulink>.</para>
 
-      <para>Using the Hera namespace you will get a
+      <para>Using the Spring Plugin namespace you will get a
       <interfacename>PluginRegistry</interfacename> instance that is capable
-      of preserving the order defined by the mentioned means. Using Hera
-      programatically use
+      of preserving the order defined by the mentioned means. Using Spring
+      Plugin programatically use
       <classname>OrderAwarePluginRegistry</classname>.</para>
     </simplesect>
   </section>

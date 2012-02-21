@@ -1,20 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.synyx.hera.metadata</artifactId>
+	<artifactId>spring-plugin-metadata</artifactId>
 
-	<name>Hera Metadata Extension</name>
+	<name>Spring Plugin Metadata Extension</name>
 	<description>Extension package for metadata based plugins</description>
 	
 	<parent>
-		<artifactId>org.synyx.hera</artifactId>
-		<groupId>org.synyx.hera</groupId>
+		<groupId>org.springframework.plugin</groupId>
+		<artifactId>spring-plugin</artifactId>
 		<version>0.8.0.BUILD-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.synyx.hera</groupId>
-			<artifactId>org.synyx.hera.core</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>spring-plugin-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

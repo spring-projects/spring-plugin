@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.synyx.hera.core</artifactId>
+	
+	<artifactId>spring-plugin-core</artifactId>
 
-	<name>Hera Core</name>
+	<name>Spring Plugin Core</name>
 	<description>Core plugin infrastructure</description>
 
 	<parent>
-		<artifactId>org.synyx.hera</artifactId>
-		<groupId>org.synyx.hera</groupId>
+		<groupId>org.springframework.plugin</groupId>
+		<artifactId>spring-plugin</artifactId>
 		<version>0.8.0.BUILD-SNAPSHOT</version>
 	</parent>
 

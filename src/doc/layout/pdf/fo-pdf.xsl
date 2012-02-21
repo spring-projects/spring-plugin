@@ -43,9 +43,6 @@
                     </fo:table-row>
                     <fo:table-row>
                         <fo:table-cell text-align="center">
-                        	<fo:block>
-                            	<fo:external-graphic src="file:target/doc/images/synyx-logo.tiff" width="70mm" height="auto" content-width="scale-to-fit" content-height="scale-to-fit" />
-                            </fo:block>
                             <fo:block font-size="12pt" padding="10mm">
                                 <xsl:for-each select="bookinfo/authorgroup/author">
                                     <xsl:if test="position() &gt; 1">
