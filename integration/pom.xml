@@ -7,7 +7,7 @@
 		<version>0.8.0.BUILD-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>spring-plugin-si</artifactId>
+	<artifactId>spring-plugin-integration</artifactId>
 	
 	<name>Spring Plugin Spring Integration integration</name>
 	
