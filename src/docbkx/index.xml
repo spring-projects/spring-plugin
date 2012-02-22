@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<book>
+<book xmlns:xi="http://www.w3.org/2001/XInclude">
   <bookinfo>
     <title>Spring Plugin</title>
 
@@ -169,11 +169,13 @@
     </section>
   </preface>
 
-  <xi:include href="../../core/src/doc/core.xml"
-              xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="../../core/src/doc/core.xml">
+  	<xi:fallback href="../../core/src/doc/core.xml" /> 
+  </xi:include>
 
-  <xi:include href="../../metadata/src/doc/metadata.xml"
-              xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="../../metadata/src/doc/metadata.xml">
+  	<xi:fallback href="../../metadata/src/doc/metadata.xml"  />
+  </xi:include>
 
   <glossary>
     <glossdiv>

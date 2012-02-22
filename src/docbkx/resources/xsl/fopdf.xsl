@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
 
-	<!-- Import standard docbook stylesheet -->
+    This is the XSL FO (PDF) stylesheet for the Spring Data reference
+    documentation.
+-->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                version="1.0">
+
+
     <xsl:import href="urn:docbkx:stylesheet"/>
-    
-    <!-- Import highlighting color codes -->
     <xsl:import href="highlight-fo.xsl"/>
-    
-    
-    <xsl:param name="glossterm.auto.link">1</xsl:param>
-    <xsl:param name="highlight.source">1</xsl:param>
-    <xsl:param name="use.extensions">1</xsl:param>
-    <xsl:param name="callouts.extension">1</xsl:param>
-    
-     
-     <!-- Custom Title Page -->
+
+    <!--###################################################
+                  Custom Title Page
+   ################################################### -->
 
     <xsl:template name="book.titlepage.recto">
         <fo:block>
@@ -23,47 +23,49 @@
                 <fo:table-body>
                     <fo:table-row>
                         <fo:table-cell text-align="center">
-                            <fo:block font-size="22pt" font-weight="bold" padding-before="30mm">
-                                <xsl:value-of select="bookinfo/title"/> 
+							<!-- Logo 
+                            <fo:block>
+                                <fo:external-graphic src="file:src/docbkx/resources/images/s2_box_logo.png"/>
                             </fo:block>
-                            <fo:block font-size="14pt" padding="10mm">
-                                <xsl:value-of select="bookinfo/subtitle"/>
+                            -->
+                            <fo:block font-family="Helvetica" font-size="22pt" padding-before="10mm">
+                                <xsl:value-of select="bookinfo/subtitle"/> 
                             </fo:block>
-                            <fo:block font-size="12pt" padding="10mm">
+                            <fo:block font-family="Helvetica" font-size="14pt" padding="10mm">
+                                <xsl:value-of select="bookinfo/title"/>
+                            </fo:block>
+                            <fo:block font-family="Helvetica" font-size="12pt" padding="10mm">
                                 <xsl:value-of select="bookinfo/releaseinfo"/>
                             </fo:block>
                         </fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                         <fo:table-cell text-align="center">
-                            <fo:block font-size="12pt" padding="10mm" padding-top="40mm">
+                            <fo:block font-family="Helvetica" font-size="14pt" padding="10mm">
                                 <xsl:value-of select="bookinfo/pubdate"/>
                             </fo:block>
                         </fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                         <fo:table-cell text-align="center">
-                            <fo:block font-size="12pt" padding="10mm">
+                            <fo:block font-family="Helvetica" font-size="12pt" padding="10mm">
                                 <xsl:for-each select="bookinfo/authorgroup/author">
-                                    <xsl:if test="position() &gt; 1">
+                                    <xsl:if test="position() > 1">
                                         <xsl:text>, </xsl:text>
                                     </xsl:if>
                                     <xsl:value-of select="firstname"/>
                                     <xsl:text> </xsl:text>
                                     <xsl:value-of select="surname"/>
-                                    <xsl:text> (</xsl:text>
-                                    <xsl:value-of select="affiliation/jobtitle"/>
-                                    <xsl:text>, </xsl:text>
-                                    <xsl:value-of select="affiliation/orgname"/>
-                                    <xsl:text>)</xsl:text>
+                                    <!-- <xsl:text> (</xsl:text>
+                                    <xsl:value-of select="affiliation"/>
+                                    <xsl:text>)</xsl:text> -->
                                 </xsl:for-each>
                             </fo:block>
-                            <fo:block font-size="12pt" padding="10mm">
-								<xsl:text>Copyright &#169; </xsl:text>
-								<xsl:value-of select="bookinfo/copyright/year" />
+                            <fo:block font-family="Helvetica" font-size="12pt" padding="10mm">
+								<xsl:text>Copyright &#xA9; 2011</xsl:text>
 							</fo:block>
 
-                            <fo:block font-size="10pt" padding="1mm">
+                            <fo:block font-family="Helvetica" font-size="10pt" padding="1mm">
                                 <xsl:value-of select="bookinfo/legalnotice"/>
                             </fo:block>
                         </fo:table-cell>
@@ -72,8 +74,7 @@
             </fo:table>
         </fo:block>
     </xsl:template>
-       
-    
+
     <!-- Prevent blank pages in output -->
     <xsl:template name="book.titlepage.before.verso">
     </xsl:template>
@@ -82,28 +83,31 @@
     <xsl:template name="book.titlepage.separator">
     </xsl:template>
 
-    <!-- Header -->
+    <!--###################################################
+                     Header
+   ################################################### -->
 
-    <!-- More space in the center header for long text 
+    <!-- More space in the center header for long text -->
     <xsl:attribute-set name="header.content.properties">
         <xsl:attribute name="font-family">
             <xsl:value-of select="$body.font.family"/>
         </xsl:attribute>
+        <xsl:attribute name="margin-left">-5em</xsl:attribute>
+        <xsl:attribute name="margin-right">-5em</xsl:attribute>
     </xsl:attribute-set>
-    -->
 
-    <!-- Custom Footer -->
+    <!--###################################################
+                     Custom Footer
+   ################################################### -->
     <xsl:template name="footer.content">
         <xsl:param name="pageclass" select="''"/>
         <xsl:param name="sequence" select="''"/>
         <xsl:param name="position" select="''"/>
         <xsl:param name="gentext-key" select="''"/>
 		<xsl:variable name="Version">
-			<xsl:value-of select="//bookinfo/title" />
-			<!-- 
 			<xsl:if test="//releaseinfo">
-				<xsl:text>Product Oriented Import (</xsl:text><xsl:value-of select="//releaseinfo"/><xsl:text>)</xsl:text>
-			</xsl:if>-->
+				<xsl:text>Spring Data Document (</xsl:text><xsl:value-of select="//releaseinfo" /><xsl:text>)</xsl:text>
+			</xsl:if>
 		</xsl:variable>
         <xsl:choose>
             <xsl:when test="$sequence='blank'">
@@ -139,11 +143,24 @@
         </xsl:choose>
     </xsl:template>
 
-    <!-- Table Of Contents -->
+    <!--###################################################
+                     Extensions
+   ################################################### -->
+
+    <!-- These extensions are required for table printing and other stuff -->
+    <xsl:param name="tablecolumns.extension">0</xsl:param>
+    <!-- FOP provide only PDF Bookmarks at the moment -->
+    <xsl:param name="fop.extensions">1</xsl:param>
+    <xsl:param name="fop1.extensions">1</xsl:param>
+    <xsl:param name="ignore.image.scaling">0</xsl:param>
+
+    <!--###################################################
+                     Table Of Contents
+   ################################################### -->
 
     <!-- Generate the TOCs for named components only -->
     <xsl:param name="generate.toc">
-        book toc,title
+        book toc
     </xsl:param>
 
     <!-- Show only Sections up to level 3 in the TOCs -->
@@ -153,78 +170,60 @@
     <xsl:param name="autotoc.label.separator" select="'.  '"/>
 
 
-    <!-- Paper & Page Size -->
+    <!--###################################################
+                  Paper & Page Size
+   ################################################### -->
 
     <!-- Paper type, no headers on blank pages, no double sided printing -->
     <xsl:param name="paper.type" select="'A4'"/>
     <xsl:param name="double.sided">0</xsl:param>
     <xsl:param name="headers.on.blank.pages">0</xsl:param>
-    <xsl:param name="footers.on.blank.pages">0</xsl:param> 
+    <xsl:param name="footers.on.blank.pages">0</xsl:param>
 
     <!-- Space between paper border and content (chaotic stuff, don't touch) -->
-    
-    <xsl:param name="region.before.extent">15mm</xsl:param>
-    <xsl:param name="region.after.extent">10mm</xsl:param>
-    
+    <xsl:param name="page.margin.top">5mm</xsl:param>
+    <xsl:param name="region.before.extent">10mm</xsl:param>
     <xsl:param name="body.margin.top">10mm</xsl:param>
-    <xsl:param name="body.margin.bottom">10mm</xsl:param>
-    
-    <xsl:param name="page.margin.top">15mm</xsl:param>
-    <xsl:param name="page.margin.bottom">15mm</xsl:param>
-	
+
+    <xsl:param name="body.margin.bottom">15mm</xsl:param>
+    <xsl:param name="region.after.extent">10mm</xsl:param>
+    <xsl:param name="page.margin.bottom">0mm</xsl:param>
+
     <xsl:param name="page.margin.outer">18mm</xsl:param>
     <xsl:param name="page.margin.inner">18mm</xsl:param>
 
     <!-- No intendation of Titles -->
     <xsl:param name="title.margin.left">0pc</xsl:param>
 
-   	 <!-- Fonts & Styles -->
+    <!--###################################################
+                  Fonts & Styles
+   ################################################### -->
 
     <!-- Left aligned text and no hyphenation -->
     <xsl:param name="alignment">justify</xsl:param>
-    <xsl:param name="hyphenate">true</xsl:param>
-    
-    <!-- Links -->
-    <xsl:param name="xref.with.number.and.title" select="0"/>
-    
-    <xsl:attribute-set name="xref.properties">
-	  <xsl:attribute name="color">
-	    <xsl:choose>
-	      <xsl:when test="self::ulink | self::xref">blue</xsl:when>
-	      <xsl:otherwise>inherit</xsl:otherwise>
-	    </xsl:choose>
-	  </xsl:attribute>
-	  <xsl:attribute name="text-decoration">
-	    <xsl:choose>
-	      <xsl:when test="self::ulink | self::xref">underline</xsl:when>
-	      <xsl:otherwise>inherit</xsl:otherwise>
-	    </xsl:choose>
-	  </xsl:attribute>
-	</xsl:attribute-set>
-    
+    <xsl:param name="hyphenate">false</xsl:param>
 
     <!-- Default Font size -->
-    <xsl:param name="title.font.family">StellaLining</xsl:param>
-    
-    <xsl:param name="body.font.family">StellaLining</xsl:param>
     <xsl:param name="body.font.master">11</xsl:param>
-    <xsl:param name="body.font.small">9</xsl:param>
+    <xsl:param name="body.font.small">8</xsl:param>
 
     <!-- Line height in body text -->
-    <xsl:param name="line-height">1.3</xsl:param> 
+    <xsl:param name="line-height">1.4</xsl:param>
 
     <!-- Monospaced fonts are smaller than regular text -->
     <xsl:attribute-set name="monospace.properties">
         <xsl:attribute name="font-family">
             <xsl:value-of select="$monospace.font.family"/>
         </xsl:attribute>
-        <xsl:attribute name="font-size">0.9em</xsl:attribute>
+        <xsl:attribute name="font-size">0.8em</xsl:attribute>
     </xsl:attribute-set>
 
-    <!-- Tables -->
+    <!--###################################################
+                  Tables
+   ################################################### -->
 
     <!-- The table width should be adapted to the paper size -->
-    <xsl:param name="default.table.width">15.4cm</xsl:param>
+    <xsl:param name="default.table.width">17.4cm</xsl:param>
 
     <!-- Some padding inside tables -->
     <xsl:attribute-set name="table.cell.padding">
@@ -238,14 +237,18 @@
     <xsl:param name="table.frame.border.thickness">0.1pt</xsl:param>
     <xsl:param name="table.cell.border.thickness">0.1pt</xsl:param>
 
-    <!-- Labels -->
+    <!--###################################################
+                        Labels
+   ################################################### -->
 
     <!-- Label Chapters and Sections (numbering) -->
     <xsl:param name="chapter.autolabel">1</xsl:param>
     <xsl:param name="section.autolabel" select="1"/>
     <xsl:param name="section.label.includes.component.label" select="1"/>
 
-    <!-- Titles -->
+    <!--###################################################
+                        Titles
+   ################################################### -->
 
     <!-- Chapter title size -->
     <xsl:attribute-set name="chapter.titlepage.recto.style">
@@ -260,7 +263,8 @@
     <!-- Why is the font-size for chapters hardcoded in the XSL FO templates? 
         Let's remove it, so this sucker can use our attribute-set only... -->
     <xsl:template match="title" mode="chapter.titlepage.recto.auto.mode">
-        <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style">
+        <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                  xsl:use-attribute-sets="chapter.titlepage.recto.style">
             <xsl:call-template name="component.title">
                 <xsl:with-param name="node" select="ancestor-or-self::chapter[1]"/>
             </xsl:call-template>
@@ -318,18 +322,19 @@
         <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
     </xsl:attribute-set>
 
-    <!-- Programlistings -->
+    <!--###################################################
+                     Programlistings
+   ################################################### -->
 
     <!-- Verbatim text formatting (programlistings) -->
     <xsl:attribute-set name="monospace.verbatim.properties">
         <xsl:attribute name="font-size">
-            <xsl:value-of select="$body.font.small"/>
+            <xsl:value-of select="$body.font.small * 1.0"/>
             <xsl:text>pt</xsl:text>
         </xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="verbatim.properties">
-    	<xsl:attribute name="keep-together.within-column">always</xsl:attribute>
         <xsl:attribute name="space-before.minimum">1em</xsl:attribute>
         <xsl:attribute name="space-before.optimum">1em</xsl:attribute>
         <xsl:attribute name="space-before.maximum">1em</xsl:attribute>
@@ -350,23 +355,28 @@
         <xsl:attribute name="background-color">#F0F0F0</xsl:attribute>
     </xsl:attribute-set>
 
-    <!-- Callouts -->
+    <!--###################################################
+                        Callouts
+   ################################################### -->
 
     <!-- Use images for callouts instead of (1) (2) (3) -->
     <xsl:param name="callout.graphics">0</xsl:param>
     <xsl:param name="callout.unicode">1</xsl:param>
 
     <!-- Place callout marks at this column in annotated areas -->
-    <xsl:param name="callout.defaultcolumn">79</xsl:param>
+    <xsl:param name="callout.defaultcolumn">90</xsl:param>
 
-    <!-- Admonitions -->
+    <!--###################################################
+                      Admonitions
+   ################################################### -->
 
-    <!-- Use nice graphics for admonitions
-    
+    <!-- Use nice graphics for admonitions -->
     <xsl:param name="admon.graphics">'1'</xsl:param>
-    <xsl:param name="admon.graphics.path">src/docbkx/resources/images/admons/</xsl:param>-->
+    <xsl:param name="admon.graphics.path">src/docbkx/resources/images/admons/</xsl:param>
 
-    <!-- Misc -->
+    <!--###################################################
+                         Misc
+   ################################################### -->
 
     <!-- Placement of titles -->
     <xsl:param name="formal.title.placement">
@@ -390,9 +400,14 @@
         <xsl:attribute name="space-after.maximum">0.1em</xsl:attribute>
     </xsl:attribute-set>
 
-    <!-- colored and hyphenated links -->
+    <!--###################################################
+             colored and hyphenated links
+   ################################################### -->
     <xsl:template match="ulink">
-        <fo:basic-link external-destination="{@url}" xsl:use-attribute-sets="xref.properties" text-decoration="underline" color="blue">
+        <fo:basic-link external-destination="{@url}"
+                       xsl:use-attribute-sets="xref.properties"
+                       text-decoration="underline"
+                       color="blue">
             <xsl:choose>
                 <xsl:when test="count(child::node())=0">
                     <xsl:value-of select="@url"/>
@@ -405,7 +420,10 @@
     </xsl:template>
 
     <xsl:template match="link">
-        <fo:basic-link internal-destination="{@linkend}" xsl:use-attribute-sets="xref.properties" text-decoration="underline" color="blue">
+        <fo:basic-link internal-destination="{@linkend}"
+                xsl:use-attribute-sets="xref.properties"
+                text-decoration="underline"
+                color="blue">
             <xsl:choose>
                 <xsl:when test="count(child::node())=0">
                     <xsl:value-of select="@linkend"/>
@@ -416,19 +434,16 @@
             </xsl:choose>
         </fo:basic-link>
     </xsl:template>
-    
     <!--
+    
     <xsl:template match="xref">
-        <fo:basic-link internal-destination="{@linkend}" xsl:use-attribute-sets="xref.properties" text-decoration="underline" color="blue">
-            <xsl:choose>
-                <xsl:when test="count(child::node())=0">
-                    <xsl:value-of select="@linkend"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <fo:basic-link internal-destination="{@linkend}"
+                xsl:use-attribute-sets="xref.properties"
+                text-decoration="underline"
+                color="blue">
+				<xsl:apply-templates/>
         </fo:basic-link>
-    </xsl:template>-->
-	
+    </xsl:template>    
+    -->
+
 </xsl:stylesheet>

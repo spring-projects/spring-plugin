@@ -1,23 +1,25 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
     This is the XSL HTML configuration file for the Spring
     Reference Documentation.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
-
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:xslthl="http://xslthl.sf.net"
+                exclude-result-prefixes="xslthl"                
+                version="1.0">
+                
     <xsl:import href="urn:docbkx:stylesheet"/>
-
+    <xsl:import href="highlight.xsl"/>
+	
     <!--###################################################
                     HTML Settings
    ################################################### -->
-
-    <xsl:param name="html.stylesheet">html.css</xsl:param>
-
+	
     <!-- These extensions are required for table printing and other stuff -->
-    <xsl:param name="use.extensions">1</xsl:param>
     <xsl:param name="tablecolumns.extension">0</xsl:param>
-    <xsl:param name="callout.extensions">1</xsl:param>
     <xsl:param name="graphicsize.extension">0</xsl:param>
+    <xsl:param name="ignore.image.scaling">1</xsl:param>
 
     <!--###################################################
                      Table Of Contents
@@ -45,7 +47,7 @@
    ################################################### -->
 
     <!-- Use images for callouts instead of (1) (2) (3) -->
-    <xsl:param name="callout.graphics">0</xsl:param>
+    <xsl:param name="callout.graphics">1</xsl:param>
 
     <!-- Place callout marks at this column in annotated areas -->
     <xsl:param name="callout.defaultcolumn">90</xsl:param>
@@ -55,8 +57,8 @@
    ################################################### -->
 
     <!-- Use nice graphics for admonitions -->
-    <xsl:param name="admon.graphics">0</xsl:param>
-
+    <xsl:param name="admon.graphics">1</xsl:param>
+	<xsl:param name="admon.graphics.path">images/admons/</xsl:param>
     <!--###################################################
                          Misc
    ################################################### -->
@@ -73,9 +75,9 @@
             <xsl:text>, </xsl:text>
         </xsl:if>
         <span class="{name(.)}">
-            <xsl:call-template name="person.name"/>
+            <xsl:call-template name="person.name"/> 
+            <!-- (<xsl:value-of select="affiliation"/>) -->
             <xsl:apply-templates mode="titlepage.mode" select="./contrib"/>
-            <xsl:apply-templates mode="titlepage.mode" select="./affiliation"/>
         </span>
     </xsl:template>
     <xsl:template match="authorgroup" mode="titlepage.mode">
@@ -85,5 +87,21 @@
             <xsl:apply-templates mode="titlepage.mode"/>
         </div>
     </xsl:template>
+   <!--###################################################
+                     Headers and Footers
+    ################################################### -->
+    <!-- let's have a Spring and I21 banner across the top of each page -->
+    <xsl:template name="user.header.navigation">
+        <div style="background-color:white;border:none;height:73px;border:1px solid black;">
+            <a style="border:none;" href="http://www.springframework.org/osgi/"
+               title="The Spring Framework - Spring Data">
+                <img style="border:none;" src="images/xdev-spring_logo.jpg"/>
+            </a>
+            <a style="border:none;" href="http://www.SpringSource.com/" title="SpringSource - Spring from the Source">
+                <img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/s2-banner-rhs.png"/>
+            </a>
+        </div>
+    </xsl:template>
 
 </xsl:stylesheet>
+
