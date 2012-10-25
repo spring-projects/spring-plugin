@@ -17,6 +17,7 @@ package org.springframework.plugin.core;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.springframework.plugin.core.OrderAwarePluginRegistry.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,11 +25,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.plugin.core.MutablePluginRegistry;
-import org.springframework.plugin.core.OrderAwarePluginRegistry;
-import org.springframework.plugin.core.Plugin;
-import org.springframework.plugin.core.PluginRegistry;
 
 /**
  * Unit test for {@link OrderAwarePluginRegistry} that especially concentrates on testing ordering functionality.
@@ -98,6 +97,21 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		assertOrder(reverse, firstPlugin, secondPlugin);
 	}
 
+	/**
+	 * @see #1
+	 */
+	@Test
+	public void considersJdkProxiedOrderedImplementation() {
+
+		ThirdImplementation plugin = new ThirdImplementation();
+		TestPlugin thirdPlugin = (TestPlugin) new ProxyFactory(plugin).getProxy();
+
+		OrderAwarePluginRegistry<TestPlugin, String> registry = create(Arrays
+				.asList(firstPlugin, secondPlugin, thirdPlugin));
+		assertOrder(registry, secondPlugin, thirdPlugin, firstPlugin);
+		assertOrder(registry.reverse(), firstPlugin, thirdPlugin, secondPlugin);
+	}
+
 	private static interface TestPlugin extends Plugin<String> {
 
 	}
@@ -126,6 +140,19 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		 */
 		public boolean supports(String delimiter) {
 
+			return true;
+		}
+	}
+
+	private static class ThirdImplementation implements TestPlugin, Ordered {
+
+		@Override
+		public int getOrder() {
+			return 3;
+		}
+
+		@Override
+		public boolean supports(String delimiter) {
 			return true;
 		}
 	}
