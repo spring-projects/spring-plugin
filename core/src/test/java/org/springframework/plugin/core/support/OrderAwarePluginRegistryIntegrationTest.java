@@ -1,32 +1,82 @@
 package org.springframework.plugin.core.support;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import java.util.List;
 
-import org.springframework.aop.framework.ProxyFactory;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
-import org.springframework.plugin.core.support.AbstractTypeAwareSupport.BeansOfTypeTargetSource;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
+/**
+ * Integration test for {@link OrderAwarePluginRegistry}.
+ * 
+ * @author Oliver Gierke
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
 public class OrderAwarePluginRegistryIntegrationTest {
+
+	@Configuration
+	@EnablePluginRegistries(TestPlugin.class)
+	static class Config {
+
+		@Bean
+		public FirstImplementation firstImplementation() {
+			return new FirstImplementation();
+		}
+
+		@Bean
+		public SecondImplementation secondImplementation() {
+			return new SecondImplementation();
+		}
+
+		@Bean
+		public ThirdImplementation thirdImplementation() {
+			return new ThirdImplementation();
+		}
+	}
 
 	@Autowired
 	ApplicationContext context;
 
-	// @Test
-	public void considersJdkProxiedOrderedImplementation() {
-		BeansOfTypeTargetSource targetSource = new AbstractTypeAwareSupport.BeansOfTypeTargetSource(context,
-				TestPlugin.class, false);
+	@Autowired
+	FirstImplementation first;
+	@Autowired
+	SecondImplementation second;
+	@Autowired
+	ThirdImplementation third;
 
-		ProxyFactory factory = new ProxyFactory(List.class, targetSource);
-		List<TestPlugin> beans = (List<TestPlugin>) factory.getProxy();
-		OrderAwarePluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.create(beans);
+	@Autowired
+	OrderAwarePluginRegistry<TestPlugin, String> registry;
+
+	@Test
+	public void considersJdkProxiedOrderedImplementation() {
 
 		List<TestPlugin> plugins = registry.getPlugins();
+
+		assertThat(plugins, Matchers.hasSize(3));
+		assertThat(plugins.get(0), is((TestPlugin) second));
+		assertThat(plugins.get(1), is((TestPlugin) third));
+		assertThat(plugins.get(2), is((TestPlugin) first));
+
+		plugins = registry.reverse().getPlugins();
+
+		assertThat(plugins.get(2), is((TestPlugin) second));
+		assertThat(plugins.get(1), is((TestPlugin) third));
+		assertThat(plugins.get(0), is((TestPlugin) first));
 	}
 
 	private static interface TestPlugin extends Plugin<String> {

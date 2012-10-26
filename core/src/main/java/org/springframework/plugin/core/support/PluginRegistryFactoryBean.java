@@ -41,7 +41,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends AbstractT
 	 * @see org.springframework.beans.factory.FactoryBean#getObjectType()
 	 */
 	public Class<?> getObjectType() {
-		return PluginRegistry.class;
+		return OrderAwarePluginRegistry.class;
 	}
 
 	/*
