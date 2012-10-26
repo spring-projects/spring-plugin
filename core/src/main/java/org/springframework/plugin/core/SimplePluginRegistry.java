@@ -17,7 +17,6 @@ package org.springframework.plugin.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,18 +27,15 @@ import java.util.List;
  * @param <S> the delimiter type
  * @author Oliver Gierke
  */
-public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePluginRegistry<T, S> {
-
-	protected final List<T> plugins;
+public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport<T, S> {
 
 	/**
 	 * Creates a new {@code SimplePluginRegistry}. Will create an empty registry if {@literal null} is provided.
 	 * 
 	 * @param plugins must not be {@literal null}.
 	 */
-	@SuppressWarnings("unchecked")
 	protected SimplePluginRegistry(List<? extends T> plugins) {
-		this.plugins = plugins == null ? new ArrayList<T>() : (List<T>) plugins;
+		super(plugins);
 	}
 
 	/**
@@ -50,7 +46,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePlug
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
-		return new SimplePluginRegistry<T, S>(null);
+		return create(Collections.<T> emptyList());
 	}
 
 	/**
@@ -64,26 +60,12 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePlug
 		return new SimplePluginRegistry<T, S>(plugins);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.plugin.core.MutablePluginRegistry#addPlugin(org.springframework.plugin.core.Plugin)
+	/* (non-Javadoc)
+	 * @see org.springframework.plugin.core.PluginRegistrySupport#getPlugins()
 	 */
-	public SimplePluginRegistry<T, S> addPlugin(T plugin) {
-
-		if (plugin != null) {
-			this.plugins.add(plugin);
-		}
-
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.plugin.core.MutablePluginRegistry#removePlugin(org.springframework.plugin.core.Plugin)
-	 */
-	public boolean removePlugin(T plugin) {
-
-		return this.plugins.remove(plugin);
+	@Override
+	public List<T> getPlugins() {
+		return Collections.unmodifiableList(super.getPlugins());
 	}
 
 	/*
@@ -109,7 +91,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePlug
 
 		List<T> result = new ArrayList<T>();
 
-		for (T plugin : plugins) {
+		for (T plugin : super.getPlugins()) {
 			if (plugin != null && plugin.supports(delimiter)) {
 				result.add(plugin);
 			}
@@ -176,18 +158,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePlug
 	 */
 	public int countPlugins() {
 
-		return plugins.size();
-	}
-
-	/**
-	 * Returns all registered plugins. Only use this method if you really need to access all plugins. For distinguished
-	 * access to certain plugins favour accessor methods like {link #getPluginFor} over this one. This method should only
-	 * be used for testing purposes to check registry configuration.
-	 * 
-	 * @return all plugins of the registry
-	 */
-	public List<T> getPlugins() {
-		return Collections.unmodifiableList(plugins);
+		return super.getPlugins().size();
 	}
 
 	/*
@@ -195,22 +166,14 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> implements MutablePlug
 	 * @see org.springframework.plugin.core.PluginRegistry#contains(org.springframework.plugin.core.Plugin)
 	 */
 	public boolean contains(T plugin) {
-		return this.plugins.contains(plugin);
+		return super.getPlugins().contains(plugin);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistry#hasPluginFor(java.lang.Object)
 	 */
-	public boolean hasPluginFor(S delimter) {
-		return null != getPluginFor(delimter);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Iterable#iterator()
-	 */
-	public Iterator<T> iterator() {
-		return plugins.iterator();
+	public boolean hasPluginFor(S delimiter) {
+		return null != getPluginFor(delimiter);
 	}
 }

@@ -58,7 +58,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	protected OrderAwarePluginRegistry(List<? extends T> plugins, Comparator<? super T> comparator) {
 
 		super(plugins);
-		setComparator(comparator);
+		this.comparator = (Comparator<? super T>) (comparator == null ? DEFAULT_COMPARATOR : comparator);
 	}
 
 	/**
@@ -122,34 +122,16 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 		return new OrderAwarePluginRegistry<T, S>(plugins, comparator);
 	}
 
-	/**
-	 * Sets the comparator to use. Resorts the contained {@link Plugin}s if any available.
-	 * 
-	 * @param comparator the comparator to set
-	 */
-	private void setComparator(Comparator<? super T> comparator) {
-
-		this.comparator = DEFAULT_COMPARATOR;
-
-		if (comparator != null) {
-			this.comparator = comparator;
-		}
-
-		if (plugins != null) {
-			Collections.sort(plugins, comparator);
-		}
-	}
-
-	/*
+	/* 
 	 * (non-Javadoc)
-	 * @see org.springframework.plugin.core.SimplePluginRegistry#addPlugin(org.springframework.plugin.core.Plugin)
+	 * @see org.springframework.plugin.core.PluginRegistrySupport#initialize(java.util.List)
 	 */
 	@Override
-	public OrderAwarePluginRegistry<T, S> addPlugin(T plugin) {
+	protected List<T> initialize(List<T> plugins) {
 
-		super.addPlugin(plugin);
-		Collections.sort(plugins, comparator);
-		return this;
+		List<T> result = super.initialize(plugins);
+		Collections.sort(result, comparator);
+		return result;
 	}
 
 	/**
@@ -160,7 +142,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public OrderAwarePluginRegistry<T, S> reverse() {
 
-		ArrayList<T> copy = new ArrayList<T>(plugins);
+		ArrayList<T> copy = new ArrayList<T>(getPlugins());
 		return create(copy, new InvertibleComparator(comparator, false));
 	}
 }

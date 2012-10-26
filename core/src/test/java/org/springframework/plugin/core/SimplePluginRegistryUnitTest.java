@@ -19,21 +19,19 @@ package org.springframework.plugin.core;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.plugin.core.MutablePluginRegistry;
-import org.springframework.plugin.core.Plugin;
-import org.springframework.plugin.core.SimplePluginRegistry;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
  * 
  * @author Oliver Gierke
  */
-public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryUnitTest {
+public class SimplePluginRegistryUnitTest {
 
 	SamplePlugin plugin;
 
@@ -49,16 +47,6 @@ public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryU
 		registry = SimplePluginRegistry.create();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.plugin.core.AbstractMutablePluginRegistryUnitTest#getRegistry()
-	 */
-	@Override
-	protected MutablePluginRegistry<SamplePlugin, String> getRegistry() {
-
-		return SimplePluginRegistry.create();
-	}
-
 	/**
 	 * Asserts that the registry contains the plugin it was initialized with.
 	 * 
@@ -67,7 +55,7 @@ public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryU
 	@Test
 	public void assertRegistryInitialized() throws Exception {
 
-		registry.addPlugin(plugin);
+		registry = SimplePluginRegistry.create(Arrays.asList(plugin));
 
 		assertThat(registry.countPlugins(), is(1));
 		assertTrue(registry.contains(plugin));
@@ -79,7 +67,7 @@ public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryU
 	@Test
 	public void assertFindsEmailNotificationProvider() {
 
-		registry.addPlugin(plugin);
+		registry = SimplePluginRegistry.create(Arrays.asList(plugin));
 
 		String delimiter = "FOO";
 
@@ -135,7 +123,10 @@ public class SimplePluginRegistryUnitTest extends AbstractMutablePluginRegistryU
 	@Test
 	public void handlesAddingNullPluginsCorrecty() throws Exception {
 
-		registry.addPlugin(null);
+		List<SamplePlugin> plugins = new ArrayList<SamplePlugin>();
+		plugins.add(null);
+
+		registry = SimplePluginRegistry.create(plugins);
 
 		assertThat(registry.countPlugins(), is(0));
 	}

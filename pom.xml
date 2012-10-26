@@ -44,7 +44,7 @@
     </modules>
     
     <properties>
-        <spring.version>3.0.7.RELEASE</spring.version>
+        <spring.version>3.1.2.RELEASE</spring.version>
     </properties>
 
     <developers>

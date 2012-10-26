@@ -102,7 +102,7 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 	 * 
 	 * @author Oliver Gierke
 	 */
-	private static class BeansOfTypeTargetSource implements TargetSource {
+	static class BeansOfTypeTargetSource implements TargetSource {
 
 		private final ListableBeanFactory context;
 		private final Class<?> type;

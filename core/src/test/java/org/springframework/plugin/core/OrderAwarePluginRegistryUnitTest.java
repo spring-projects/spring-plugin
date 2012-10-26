@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.core.Ordered;
@@ -49,27 +48,11 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		secondPlugin = new SecondImplementation();
 	}
 
-	@Override
-	protected OrderAwarePluginRegistry<SamplePlugin, String> getRegistry() {
-
-		return OrderAwarePluginRegistry.create();
-	}
-
 	@Test
 	public void honorsOrderOnAddPlugins() throws Exception {
 
 		PluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.create(Arrays.asList(firstPlugin,
 				secondPlugin));
-		assertOrder(registry, secondPlugin, firstPlugin);
-	}
-
-	@Test
-	@Ignore
-	public void assertsOrderOnAddingPlugins() throws Exception {
-
-		MutablePluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.create(Arrays.asList(firstPlugin));
-		registry.addPlugin(secondPlugin);
-
 		assertOrder(registry, secondPlugin, firstPlugin);
 	}
 
