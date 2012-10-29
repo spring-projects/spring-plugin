@@ -59,6 +59,7 @@ public class EnablePluginRegistriesIntegrationTest {
 		assertThat(registry, is(notNullValue()));
 	}
 
+	@Qualifier("myQualifier")
 	interface AnotherPlugin extends Plugin<String> {
 
 	}

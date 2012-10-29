@@ -16,7 +16,9 @@
 package org.springframework.plugin.core.support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.aop.TargetSource;
@@ -42,25 +44,32 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 	private ApplicationContext context;
 	private Class<T> type;
 	private BeansOfTypeTargetSource targetSource;
+	private Collection<Class<?>> exclusions;
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.context.ApplicationContextAware#setApplicationContext
-	 * (org.springframework.context.ApplicationContext)
+	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
 	 */
 	public void setApplicationContext(ApplicationContext context) {
-
 		this.context = context;
 	}
 
 	/**
+	 * Configures the type of beans to be looked up.
+	 * 
 	 * @param type the type to set
 	 */
 	public void setType(Class<T> type) {
-
 		this.type = type;
+	}
+
+	/**
+	 * Configures the types to be excluded from the lookup.
+	 * 
+	 * @param exclusions
+	 */
+	public void setExclusions(Class<?>[] exclusions) {
+		this.exclusions = Arrays.asList(exclusions);
 	}
 
 	/**
@@ -80,7 +89,7 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	public void afterPropertiesSet() {
-		this.targetSource = new BeansOfTypeTargetSource(context, type, false);
+		this.targetSource = new BeansOfTypeTargetSource(context, type, false, exclusions);
 	}
 
 	/*
@@ -107,9 +116,10 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		private final ListableBeanFactory context;
 		private final Class<?> type;
 		private final boolean eagerInit;
+		private final Collection<Class<?>> exclusions;
 
 		private boolean frozen = false;
-		private Collection<?> components;
+		private Collection<Object> components;
 
 		/**
 		 * Creates a new {@link BeansOfTypeTargetSource} using the given {@link ListableBeanFactory} to lookup beans of the
@@ -119,7 +129,8 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		 * @param type must not be {@literal null}.
 		 * @param eagerInit whether to eagerly init {@link FactoryBean}s, defaults to {@literal false}.
 		 */
-		public BeansOfTypeTargetSource(ListableBeanFactory context, Class<?> type, boolean eagerInit) {
+		public BeansOfTypeTargetSource(ListableBeanFactory context, Class<?> type, boolean eagerInit,
+				Collection<Class<?>> exclusions) {
 
 			Assert.notNull(context);
 			Assert.notNull(type);
@@ -127,6 +138,7 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 			this.context = context;
 			this.type = type;
 			this.eagerInit = eagerInit;
+			this.exclusions = exclusions == null ? Collections.<Class<?>> emptySet() : exclusions;
 		}
 
 		/**
@@ -160,7 +172,7 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public synchronized Object getTarget() throws Exception {
 
-			Collection<?> components = this.components == null ? context.getBeansOfType(type, false, eagerInit).values()
+			Collection<Object> components = this.components == null ? getBeansOfTypeExcept(type, exclusions)
 					: this.components;
 
 			if (frozen && this.components == null) {
@@ -176,6 +188,20 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		 */
 		public void releaseTarget(Object target) throws Exception {
 
+		}
+
+		private Collection<Object> getBeansOfTypeExcept(Class<?> type, Collection<Class<?>> exceptions) {
+
+			List<Object> result = new ArrayList<Object>();
+
+			for (String beanName : context.getBeanNamesForType(type, false, eagerInit)) {
+				if (exceptions.contains(context.getType(beanName))) {
+					continue;
+				}
+				result.add(context.getBean(beanName));
+			}
+
+			return result;
 		}
 	}
 }
