@@ -15,6 +15,7 @@
  */
 package org.springframework.plugin.core.support;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,7 +39,8 @@ public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T> implemen
 	 */
 	public List<T> getObject() {
 
-		List<T> beans = getBeans();
+		List<T> beans = new ArrayList<T>();
+		beans.addAll(getBeans());
 		Collections.sort(beans, COMPARATOR);
 
 		return beans;

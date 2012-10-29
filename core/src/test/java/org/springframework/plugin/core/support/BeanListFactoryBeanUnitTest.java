@@ -16,11 +16,10 @@
 package org.springframework.plugin.core.support;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
-import org.springframework.plugin.core.support.BeanListFactoryBean;
 
 /**
  * Unit test for {@link BeanListFactoryBean}.
@@ -60,11 +58,10 @@ public class BeanListFactoryBeanUnitTest {
 		Ordered first = getOrdered(5);
 		Ordered second = getOrdered(0);
 
-		Map<String, Ordered> beans = new HashMap<String, Ordered>();
-		beans.put("first", first);
-		beans.put("second", second);
-
-		when(context.getBeansOfType(Ordered.class, false, false)).thenReturn(beans);
+		when(context.getBeanNamesForType(Ordered.class, false, false)).thenReturn(new String[] { "first", "second" });
+		when(context.getType(any(String.class))).thenReturn((Class) Ordered.class);
+		when(context.getBean("first")).thenReturn(first);
+		when(context.getBean("second")).thenReturn(second);
 
 		Object result = factory.getObject();
 		assertTrue(result instanceof List<?>);
@@ -78,7 +75,7 @@ public class BeanListFactoryBeanUnitTest {
 	@Test
 	public void returnsEmptyListIfNoBeansFound() throws Exception {
 
-		when(context.getBeansOfType(Ordered.class)).thenReturn(new HashMap<String, Ordered>());
+		when(context.getBeanNamesForType(Ordered.class, false, false)).thenReturn(new String[0]);
 
 		Object result = factory.getObject();
 		assertTrue(result instanceof List<?>);
