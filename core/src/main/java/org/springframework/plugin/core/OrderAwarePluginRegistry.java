@@ -55,6 +55,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @param comparator the {@link Comparator} to be used for ordering the {@link Plugin}s or {@literal null} if the
 	 *          {@code #DEFAULT_COMPARATOR} shall be used.
 	 */
+	@SuppressWarnings("unchecked")
 	protected OrderAwarePluginRegistry(List<? extends T> plugins, Comparator<? super T> comparator) {
 
 		super(plugins);
@@ -69,8 +70,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
-
-		return create(null, null);
+		return create(Collections.<T> emptyList());
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(Comparator<? super T> comparator) {
-		return create(null, comparator);
+		return create(Collections.<T> emptyList(), comparator);
 	}
 
 	/**

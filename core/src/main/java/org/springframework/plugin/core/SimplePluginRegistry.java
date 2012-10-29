@@ -74,10 +74,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	public T getPluginFor(S delimiter) {
 
-		List<T> result = getPluginsFor(delimiter);
-
-		if (0 < result.size()) {
-			return result.get(0);
+		for (T plugin : super.getPlugins()) {
+			if (plugin != null && plugin.supports(delimiter)) {
+				return plugin;
+			}
 		}
 
 		return null;
