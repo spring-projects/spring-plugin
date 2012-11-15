@@ -2,21 +2,13 @@
 
 V0.8 - Oliver Gierke, SpringSource - a division of VMware
 
-© 2008-2012 The original authors
-
-## Revision History
- 
-* 04.11.2008 Oliver Gierke Initial draft							
-* 05.11.2008 Oliver Gierke Added metadata module documentation
-* 24.01.2009 Oliver Gierke Added remark to inner bean usage		
-* 23.03.2009 Oliver Gierke Added section on plugin ordering		
-* 21.02.2012 Oliver Gierke Move project to SpringSource
+&copy; 2008-2012 The original authors
 
 ## Preface
 
 ### Introduction
 
-Building extensible architectures nowadays is a core principle to create maintainable applications. This is why fully fledged plugin environments like *OSGi* are so poular these days. Unfortunately the introduction of *OSGi* introduces a lot of complexity to projects.
+Building extensible architectures nowadays is a core principle to create maintainable applications. This is why fully fledged plugin environments like *OSGi* are so popular these days. Unfortunately the introduction of *OSGi* introduces a lot of complexity to projects.
 
 Spring Plugin provides a more pragmatic approach to plugin development by providing the core flexibility of having plugin implementations extending a core system's functionality but of course not delivering core OSGi features like dynamic class loading or runtime installation and deployment of plugins. Although Spring Plugin thus is not nearly as powerful as OSGi, it servers poor man's requirements to build a modular
 extensible application.
@@ -36,7 +28,7 @@ lot of momentum in collaborative use with Spring.
 
 #### Spring
 
-Spring is the defacto standard application framework for Java applications. Its consistent programming model, easy configuration and wide support for all kinds of third party libraries makes it the first class citizen of application frameworks. Spring Plugin tightly integrates into Spring's component model and extends the core container
+Spring is the de-facto standard application framework for Java applications. Its consistent programming model, easy configuration and wide support for all kinds of third party libraries makes it the first class citizen of application frameworks. Spring Plugin tightly integrates into Spring's component model and extends the core container
 with some custom functionality.
 
 ## Core
@@ -126,17 +118,17 @@ support**
 
 ~~~~xml
 <!-- In a file called plugins.xml in the plugin project -->
-<bean class="MyPluginimplementation" />
+<bean class="MyPluginImplementation" />
 ~~~~
 
-You can see that we include a wildcarded configurationfile that allows plugin projects to easily contribute plugin implementations by declaring them as beans in configuration files matching the wildcarded path. If you use Spring 2.5 component scanning you don't have to use the import trick at all as Spring would detect the implementation automatically as long as it is annotated with `@Component`, `@Service` a.s.o.
+You can see that we include a wildcarded configuration file that allows plugin projects to easily contribute plugin implementations by declaring them as beans in configuration files matching the wildcarded path. If you use Spring 2.5 component scanning you don't have to use the import trick at all as Spring would detect the implementation automatically as long as it is annotated with `@Component`, `@Service` a.s.o.
 
 The `BeanListBeanFactory` in turn allows registering a map of lists to be created, where the maps entry key is the id under which the list will be registered and the entry's value is the type to be looked up.
 
 > #### Note
 >
 > The design of the `BeanListBeanFactory` might seem a little confusing at first
-> (especially to set a map on a property named lists). This is due to the posibility to
+> (especially to set a map on a property named lists). This is due to the possibility to
 > register more than one list to be looked up. We think about dropping this
 > functionality for the sake of simplicity in future versions.
 
@@ -224,7 +216,7 @@ registry.getPluginFor(ProductType.SOFTWARE, new DefaultPlugin());
 registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");
 ~~~~
 
-#### Configuration and namespace
+#### Configuration, XML namespace and @EnablePluginRegistries
 
 Similar to the `BeanListBeanFactory` described in [Collecting Spring beans
 dynamically](#core.beans-dynamically) Spring Plugin provides a `PluginRegistryBeanFactory` to automatically lookup beans of a dedicated type to be aggregated in a `PluginRegistry`. Note that the type has to be assignable to `Plugin` to let the registry work as expected.
@@ -233,19 +225,28 @@ Furthermore there is also an element in the namespace to shrink down configurati
 
 **Example 1.8. Using the XML namespace to configure a registry**
 
-~~~~xml
+```xml
 <plugin:registry id="plugins" class="com.acme.MyPluginInterface" />
-~~~~
+```
+
+As of version 0.8 creating a `PluginRegistry` can also be achieved using the `@EnablePluginRegistries` annotation:
+
+```java
+@Configuration
+@EnablePluginRegistries(MyPluginInterface.class)
+class ApplicationConfiguration { … }
+```
+
+This configuration snippet will register a `OrderAwarePluginRegistry` for `MyPluginInterface` within the `ApplicationContext` and thus make it available for injection into client beans. The registered bean will be named `myPluginInterfaceRegistry` so that it can be explicitly referenced on the client side using the `@Qualifier` annotation if necessary. The bean name can be customized using `@Qualifier` on the plugin interface definition.
 
 ### Ordering plugins
 
-Declaring plugin beans sometimes it is necessary to preserve a certain order of plugins. Suppose you have a plugin host that already defines one plugin that shall always be executed after all plugins declared by extensions. Actually the Spring container typically returnes beans in the order they were declared, so that you could import you wildcarded config files right before declaring the default plugin. Unfortunately
-the order of the beans is not contracted to be preserved for the Spring container. Thus we need a different solution.
+Declaring plugin beans sometimes it is necessary to preserve a certain order of plugins. Suppose you have a plugin host that already defines one plugin that shall always be executed after all plugins declared by extensions. Actually the Spring container typically returns beans in the order they were declared, so that you could import you wildcarded config files right before declaring the default plugin. Unfortunately the order of the beans is not contracted to be preserved for the Spring container. Thus we need a different solution.
 
 Spring provides two ways to order beans. First, you can implement `Ordered` interface and implement `getOrder` to place a plugin at a certain point in the list. Secondly you can user the `@Order` annotation. For more information on ordering capabilities of Spring see the [section on this topic in the Spring reference documentation](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/core/Ordered.html).
 
 Using the Spring Plugin namespace you will get a `PluginRegistry` instance that is capable of preserving the order defined by the mentioned means. Using Spring Plugin
-programatically use `OrderAwarePluginRegistry`.
+programmatically use `OrderAwarePluginRegistry`.
 
 ## Metadata
 
@@ -268,10 +269,10 @@ public interface MetadataProvider {
 }
 ~~~~
 
-The `PluginMetadata` interface captures the required properties to define an identifyable plugin. This means, that implementations should ensure uniqueness through these two properties. With `SimplePluginMetadata` Spring Plugin provides a Java bean style class to capture metadata. Of course applications can and should provide extended metadata information according to their needs. The very narrow interface is only targeted at integrating the metadata concept with the `PluginRegistry` (see [the section called “PluginRegistry”](#core.plugin-registry)) without bothering developers with too much information required.
+The `PluginMetadata` interface captures the required properties to define an identifiable plugin. This means, that implementations should ensure uniqueness through these two properties. With `SimplePluginMetadata` Spring Plugin provides a Java bean style class to capture metadata. Of course applications can and should provide extended metadata information according to their needs. The very narrow interface is only targeted at integrating the metadata concept with the `PluginRegistry` (see [the section called “PluginRegistry”](#core.plugin-registry)) without bothering developers with too much information required.
 
 The `MetadataProvider` interface is to be used in application plugin interfaces to indicate that they can provide metadata. To ease plugin implementation we provide
-`AbstractMetadataBasedPlugin` that uses the internal metadata to implement `supports(..)` method of `Plugin`. Extending this base class plugins with metadata as selection criteria can easily be build. This way you could store the metadata in user specific configuration files and use this to select a distinct plugin specific to a given user.
+`AbstractMetadataBasedPlugin` that uses the internal metadata to implement `supports(…)` method of `Plugin`. Extending this base class plugins with metadata as selection criteria can easily be build. This way you could store the metadata in user specific configuration files and use this to select a distinct plugin specific to a given user.
 
 ## Glossary
 
