@@ -12,7 +12,7 @@
 	<name>Spring Plugin Spring Integration integration</name>
 	
 	<properties>
-		<spring.integration.version>2.0.5.RELEASE</spring.integration.version>
+		<spring.integration.version>2.1.4.RELEASE</spring.integration.version>
 	</properties>
 	
 	<dependencies>

@@ -44,8 +44,8 @@
     </modules>
     
     <properties>
-        <spring.version>3.1.2.RELEASE</spring.version>
-        <slf4j.version>1.7.1</slf4j.version>
+        <spring.version>3.1.3.RELEASE</spring.version>
+        <slf4j.version>1.7.2</slf4j.version>
     </properties>
 
     <developers>
@@ -183,6 +183,7 @@
 
     <ciManagement>
         <system>Bamboo</system>
+        <url>https://build.springsource.org/browse/PLUGIN-MASTER</url>
     </ciManagement>
 
     <issueManagement>
