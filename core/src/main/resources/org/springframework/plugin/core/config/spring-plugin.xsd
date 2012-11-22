@@ -36,7 +36,7 @@
             </xsd:documentation>
             <xsd:appinfo>
                 <tool:annotation>
-                    <tool:exports identifier="@id" type="org.synyx.plugin.core.PluginRegistry" />
+                    <tool:exports type="org.springframework.plugin.core.OrderAwarePluginRegistry" />
                 </tool:annotation>
             </xsd:appinfo>
         </xsd:annotation>
