@@ -17,14 +17,14 @@ package org.springframework.plugin.integration.config;
 
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandler;
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import org.springframework.integration.config.xml.AbstractIntegrationNamespaceHandler;
 
 /**
  * {@link NamespaceHandler} to register {@link BeanDefinitionParser}s.
  * 
  * @author Oliver Gierke
  */
-public class SpringPluginSpringIntegrationNamespaceHandler extends NamespaceHandlerSupport {
+public class SpringPluginSpringIntegrationNamespaceHandler extends AbstractIntegrationNamespaceHandler {
 
 	/*
 	 * (non-Javadoc)
