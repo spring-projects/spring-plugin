@@ -10,7 +10,7 @@ V0.8 - Oliver Gierke, SpringSource - a division of VMware
 
 Building extensible architectures nowadays is a core principle to create maintainable applications. This is why fully fledged plugin environments like *OSGi* are so popular these days. Unfortunately the introduction of *OSGi* introduces a lot of complexity to projects.
 
-Spring Plugin provides a more pragmatic approach to plugin development by providing the core flexibility of having plugin implementations extending a core system's functionality but of course not delivering core OSGi features like dynamic class loading or runtime installation and deployment of plugins. Although Spring Plugin thus is not nearly as powerful as OSGi, it serves as a poor man's requirements to build a modular
+Spring Plugin provides a more pragmatic approach to plugin development by providing the core flexibility of having plugin implementations extending a core system's functionality but of course not delivering core OSGi features like dynamic class loading or runtime installation and deployment of plugins. Although Spring Plugin thus is not nearly as powerful as OSGi, it serves a poor man's requirements to build a modular
 extensible application.
 
 ### Context
