@@ -41,7 +41,7 @@ and works with them.
 
 **Example 1.1. Basic example of plugin interface and host**
 
-~~~~java
+```java
 /**
  * Interface contract for the providers to be implemented.
  */
@@ -72,7 +72,7 @@ public class HostImpl implements Host {
     }
   }
 }
-~~~~
+```
 
 This is the way you would typically construct a host component in general. Leveraging dependency injection via setters allows flexible usage in a variety of environments. Thus you could easily provide a factory class that is able to lookup `MyPluginInterface` 
 implementations from the classpath, instantiate them and inject them into `HostImpl`.
@@ -81,7 +81,7 @@ Using Spring as component container you could configure something like this:
 
 **Example 1.2. Configuring HostImpl with Spring**
 
-~~~~xml
+```xml
 <bean id="host" class="com.acme.HostImpl">
   <property name="plugins">
     <list>
@@ -89,7 +89,7 @@ Using Spring as component container you could configure something like this:
     </list>
   </property>
 </bean>
-~~~~
+```
 
 This is pretty much well known to Spring developers and let's us face the wall that this is rather static. Everytime you want to add a new plugin implementation instance you have to modify configuration of the core. Let's see how we can get this dance a little more.
 
@@ -100,7 +100,7 @@ With the `BeanListBeanFactory` Spring Plugin provides a Spring container extensi
 **Example 1.3. Host and plugin configuration with Spring Plugin
 support**
 
-~~~~xml
+```xml
 <import resource="classpath*:com/acme/**/plugins.xml" />
 
 <bean id="host" class="com.acme.HostImpl">
@@ -114,12 +114,12 @@ support**
     </map>
   </property>
 </bean>
-~~~~
+```
 
-~~~~xml
+```xml
 <!-- In a file called plugins.xml in the plugin project -->
 <bean class="MyPluginImplementation" />
-~~~~
+```
 
 You can see that we include a wildcarded configuration file that allows plugin projects to easily contribute plugin implementations by declaring them as beans in configuration files matching the wildcarded path. If you use Spring 2.5 component scanning you don't have to use the import trick at all as Spring would detect the implementation automatically as long as it is annotated with `@Component`, `@Service` a.s.o.
 
@@ -138,7 +138,7 @@ Actually this already serves a lot of requirements we listed in [Section “Cont
 
 **Example 1.4. Host configuration using the plugin namespace**
 
-~~~~xml
+```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:plugin="http://www.springframework.org/schema/plugin"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -153,7 +153,7 @@ Actually this already serves a lot of requirements we listed in [Section “Cont
 
   <plugin:list id="plugins" class="org.acme.MyPluginInterface" />
 </beans>
-~~~~
+```
 
 Assuming you have added the namespace XSD into Eclipse and installed Spring IDE, you should get code completion on filling the class attribute.
 
@@ -163,7 +163,7 @@ The listing above features an indirection for the `plugin` bean definition. Defi
 
 **Example 1.5. Using inner bean definition**
 
-~~~~xml
+```xml
 <import resource="classpath*:com/acme/**/plugins.xml" />
 
 <bean id="host" class="com.acme.HostImpl">
@@ -171,7 +171,7 @@ The listing above features an indirection for the `plugin` bean definition. Defi
     <plugin:list class="org.acme.MyPluginInterface" />
   </property>
 </bean>
-~~~~
+```
 
 This way you have a more compact configuration, paying the prica of tangling all extention points though possibly various config files.
 
@@ -185,7 +185,7 @@ Hera's central infrastructure interfacte is `Plugin<S>`, where `S` defines the d
 
 **Example 1.6. Usage of Plugin interface**
 
-~~~~java
+```java
 public enum ProductType {
   SOFTWARE, HARDWARE;
 }
@@ -193,7 +193,7 @@ public enum ProductType {
 public interface ProductProcessor extends Plugin<ProductType> {
   public void process(Product product);
 }
-~~~~
+```
 
 This design would allow plugin providers to implement `supports(ProductType productType)` to decide which product types they want to process and provide actual processing logic in `process(Product product)`.
 
@@ -204,7 +204,7 @@ cases Spring Plugin provides a `PluginRegistry<T extends Plugin<S>, S>` interfac
 
 **Example 1.7. Usage of the PluginRegistry**
 
-~~~~java
+```java
 PluginRegistry<ProductProcessor, ProductType> registry = SimplePluginRegistry.create();
 // Add plugin instances
 registry.add(new FooImplementation());
@@ -214,7 +214,7 @@ registry.getPluginFor(ProductType.SOFTWARE);
 registry.getPluginFor(ProductType.SOFTWARE, new DefaultPlugin());
 // Returns all plugins supporting HARDWARE, throwing the given exception if none found
 registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");
-~~~~
+```
 
 #### Configuration, XML namespace and @EnablePluginRegistries
 
@@ -258,7 +258,7 @@ The metadata module actually builds around two core interfaces, `PluginMetadata`
 
 **Example 2.1. Core concepts**
 
-~~~~java
+```java
 public interface PluginMetadata {
   String getName();
   String getVersion();
@@ -267,7 +267,7 @@ public interface PluginMetadata {
 public interface MetadataProvider {
   PluginMetadata getMetadata();
 }
-~~~~
+```
 
 The `PluginMetadata` interface captures the required properties to define an identifiable plugin. This means, that implementations should ensure uniqueness through these two properties. With `SimplePluginMetadata` Spring Plugin provides a Java bean style class to capture metadata. Of course applications can and should provide extended metadata information according to their needs. The very narrow interface is only targeted at integrating the metadata concept with the `PluginRegistry` (see [the section called “PluginRegistry”](#core.plugin-registry)) without bothering developers with too much information required.
 
