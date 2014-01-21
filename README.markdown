@@ -1,9 +1,5 @@
 # The smallest plugin system ever
 
-V0.8 - Oliver Gierke, SpringSource - a division of VMware
-
-&copy; 2008-2012 The original authors
-
 ## Preface
 
 ### Introduction
