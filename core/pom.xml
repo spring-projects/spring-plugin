@@ -4,7 +4,7 @@
 	
 	<artifactId>spring-plugin-core</artifactId>
 
-	<name>Spring Plugin Core</name>
+	<name>Spring Plugin - Core</name>
 	<description>Core plugin infrastructure</description>
 
 	<parent>
@@ -42,13 +42,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2.2</version>
 			<scope>test</scope>
 		</dependency>
 

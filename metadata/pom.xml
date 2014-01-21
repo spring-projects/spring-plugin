@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>spring-plugin-metadata</artifactId>
 
-	<name>Spring Plugin Metadata Extension</name>
+	<name>Spring Plugin - Metadata Extension</name>
 	<description>Extension package for metadata based plugins</description>
 	
 	<parent>

@@ -10,7 +10,7 @@
 	
 	<artifactId>spring-plugin-integration</artifactId>
 	
-	<name>Spring Plugin Spring Integration integration</name>
+	<name>Spring Plugin - Spring Integration integration</name>
 	
 	<properties>
 		<spring.integration.version>2.1.4.RELEASE</spring.integration.version>
