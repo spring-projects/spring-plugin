@@ -13,7 +13,7 @@
 	<name>Spring Plugin - Spring Integration integration</name>
 	
 	<properties>
-		<spring.integration.version>2.1.4.RELEASE</spring.integration.version>
+		<spring.integration.version>4.0.0.RC1</spring.integration.version>
 	</properties>
 	
 	<dependencies>
@@ -40,7 +40,13 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
