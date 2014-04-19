@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.springframework.plugin</groupId>
 		<artifactId>spring-plugin</artifactId>
 		<version>1.1.0.BUILD-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>spring-plugin-integration</artifactId>
-	
+
 	<name>Spring Plugin - Spring Integration integration</name>
-	
+
 	<properties>
-		<spring.integration.version>2.1.4.RELEASE</spring.integration.version>
+		<spring.integration.version>3.0.2.RELEASE</spring.integration.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>spring-plugin-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-core</artifactId>
 			<version>${spring.integration.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 </project>

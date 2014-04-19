@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,40 +15,37 @@
  */
 package org.springframework.plugin.integration.config;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
-import org.springframework.integration.core.SubscribableChannel;
-import org.springframework.integration.handler.LoggingHandler;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Integration test for the namespace.
- * 
+ *
  * @author Oliver Gierke
+ * @author Artem Bilan
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:dynamic-service-activator-test-context.xml")
 public class DynamicServiceActivatorNamespaceIntegrationTest {
 
 	@Autowired
-	@Qualifier("sampleChannel")
-	MessageChannel channel;
-
-	@Autowired
-	@Qualifier("foo")
-	SubscribableChannel sink;
+	PluginInvocationGateway gateway;
 
 	@Test
 	public void invokesPluginBasedOnPayload() {
-
-		sink.subscribe(new LoggingHandler("DEBUG"));
-		Message<String> message = MessageBuilder.withPayload("FOO").build();
-		channel.send(message);
+		String result = gateway.invoke("FOO");
+		Assert.assertEquals("First", result);
 	}
+
+	public static interface PluginInvocationGateway {
+
+		String invoke(String payload);
+
+	}
+
 }
