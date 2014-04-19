@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,21 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHandlingException;
-import org.springframework.integration.handler.AbstractReplyProducingMessageHandler;
+import org.springframework.integration.expression.IntegrationEvaluationContextAware;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.PluginRegistry;
@@ -41,35 +43,45 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Dynamic service activator that uses a {@link PluginRegistry} to delegate execution to one or more plugins matching a
- * delimiter.
- * 
+ * Dynamic service activator that uses a {@link PluginRegistry} to delegate execution
+ * to one or more plugins matching a delimiter.
+ *
  * @author Oliver Gierke
+ * @author Artem Bilan
  */
-public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMessageHandler {
+public class PluginMethodInvocationService implements IntegrationEvaluationContextAware {
 
-	private static final Log LOG = LogFactory.getLog(PluginRegistryAwareMessageHandler.class);
+	private static final Log LOG = LogFactory.getLog(PluginMethodInvocationService.class);
+
+	private static final SpelExpressionParser parser = new SpelExpressionParser();
 
 	private final PluginRegistry<? extends Plugin<?>, Object> registry;
+
 	private final Class<? extends Plugin<?>> pluginType;
+
 	private final Class<?> delimiterType;
-	private final SpelExpressionParser parser = new SpelExpressionParser();
+
+	private final String serviceMethodName;
+
+	private final Map<Class<?>[], Method> methodsForArguments = new HashMap<Class<?>[], Method>();
 
 	private Expression delimiterExpression;
+
 	private Expression invocationArgumentsExpression;
-	private String serviceMethodName;
+
 	private PluginLookupMethod pluginLookupMethod = PluginLookupMethod.getDefault();
 
+	private EvaluationContext evaluationContext;
+
 	/**
-	 * Creates a new {@link PluginRegistryAwareMessageHandler} for the given {@link PluginRegistry}, pluginType and a
-	 * method name to call.
-	 * 
-	 * @param registry
-	 * @param pluginType
-	 * @param serviceMethodName
+	 * Create a new {@link PluginMethodInvocationService} for the given
+	 * {@link PluginRegistry}, pluginType and a method name to call.
+	 * @param registry the {@link PluginRegistry} to server {@link Plugin}s.
+	 * @param pluginType the {@link Plugin} type.
+	 * @param serviceMethodName the {@link Plugin} method name.
 	 */
 	@SuppressWarnings("unchecked")
-	public PluginRegistryAwareMessageHandler(PluginRegistry<? extends Plugin<?>, ?> registry,
+	public PluginMethodInvocationService(PluginRegistry<? extends Plugin<?>, ?> registry,
 			Class<? extends Plugin<?>> pluginType, String serviceMethodName) {
 
 		Assert.notNull(registry);
@@ -84,39 +96,37 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 		verify();
 	}
 
-	private final void verify() {
+	private void verify() {
 
 		boolean methodFound = false;
 
-		for (Method candidate : pluginType.getMethods()) {
-			if (candidate.getName().equals(serviceMethodName)) {
+		for (Method candidate : this.pluginType.getMethods()) {
+			if (candidate.getName().equals(this.serviceMethodName)) {
 				methodFound = true;
 				break;
 			}
 		}
 
 		if (!methodFound) {
-			throw new IllegalArgumentException(String.format("Not method %s found for type %s!", serviceMethodName,
-					pluginType));
+			throw new IllegalArgumentException(String.format("Not method %s found for type %s!", this.serviceMethodName,
+					this.pluginType));
 		}
 	}
 
 	/**
-	 * Sets the SpEL expression to extract the delimiter from the {@link Message}.
-	 * 
-	 * @param delimiterExpression the delimiterExpression to set
+	 * Set the SpEL expression to extract the delimiter from the provided argument
+	 * as root object of expression evaluation context.
+	 * @param expression the delimiterExpression to set
 	 */
 	public void setDelimiterExpression(String expression) {
-
 		Assert.hasText(expression);
 		this.delimiterExpression = parser.parseExpression(expression);
 	}
 
 	/**
-	 * Sets the SpEL expression to extract the method arguments for the actual plugin method invocation from the
-	 * {@link Message}.
-	 * 
-	 * @param invocationArgumentsExpression the invocationArgumentsExpression to set
+	 * Set the SpEL expression to extract the method arguments for the actual plugin method
+	 * invocation from the root object of expression evaluation context.
+	 * @param expression the {@link #invocationArgumentsExpression} to set.
 	 */
 	public void setInvocationArgumentsExpression(String expression) {
 
@@ -125,67 +135,70 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	}
 
 	/**
-	 * Configures the method to be used when looking up plugins to invoke.
-	 * 
+	 * Configure the method to be used when looking up plugins to invoke.
+	 * @param pluginLookupMethod the {@link #pluginLookupMethod} to set.
 	 * @see PluginLookupMethod
-	 * @param pluginLookupMethod the invocationMethod to set
 	 */
 	public void setPluginLookupMethod(PluginLookupMethod pluginLookupMethod) {
 		this.pluginLookupMethod = pluginLookupMethod == null ? PluginLookupMethod.getDefault() : pluginLookupMethod;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.integration.handler.AbstractReplyProducingMessageHandler
-	 * #handleRequestMessage(org.springframework.integration.Message)
-	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	protected Object handleRequestMessage(Message<?> requestMessage) {
+	public void setIntegrationEvaluationContext(EvaluationContext evaluationContext) {
+		this.evaluationContext = evaluationContext;
+	}
 
-		Object delimiter = getDelimiter(requestMessage);
+	public Object invoke(Object request) {
 
-		switch (pluginLookupMethod) {
+		Object delimiter = getDelimiter(request);
+
+		switch (this.pluginLookupMethod) {
 
 		case ALL:
 			if (LOG.isDebugEnabled()) {
 				LOG.debug(String.format("Looking up plugins for delimiter %s", delimiter));
 			}
-			return invokePlugins(registry.getPluginsFor(delimiter), requestMessage);
+			return invokePlugins(this.registry.getPluginsFor(delimiter), request);
 
 		case ONE:
 			if (LOG.isDebugEnabled()) {
 				LOG.debug(String.format("Looking up plugin for delimiter %s", delimiter));
 			}
-			List<Object> results = invokePlugins(Arrays.asList(registry.getPluginFor(delimiter)), requestMessage);
+			List<Object> results = invokePlugins(Collections.singletonList(this.registry.getPluginFor(delimiter)),
+					request);
 			return results.isEmpty() ? null : results.get(0);
 
 		default:
-			throw new IllegalStateException(String.format("Unsupported plugin lookup method %s!", pluginLookupMethod));
+			throw new IllegalStateException(String.format("Unsupported plugin lookup method %s!", this.pluginLookupMethod));
 		}
 	}
 
-	private List<Object> invokePlugins(Collection<? extends Plugin<?>> plugins, Message<?> message) {
+	private List<Object> invokePlugins(Collection<? extends Plugin<?>> plugins, Object request) {
 
 		List<Object> results = new ArrayList<Object>();
+
 		if (LOG.isDebugEnabled()) {
 			LOG.debug(String.format("Invoking plugin(s) %s with message %s",
-					StringUtils.collectionToCommaDelimitedString(plugins), message));
+					StringUtils.collectionToCommaDelimitedString(plugins), request));
 		}
 
 		for (Plugin<?> plugin : plugins) {
 
-			Object[] invocationArguments = getInvocationArguments(message);
+			Object[] invocationArguments = getInvocationArguments(request);
 			Class<?>[] types = getTypes(invocationArguments);
 
-			Method businessMethod = ReflectionUtils.findMethod(pluginType, serviceMethodName, types);
+			Method businessMethod = this.methodsForArguments.get(types);
 
 			if (businessMethod == null) {
-				throw new MessageHandlingException(message, String.format(
-						"Did not find a method %s on %s taking the following parameters %s", serviceMethodName,
-						pluginType.getName(), Arrays.toString(types)));
+				businessMethod = ReflectionUtils.findMethod(this.pluginType, this.serviceMethodName, types);
+
+				if (businessMethod == null) {
+					throw new IllegalArgumentException(String.format(
+							"Did not find a method %s on %s taking the following parameters %s", this.serviceMethodName,
+							this.pluginType.getName(), Arrays.toString(types)));
+				}
+
+				this.methodsForArguments.put(types, businessMethod);
 			}
 
 			if (LOG.isDebugEnabled()) {
@@ -204,53 +217,48 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 	}
 
 	/**
-	 * Returns the delimiter object to be used for the given {@link Message}. Will use the configured delimiter expression
-	 * if configured.
-	 * 
-	 * @param message
-	 * @return
+	 * Return the delimiter object to be used for the given {@code request}.
+	 * Will use the configured delimiter expression if configured.
+	 * @param request the root object of expression evaluation context to determine the delimiter.
+	 * @return the delimiter.
 	 */
-	private Object getDelimiter(Message<?> message) {
+	private Object getDelimiter(Object request) {
 
-		Object delimiter = message;
+		Object delimiter = request;
 
-		if (delimiterExpression != null) {
-			StandardEvaluationContext context = new StandardEvaluationContext(message);
-			delimiter = delimiterExpression.getValue(context);
+		if (this.delimiterExpression != null) {
+			delimiter = this.delimiterExpression.getValue(this.evaluationContext, request);
 		}
 
-		Assert.isInstanceOf(delimiterType, delimiter, String.format("Delimiter expression did "
+		Assert.isInstanceOf(this.delimiterType, delimiter, String.format("Delimiter expression did "
 				+ "not return a suitable delimiter! Make sure the expression evaluates to a suitable "
-				+ "type! Got %s but need %s", delimiter.getClass(), delimiterType));
+				+ "type! Got %s but need %s", delimiter.getClass(), this.delimiterType));
 
 		return delimiter;
 	}
 
 	/**
-	 * Returns the actual arguments to be used for the plugin method invocation. Will apply the configured invocation
-	 * argument expression to the given {@link Message}.
-	 * 
-	 * @param message
-	 * @return
+	 * Return the actual arguments to be used for the plugin method invocation.
+	 * Will apply the configured invocation argument expression to the given {@code request}.
+	 * @param request the root object of expression evaluation context to determine the invocation arguments.
+	 * @return the invocation arguments.
 	 */
-	private Object[] getInvocationArguments(Message<?> message) {
+	private Object[] getInvocationArguments(Object request) {
 
-		if (invocationArgumentsExpression == null) {
-			return new Object[] { message };
+		if (this.invocationArgumentsExpression == null) {
+			return new Object[] { request };
 		}
 
-		StandardEvaluationContext context = new StandardEvaluationContext(message);
-		Object result = delimiterExpression.getValue(context);
+		Object result = this.invocationArgumentsExpression.getValue(this.evaluationContext, request);
 
 		return ObjectUtils.isArray(result) ? ObjectUtils.toObjectArray(result) : new Object[] { result };
 	}
 
 	/**
-	 * Returns an array of types for the given objects. Inspects each element of the array for its type. will return
-	 * {@literal null} for {@literal null} source values.
-	 * 
-	 * @param source
-	 * @return
+	 * Return an array of types for the given objects. Inspects each element
+	 * of the array for its type. will return {@literal null} for {@literal null} source values.
+	 * @param source the args of argument to determine their types.
+	 * @return the array of types for the given objects.
 	 */
 	private Class<?>[] getTypes(Object[] source) {
 
@@ -264,7 +272,7 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 
 	/**
 	 * Lookup methods for plugins.
-	 * 
+	 *
 	 * @author Oliver Gierke
 	 */
 	private enum PluginLookupMethod {
@@ -276,7 +284,6 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 
 		/**
 		 * All plugins supporting a given delimiter will be invoked. Plugin order will be considered.
-		 * 
 		 * @see OrderAwarePluginRegistry
 		 * @see Order
 		 * @see Ordered
@@ -284,12 +291,12 @@ public class PluginRegistryAwareMessageHandler extends AbstractReplyProducingMes
 		ALL;
 
 		/**
-		 * Returns the default {@link PluginLookupMethod}.
-		 * 
-		 * @return
+		 * @return the default {@link PluginLookupMethod}.
 		 */
 		static PluginLookupMethod getDefault() {
 			return ONE;
 		}
+
 	}
+
 }

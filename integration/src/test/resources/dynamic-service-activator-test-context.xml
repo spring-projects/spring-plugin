@@ -6,19 +6,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/plugin/integration http://www.springframework.org/schema/plugin/integration/spring-plugin-integration.xsd">
-	
+
 	<bean class="org.springframework.plugin.integration.sample.FirstSamplePluginImpl" />
 	<bean class="org.springframework.plugin.integration.sample.SecondSamplePluginImpl" />
-	
-	<int-plugin:dynamic-service-activator 
+
+	<int:gateway id="invocationGateway"
+			service-interface="org.springframework.plugin.integration.config.DynamicServiceActivatorNamespaceIntegrationTest$PluginInvocationGateway"
+			default-request-channel="sampleChannel"/>
+
+	<int-plugin:dynamic-service-activator
 	    input-channel="sampleChannel"
-	    output-channel="foo"
-		plugin-type="org.springframework.plugin.integration.sample.SamplePlugin" 
+		plugin-type="org.springframework.plugin.integration.sample.SamplePlugin"
 		method="myBusinessMethod"
-		delimiter="payload" 
+		delimiter="payload"
 		invocation-arguments="payload" />
-		
+
 	<int:channel id="sampleChannel" />
-	<int:channel id="foo" />
-	
+
 </beans>

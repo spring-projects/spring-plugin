@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,43 +15,32 @@
  */
 package org.springframework.plugin.integration;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
-import org.springframework.integration.MessageHandlingException;
+
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.PluginRegistry;
-import org.springframework.plugin.integration.PluginRegistryAwareMessageHandler;
 import org.springframework.plugin.integration.sample.FirstSamplePluginImpl;
 import org.springframework.plugin.integration.sample.SamplePlugin;
 import org.springframework.plugin.integration.sample.SecondSamplePluginImpl;
 
 /**
- * Unit tests for {@link PluginRegistryAwareMessageHandler}.
- * 
+ * Unit tests for {@link PluginMethodInvocationService}.
+ *
  * @author Oliver Gierke
+ * @author Artem Bilan
  */
-@RunWith(MockitoJUnitRunner.class)
 public class PluginRegistryAwareMessageHandlerUnitTest {
 
 	PluginRegistry<SamplePlugin, String> registry;
-	PluginRegistryAwareMessageHandler handler;
 
-	@Mock
-	MessageChannel outputChannel;
+	PluginMethodInvocationService handler;
 
 	@Before
 	public void setUp() {
@@ -59,38 +48,28 @@ public class PluginRegistryAwareMessageHandlerUnitTest {
 		registry = OrderAwarePluginRegistry
 				.create(Arrays.asList(new FirstSamplePluginImpl(), new SecondSamplePluginImpl()));
 
-		handler = new PluginRegistryAwareMessageHandler(registry, SamplePlugin.class, "myBusinessMethod");
-		handler.setOutputChannel(outputChannel);
+		handler = new PluginMethodInvocationService(registry, SamplePlugin.class, "myBusinessMethod");
+		handler.setIntegrationEvaluationContext(new StandardEvaluationContext());
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
-	public void routesInvocationToFirstpluginIfConfiguredToDoSo() {
+	public void routesInvocationToFirstPluginIfConfiguredToDoSo() {
 
 		handler.setDelimiterExpression("payload");
 		handler.setInvocationArgumentsExpression("payload");
-		handler.afterPropertiesSet();
 
-		Message<String> message = MessageBuilder.withPayload("FOO").build();
-		when(outputChannel.send(Mockito.any(Message.class))).thenReturn(true);
-
-		handler.handleMessage(message);
-
-		ArgumentCaptor<Message> resultMessage = ArgumentCaptor.forClass(Message.class);
-		verify(outputChannel).send(resultMessage.capture());
-		assertThat(resultMessage.getValue().getPayload().toString(), is("First"));
+		Object result = handler.invoke(MessageBuilder.withPayload("FOO").build());
+		assertEquals("First", result);
 	}
 
-	@Test(expected = MessageHandlingException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void failsHandlingMessageIfDelimiterTypeDoesNotMatch() {
-
-		Message<String> message = MessageBuilder.withPayload("FOO").build();
-		handler.handleMessage(message);
+		handler.invoke(MessageBuilder.withPayload("FOO").build());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void rejectsInvalidMethodName() {
-
-		new PluginRegistryAwareMessageHandler(registry, SamplePlugin.class, "foo");
+		new PluginMethodInvocationService(registry, SamplePlugin.class, "foo");
 	}
+
 }

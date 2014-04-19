@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,73 +15,70 @@
  */
 package org.springframework.plugin.integration.config;
 
+import org.w3c.dom.Element;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.integration.config.ServiceActivatorFactoryBean;
 import org.springframework.integration.config.xml.AbstractConsumerEndpointParser;
 import org.springframework.plugin.core.support.PluginRegistryFactoryBean;
-import org.springframework.plugin.integration.PluginRegistryAwareMessageHandler;
+import org.springframework.plugin.integration.PluginMethodInvocationService;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Element;
 
 /**
- * {@link BeanDefinitionParser} to create {@link PluginRegistryAwareMessageHandler} beans.
- * 
+ * {@link BeanDefinitionParser} to create {@link org.springframework.integration.handler.ServiceActivatingHandler}
+ * for {@link PluginMethodInvocationService} bean.
+ *
  * @author Oliver Gierke
+ * @author Artem Bilan
  */
 public class DynamicServiceActivatorParser extends AbstractConsumerEndpointParser {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.integration.config.xml.AbstractConsumerEndpointParser#parseHandler(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext)
-	 */
 	@Override
 	protected BeanDefinitionBuilder parseHandler(Element element, ParserContext parserContext) {
-
-		Object source = parserContext.extractSource(element);
 
 		String pluginType = element.getAttribute("plugin-type");
 		String method = element.getAttribute("method");
 
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(PluginRegistryAwareMessageHandler.class);
-		builder.addConstructorArgValue(getRegistryBeanDefinition(pluginType, source));
-		builder.addConstructorArgValue(pluginType);
-		builder.addConstructorArgValue(method);
+		BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.rootBeanDefinition(PluginMethodInvocationService.class);
+		serviceBuilder.addConstructorArgValue(getRegistryBeanDefinition(pluginType));
+		serviceBuilder.addConstructorArgValue(pluginType);
+		serviceBuilder.addConstructorArgValue(method);
 
 		String delimiter = element.getAttribute("delimiter");
 
 		if (StringUtils.hasText(delimiter)) {
-			builder.addPropertyValue("delimiterExpression", delimiter);
+			serviceBuilder.addPropertyValue("delimiterExpression", delimiter);
 		}
 
 		String invocationArguments = element.getAttribute("invocation-arguments");
 
 		if (StringUtils.hasText(invocationArguments)) {
-			builder.addPropertyValue("invocationArgumentsExpression", invocationArguments);
+			serviceBuilder.addPropertyValue("invocationArgumentsExpression", invocationArguments);
 		}
 
-		AbstractBeanDefinition definition = builder.getBeanDefinition();
-		definition.setSource(source);
+		String serviceBeanId = BeanDefinitionReaderUtils.registerWithGeneratedName(serviceBuilder.getBeanDefinition(),
+				parserContext.getRegistry());
 
-		return builder;
+		return BeanDefinitionBuilder.rootBeanDefinition(ServiceActivatorFactoryBean.class)
+				.addPropertyValue("expressionString", "@'" + serviceBeanId + "'.invoke(#root)");
 	}
 
 	/**
-	 * Creates a {@link BeanDefinition} for a {@link PluginRegistryFactoryBean}.
-	 * 
-	 * @param pluginType
-	 * @param source
-	 * @return
+	 * Create a {@link BeanDefinition} for a {@link PluginRegistryFactoryBean}.
+	 * @param pluginType the pluginType to create.
+	 * @return the {@link AbstractBeanDefinition} for {@link PluginRegistryFactoryBean}.
 	 */
-	private AbstractBeanDefinition getRegistryBeanDefinition(String pluginType, Object source) {
+	private AbstractBeanDefinition getRegistryBeanDefinition(String pluginType) {
 
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(PluginRegistryFactoryBean.class);
 		builder.addPropertyValue("type", pluginType);
 
-		AbstractBeanDefinition definition = builder.getBeanDefinition();
-		definition.setSource(source);
-		return definition;
+		return builder.getBeanDefinition();
 	}
+
 }
