@@ -41,7 +41,6 @@
 	<modules>
 		<module>core</module>
 		<module>metadata</module>
-		<module>integration</module>
 	</modules>
 	
 	<properties>
@@ -63,7 +62,7 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
-	
+
 	<dependencies>
 
 		<!-- Common test dependencies -->
@@ -79,7 +78,7 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -203,7 +202,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-plugins-release</id>

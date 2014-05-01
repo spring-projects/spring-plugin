@@ -1,4 +1,0 @@
-# Tooling related information for the Spring Plugin Integration namespace
-http\://www.springframework.org/schema/plugin/integration@name=Spring Plugin Spring Integration Namespace
-http\://www.springframework.org/schema/plugin/integration@prefix=int-plugin
-http\://www.springframework.org/schema/plugin/integration@icon=org/springframework/beans/factory/xml/spring-beans.gif
