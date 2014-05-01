@@ -12,9 +12,9 @@
 		<name>Pivotal, Inc.</name>
 		<url>http://www.springsource.org</url>
 	</organization>
-	<inceptionYear>2008</inceptionYear>
+	<inceptionYear>2008-2014</inceptionYear>
 	<url>https://github.com/SpringSource/spring-plugin</url>
-	
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -42,10 +42,10 @@
 		<module>core</module>
 		<module>metadata</module>
 	</modules>
-	
+
 	<properties>
-		<spring.version>3.2.7.RELEASE</spring.version>
-		<slf4j.version>1.7.5</slf4j.version>
+		<spring.version>3.2.8.RELEASE</spring.version>
+		<slf4j.version>1.7.6</slf4j.version>
 	</properties>
 
 	<developers>
@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>1.1.0</version>
 			<scope>test</scope>
 		</dependency>
 
