@@ -9,11 +9,11 @@
 	<description>Simple plugin infrastructure</description>
 
 	<organization>
-		<name>Pivotal, Inc.</name>
-		<url>http://www.springsource.org</url>
+		<name>Pivotal Software, Inc.</name>
+		<url>http://www.spring.io</url>
 	</organization>
-	<inceptionYear>2008-2014</inceptionYear>
-	<url>https://github.com/SpringSource/spring-plugin</url>
+	<inceptionYear>2008-2015</inceptionYear>
+	<url>https://github.com/spring-projects/spring-plugin</url>
 
 	<licenses>
 		<license>
@@ -44,18 +44,17 @@
 	</modules>
 
 	<properties>
-		<spring.version>3.2.8.RELEASE</spring.version>
-		<slf4j.version>1.7.6</slf4j.version>
+		<spring.version>4.0.9.RELEASE</spring.version>
+		<slf4j.version>1.7.10</slf4j.version>
 	</properties>
 
 	<developers>
 		<developer>
 			<id>gierke</id>
 			<name>Oliver Gierke</name>
-			<email>ogierke@gopivotal.com</email>
-			<url>http://www.olivergierke.de</url>
-			<organization>Pivtoal</organization>
-			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<email>ogierke@pivotal.io</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.pivotal.io</organizationUrl>
 			<roles>
 				<role>Project lead</role>
 			</roles>
@@ -75,14 +74,14 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
+			<version>1.10.19</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -101,7 +100,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.2</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -112,7 +111,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -122,7 +121,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>2.4</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -154,7 +153,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.5</version>
 				<configuration>
 					<useDefaultManifestFile>true</useDefaultManifestFile>
 				</configuration>
@@ -163,7 +162,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>2.10.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -172,6 +171,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
 			</plugin>
 
 		</plugins>
@@ -196,7 +198,7 @@
 	<repositories>
 		<repository>
 			<id>spring-libs-release</id>
-			<url>http://repo.spring.io/libs-release</url>
+			<url>https://repo.spring.io/libs-release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -206,7 +208,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-plugins-release</id>
-			<url>http://repo.spring.io/plugins-release</url>
+			<url>https://repo.spring.io/plugins-release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
