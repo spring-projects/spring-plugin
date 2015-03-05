@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
 /**
  * Value object style implementation of {@code PluginMetadata}.
  * 
- * @author Oliver Gierke - gierke@synyx.de
+ * @author Oliver Gierke
  */
 public class SimplePluginMetadata implements PluginMetadata {
 
@@ -88,7 +88,7 @@ public class SimplePluginMetadata implements PluginMetadata {
 		PluginMetadata that = (PluginMetadata) obj;
 
 		boolean sameName = nullSafeEquals(this.getName(), that.getName());
-		boolean sameVersion = nullSafeEquals(this.getName(), that.getName());
+		boolean sameVersion = nullSafeEquals(this.getVersion(), that.getVersion());
 
 		return sameName && sameVersion;
 	}
