@@ -5,7 +5,7 @@
 	<artifactId>spring-plugin</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring Plugin</name>
-	<version>1.2.0.RELEASE</version>
+	<version>1.2.1.BUILD-SNAPSHOT</version>
 	<description>Simple plugin infrastructure</description>
 
 	<organization>
