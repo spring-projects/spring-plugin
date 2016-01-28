@@ -21,10 +21,12 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.plugin.core.PluginRegistry.Supplier;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
@@ -129,5 +131,22 @@ public class SimplePluginRegistryUnitTest {
 		registry = SimplePluginRegistry.create(plugins);
 
 		assertThat(registry.countPlugins(), is(0));
+	}
+
+	/**
+	 * @see #19
+	 */
+	@Test(expected = IllegalStateException.class)
+	public void testname() throws Exception {
+
+		registry = SimplePluginRegistry.create(Collections.<SamplePlugin> emptyList());
+
+		registry.getPluginFor("FOO", new Supplier<Exception>() {
+
+			@Override
+			public Exception get() {
+				return new IllegalStateException();
+			}
+		});
 	}
 }

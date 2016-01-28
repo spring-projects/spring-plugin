@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,19 +51,48 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @param ex the exception to be thrown in case no plugin can be found
 	 * @return a single plugin for the given delimiter
 	 * @throws E if no plugin can be found for the given delimiter
+	 * @deprecated prefer {@link #getPluginFor(Object, Supplier)} to avoid the exceptions to be created for every plugin
+	 *             lookup.
 	 */
+	@Deprecated
 	<E extends Exception> T getPluginFor(S delimiter, E ex) throws E;
+
+	/**
+	 * Retrieves a required plugin from the registry or throw the given exception if none can be found. If more than one
+	 * plugins are found the first one will be returned.
+	 * 
+	 * @param <E> the exception type to be thrown in case no plugin can be found.
+	 * @param delimiter
+	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found.
+	 * @return a single plugin for the given delimiter
+	 * @throws E if no plugin can be found for the given delimiter
+	 */
+	<E extends Exception> T getPluginFor(S delimiter, Supplier<E> ex) throws E;
 
 	/**
 	 * Retrieves all plugins for the given delimiter or throws an exception if no plugin can be found.
 	 * 
-	 * @param <E> the exception type to be thrown
+	 * @param <E> the exception type to be thrown.
 	 * @param delimiter
-	 * @param ex
+	 * @param ex the exception to be thrown in case no plugin can be found.
+	 * @return all plugins for the given delimiter.
+	 * @throws E if no plugin can be found
+	 * @deprecated prefer {@link #getPluginFor(Object, Supplier)} to avoid the exceptions to be created for every plugin
+	 *             lookup.
+	 */
+	@Deprecated
+	<E extends Exception> List<T> getPluginsFor(S delimiter, E ex) throws E;
+
+	/**
+	 * Retrieves all plugins for the given delimiter or throws an exception if no plugin can be found.
+	 * 
+	 * @param <E> the exception type to be thrown.
+	 * @param delimiter
+	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found.
 	 * @return all plugins for the given delimiter
 	 * @throws E if no plugin can be found
 	 */
-	<E extends Exception> List<T> getPluginsFor(S delimiter, E ex) throws E;
+	<E extends Exception> List<T> getPluginsFor(S delimiter, Supplier<E> ex) throws E;
 
 	/**
 	 * Returns the first {@link Plugin} supporting the given delimiter or the given plugin if none can be found.
@@ -113,4 +142,9 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @return
 	 */
 	List<T> getPlugins();
+
+	interface Supplier<E extends Exception> {
+
+		E get();
+	}
 }
