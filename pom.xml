@@ -12,7 +12,7 @@
 		<name>Pivotal Software, Inc.</name>
 		<url>http://www.spring.io</url>
 	</organization>
-	<inceptionYear>2008-2015</inceptionYear>
+	<inceptionYear>2008-2016</inceptionYear>
 	<url>https://github.com/spring-projects/spring-plugin</url>
 
 	<licenses>
@@ -44,8 +44,8 @@
 	</modules>
 
 	<properties>
-		<spring.version>4.1.9.RELEASE</spring.version>
-		<slf4j.version>1.7.14</slf4j.version>
+		<spring.version>4.3.3.BUILD-SNAPSHOT</spring.version>
+		<slf4j.version>1.7.21</slf4j.version>
 	</properties>
 
 	<developers>
@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.3</version>
+			<version>1.1.7</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -197,10 +197,10 @@
 
 	<repositories>
 		<repository>
-			<id>spring-libs-release</id>
-			<url>https://repo.spring.io/libs-release</url>
+			<id>spring-libs-snapshot</id>
+			<url>https://repo.spring.io/libs-snapshot</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
