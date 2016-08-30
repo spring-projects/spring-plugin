@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2012-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +50,7 @@ public class EnablePluginRegistriesIntegrationTest {
 		}
 	}
 
-	@Autowired
-	@Qualifier("samplePluginRegistry")
-	PluginRegistry<SamplePlugin, String> registry;
+	@Autowired PluginRegistry<SamplePlugin, String> registry;
 
 	@Test
 	public void registersPluginRegistries() {
@@ -60,9 +58,7 @@ public class EnablePluginRegistriesIntegrationTest {
 	}
 
 	@Qualifier("myQualifier")
-	interface AnotherPlugin extends Plugin<String> {
-
-	}
+	interface AnotherPlugin extends Plugin<String> {}
 
 	static class AnotherSamplePluginImplementation implements AnotherPlugin {
 
