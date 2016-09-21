@@ -65,7 +65,7 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		assertThat(plugins.length, is(result.size()));
 
 		for (int i = 0; i < plugins.length; i++) {
-			assertThat(result.get(i), is(result.get(i)));
+			assertThat(result.get(i), is(plugins[i]));
 		}
 
 		assertThat(registry.getPluginFor(null), is(plugins[0]));
