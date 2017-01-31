@@ -38,8 +38,8 @@ import org.springframework.util.Assert;
  * 
  * @author Oliver Gierke
  */
-public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextAware,
-		ApplicationListener<ContextRefreshedEvent>, InitializingBean {
+public abstract class AbstractTypeAwareSupport<T>
+		implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent>, InitializingBean {
 
 	private ApplicationContext context;
 	private Class<T> type;
@@ -132,8 +132,8 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		public BeansOfTypeTargetSource(ListableBeanFactory context, Class<?> type, boolean eagerInit,
 				Collection<Class<?>> exclusions) {
 
-			Assert.notNull(context);
-			Assert.notNull(type);
+			Assert.notNull(context, "ListableBeanFactory must not be null!");
+			Assert.notNull(type, "Type must not be null!");
 
 			this.context = context;
 			this.type = type;
