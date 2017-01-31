@@ -132,8 +132,8 @@ public abstract class AbstractTypeAwareSupport<T> implements ApplicationContextA
 		public BeansOfTypeTargetSource(ListableBeanFactory context, Class<?> type, boolean eagerInit,
 				Collection<Class<?>> exclusions) {
 
-			Assert.notNull(context);
-			Assert.notNull(type);
+			Assert.notNull(context, "Context must not be null!");
+			Assert.notNull(type, "Type must not be null!");
 
 			this.context = context;
 			this.type = type;

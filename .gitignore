@@ -2,4 +2,7 @@
 .project
 .settings/
 .springBeans
+*.iml
+*.ipr
+/.idea/
 target/
