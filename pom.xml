@@ -12,7 +12,7 @@
 		<name>Pivotal Software, Inc.</name>
 		<url>http://www.spring.io</url>
 	</organization>
-	<inceptionYear>2008-2016</inceptionYear>
+	<inceptionYear>2008-2017</inceptionYear>
 	<url>https://github.com/spring-projects/spring-plugin</url>
 
 	<licenses>
@@ -44,8 +44,8 @@
 	</modules>
 
 	<properties>
-		<spring.version>4.3.3.BUILD-SNAPSHOT</spring.version>
-		<slf4j.version>1.7.21</slf4j.version>
+		<spring.version>4.3.6.RELEASE</spring.version>
+		<slf4j.version>1.7.22</slf4j.version>
 	</properties>
 
 	<developers>
@@ -61,6 +61,36 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+
+	<profiles>
+		<profile>
+			<id>spring5</id>
+			<properties>
+				<spring.version>5.0.0.M3</spring.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>spring-libs-milestone</id>
+					<url>https://repo.spring.io/libs-milestone</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>spring5-next</id>
+			<properties>
+				<spring.version>5.0.0.BUILD-SNAPSHOT</spring.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>spring-libs-snapshot</id>
+					<url>https://repo.spring.io/libs-snapshot</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 
 	<dependencies>
 
@@ -197,10 +227,10 @@
 
 	<repositories>
 		<repository>
-			<id>spring-libs-snapshot</id>
-			<url>https://repo.spring.io/libs-snapshot</url>
+			<id>spring-libs-release</id>
+			<url>https://repo.spring.io/libs-release</url>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 	</repositories>

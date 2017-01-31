@@ -39,8 +39,7 @@ public class BeanListFactoryBeanUnitTest {
 
 	BeanListFactoryBean<Ordered> factory;
 
-	@Mock
-	ApplicationContext context;
+	@Mock ApplicationContext context;
 
 	@Before
 	public void setUp() {
@@ -52,6 +51,7 @@ public class BeanListFactoryBeanUnitTest {
 	}
 
 	@Test
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void regardsOrderOfBeans() throws Exception {
 
 		// They shall be switched in the result.

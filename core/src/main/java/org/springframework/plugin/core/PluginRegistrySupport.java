@@ -40,7 +40,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	@SuppressWarnings("unchecked")
 	public PluginRegistrySupport(List<? extends T> plugins) {
 
-		Assert.notNull(plugins);
+		Assert.notNull(plugins, "Plugins must not be null!");
 
 		this.plugins = plugins == null ? new ArrayList<T>() : (List<T>) plugins;
 		this.initialized = false;
@@ -72,7 +72,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	 */
 	protected synchronized List<T> initialize(List<T> plugins) {
 
-		Assert.notNull(plugins);
+		Assert.notNull(plugins, "Plugins must not be null!");
 		List<T> result = new ArrayList<T>();
 
 		for (T plugin : this.plugins) {
