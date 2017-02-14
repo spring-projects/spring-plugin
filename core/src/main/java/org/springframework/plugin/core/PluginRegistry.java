@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2016 the original author or authors.
+ * Copyright 2008-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package org.springframework.plugin.core;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Registry for plugins. Allows sophisticated typesafe access to implementations of interfaces extending {link Plugin}.
@@ -32,7 +34,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @param originatingSystem
 	 * @return a plugin for the given originating system or {@code null} if none found
 	 */
-	T getPluginFor(S delimiter);
+	Optional<T> getPluginFor(S delimiter);
 
 	/**
 	 * Returns all plugins for the given delimiter.
@@ -46,21 +48,6 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Retrieves a required plugin from the registry or throw the given exception if none can be found. If more than one
 	 * plugins are found the first one will be returned.
 	 * 
-	 * @param <E> the exception type to be thrown in case no plugin can be found
-	 * @param delimiter
-	 * @param ex the exception to be thrown in case no plugin can be found
-	 * @return a single plugin for the given delimiter
-	 * @throws E if no plugin can be found for the given delimiter
-	 * @deprecated prefer {@link #getPluginFor(Object, Supplier)} to avoid the exceptions to be created for every plugin
-	 *             lookup.
-	 */
-	@Deprecated
-	<E extends Exception> T getPluginFor(S delimiter, E ex) throws E;
-
-	/**
-	 * Retrieves a required plugin from the registry or throw the given exception if none can be found. If more than one
-	 * plugins are found the first one will be returned.
-	 * 
 	 * @param <E> the exception type to be thrown in case no plugin can be found.
 	 * @param delimiter
 	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found.
@@ -68,20 +55,6 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @throws E if no plugin can be found for the given delimiter
 	 */
 	<E extends Exception> T getPluginFor(S delimiter, Supplier<E> ex) throws E;
-
-	/**
-	 * Retrieves all plugins for the given delimiter or throws an exception if no plugin can be found.
-	 * 
-	 * @param <E> the exception type to be thrown.
-	 * @param delimiter
-	 * @param ex the exception to be thrown in case no plugin can be found.
-	 * @return all plugins for the given delimiter.
-	 * @throws E if no plugin can be found
-	 * @deprecated prefer {@link #getPluginFor(Object, Supplier)} to avoid the exceptions to be created for every plugin
-	 *             lookup.
-	 */
-	@Deprecated
-	<E extends Exception> List<T> getPluginsFor(S delimiter, E ex) throws E;
 
 	/**
 	 * Retrieves all plugins for the given delimiter or throws an exception if no plugin can be found.
@@ -101,7 +74,18 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @param plugin
 	 * @return a single {@link Plugin} supporting the given delimiter or the given {@link Plugin} if none found
 	 */
-	T getPluginFor(S delimiter, T plugin);
+	T getPluginOrDefaultFor(S delimiter, T plugin);
+
+	/**
+	 * Returns the first {@link Plugin} supporting the given delimiter or the given lazily-provided plugin if none can be
+	 * found.
+	 * 
+	 * @param delimiter can be {@literal null}.
+	 * @param plugin must not be {@literal null}.
+	 * @return a single {@link Plugin} supporting the given delimiter or the given lazily provided {@link Plugin} if none
+	 *         found.
+	 */
+	T getPluginOrDefaultFor(S delimiter, Supplier<T> defaultSupplier);
 
 	/**
 	 * Returns all {@link Plugin}s supporting the given delimiter or the given plugins if none found.
@@ -142,9 +126,4 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * @return
 	 */
 	List<T> getPlugins();
-
-	interface Supplier<E extends Exception> {
-
-		E get();
-	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import static org.springframework.plugin.core.OrderAwarePluginRegistry.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,8 +54,8 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 	@Test
 	public void honorsOrderOnAddPlugins() throws Exception {
 
-		PluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.create(Arrays.asList(firstPlugin,
-				secondPlugin));
+		PluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry
+				.create(Arrays.asList(firstPlugin, secondPlugin));
 		assertOrder(registry, secondPlugin, firstPlugin);
 	}
 
@@ -68,14 +69,14 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 			assertThat(result.get(i), is(plugins[i]));
 		}
 
-		assertThat(registry.getPluginFor(null), is(plugins[0]));
+		assertThat(registry.getPluginFor(null), is(Optional.of(plugins[0])));
 	}
 
 	@Test
 	public void createsRevertedRegistryCorrectly() throws Exception {
 
-		OrderAwarePluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.create(Arrays.asList(firstPlugin,
-				secondPlugin));
+		OrderAwarePluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry
+				.create(Arrays.asList(firstPlugin, secondPlugin));
 		PluginRegistry<TestPlugin, String> reverse = registry.reverse();
 
 		assertOrder(registry, secondPlugin, firstPlugin);
@@ -91,8 +92,8 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		ThirdImplementation plugin = new ThirdImplementation();
 		TestPlugin thirdPlugin = (TestPlugin) new ProxyFactory(plugin).getProxy();
 
-		OrderAwarePluginRegistry<TestPlugin, String> registry = create(Arrays
-				.asList(firstPlugin, secondPlugin, thirdPlugin));
+		OrderAwarePluginRegistry<TestPlugin, String> registry = create(
+				Arrays.asList(firstPlugin, secondPlugin, thirdPlugin));
 		assertOrder(registry, secondPlugin, thirdPlugin, firstPlugin);
 		assertOrder(registry.reverse(), firstPlugin, thirdPlugin, secondPlugin);
 	}
@@ -104,8 +105,8 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 
 	@Test
 	public void defaultSetupUsesDefaultReverseComparator() {
-		OrderAwarePluginRegistry<Plugin<Object>, Object> registry = OrderAwarePluginRegistry.createReverse(Collections
-				.<Plugin<Object>> emptyList());
+		OrderAwarePluginRegistry<Plugin<Object>, Object> registry = OrderAwarePluginRegistry
+				.createReverse(Collections.<Plugin<Object>> emptyList());
 		Object field = ReflectionTestUtils.getField(registry, "comparator");
 		assertThat(field, is(ReflectionTestUtils.getField(registry, "DEFAULT_REVERSE_COMPARATOR")));
 	}

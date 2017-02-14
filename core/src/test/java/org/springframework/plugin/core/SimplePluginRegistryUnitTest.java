@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.plugin.core.PluginRegistry.Supplier;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
@@ -87,7 +86,7 @@ public class SimplePluginRegistryUnitTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void throwsExceptionIfNoPluginFound() {
 
-		registry.getPluginFor("BAR", new IllegalArgumentException());
+		registry.getPluginFor("BAR", () -> new IllegalArgumentException());
 	}
 
 	/**
@@ -96,7 +95,7 @@ public class SimplePluginRegistryUnitTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void throwsExceptionIfNoPluginsFound() {
 
-		registry.getPluginsFor("BAR", new IllegalArgumentException());
+		registry.getPluginsFor("BAR", () -> new IllegalArgumentException());
 	}
 
 	/**
@@ -107,7 +106,7 @@ public class SimplePluginRegistryUnitTest {
 
 		SamplePlugin defaultPlugin = new SamplePluginImplementation();
 
-		assertThat(registry.getPluginFor("BAR", defaultPlugin), is(defaultPlugin));
+		assertThat(registry.getPluginOrDefaultFor("BAR", defaultPlugin), is(defaultPlugin));
 	}
 
 	/**
@@ -141,12 +140,6 @@ public class SimplePluginRegistryUnitTest {
 
 		registry = SimplePluginRegistry.create(Collections.<SamplePlugin> emptyList());
 
-		registry.getPluginFor("FOO", new Supplier<Exception>() {
-
-			@Override
-			public Exception get() {
-				return new IllegalStateException();
-			}
-		});
+		registry.getPluginFor("FOO", () -> new IllegalStateException());
 	}
 }

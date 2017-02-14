@@ -42,7 +42,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 
 		Assert.notNull(plugins, "Plugins must not be null!");
 
-		this.plugins = plugins == null ? new ArrayList<T>() : (List<T>) plugins;
+		this.plugins = plugins == null ? new ArrayList<>() : (List<T>) plugins;
 		this.initialized = false;
 	}
 
