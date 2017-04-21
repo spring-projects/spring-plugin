@@ -55,8 +55,8 @@ public class BeanListFactoryBeanUnitTest {
 	public void regardsOrderOfBeans() throws Exception {
 
 		// They shall be switched in the result.
-		Ordered first = getOrdered(5);
-		Ordered second = getOrdered(0);
+		Ordered first = () -> 5;
+		Ordered second = () -> 0;
 
 		when(context.getBeanNamesForType(Ordered.class, false, false)).thenReturn(new String[] { "first", "second" });
 		when(context.getType(any(String.class))).thenReturn((Class) Ordered.class);
@@ -86,24 +86,6 @@ public class BeanListFactoryBeanUnitTest {
 
 	@SuppressWarnings("unchecked")
 	private <T> List<T> type(Object list) {
-
 		return (List<T>) list;
-	}
-
-	/**
-	 * Returns an {@link Ordered} with the given order.
-	 * 
-	 * @param order
-	 * @return
-	 */
-	public Ordered getOrdered(final int order) {
-
-		return new Ordered() {
-
-			public int getOrder() {
-
-				return order;
-			}
-		};
 	}
 }

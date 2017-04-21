@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.util.comparator.InvertibleComparator;
+import org.springframework.util.Assert;
 
 /**
  * {@link PluginRegistry} implementation that be made aware of a certain ordering of {@link Plugin}s. By default it
@@ -42,10 +42,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Comparator reverting the {@value #DEFAULT_COMPARATOR}.
 	 */
-	private static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR = new InvertibleComparator<Object>(
-			DEFAULT_COMPARATOR, false);
+	private static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR = DEFAULT_COMPARATOR.reversed();
 
-	private Comparator<? super T> comparator;
+	private final Comparator<? super T> comparator;
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given {@link Plugin}s and {@link Comparator}.
@@ -55,11 +54,13 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @param comparator the {@link Comparator} to be used for ordering the {@link Plugin}s or {@literal null} if the
 	 *          {@code #DEFAULT_COMPARATOR} shall be used.
 	 */
-	@SuppressWarnings("unchecked")
 	protected OrderAwarePluginRegistry(List<? extends T> plugins, Comparator<? super T> comparator) {
 
 		super(plugins);
-		this.comparator = (Comparator<? super T>) (comparator == null ? DEFAULT_COMPARATOR : comparator);
+
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		this.comparator = comparator;
 	}
 
 	/**
@@ -68,23 +69,27 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
-		return create(Collections.<T> emptyList());
+		return create(Collections.emptyList());
 	}
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} using the given {@link Comparator} for ordering contained
 	 * {@link Plugin}s.
 	 * 
+	 * @param comparator must not be {@literal null}.
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(Comparator<? super T> comparator) {
-		return create(Collections.<T> emptyList(), comparator);
+
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		return create(Collections.emptyList(), comparator);
 	}
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
 	 * 
-	 * @param plugins
+	 * @param plugins must not be {@literal null}.
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins) {
@@ -92,9 +97,10 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	}
 
 	/**
-	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins and the order of the plugins reverted.
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given {@link Plugin}s and the order of the {@link Plugin}s
+	 * reverted.
 	 * 
-	 * @param plugins
+	 * @param plugins must not be {@literal null}.
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> createReverse(List<? extends T> plugins) {
@@ -109,7 +115,11 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins,
 			Comparator<? super T> comparator) {
-		return new OrderAwarePluginRegistry<T, S>(plugins, comparator);
+
+		Assert.notNull(plugins, "Plugins must not be null!");
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		return new OrderAwarePluginRegistry<>(plugins, comparator);
 	}
 
 	/* 
@@ -129,10 +139,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public OrderAwarePluginRegistry<T, S> reverse() {
 
-		ArrayList<T> copy = new ArrayList<T>(getPlugins());
-		return create(copy, new InvertibleComparator(comparator, false));
+		List<T> copy = new ArrayList<>(getPlugins());
+		return create(copy, comparator.reversed());
 	}
 }
