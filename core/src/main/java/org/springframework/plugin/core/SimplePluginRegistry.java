@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.springframework.util.Assert;
+
 /**
  * Basic implementation of {@link PluginRegistry}. Simply holds all given plugins in a list dropping {@literal null}
  * values silently on adding.
@@ -81,6 +83,29 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 		return super.getPlugins().stream()//
 				.filter(it -> it.supports(delimiter))//
 				.findFirst();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.plugin.core.PluginRegistry#getRequiredPluginFor(java.lang.Object)
+	 */
+	@Override
+	public T getRequiredPluginFor(S delimiter) {
+
+		return getRequiredPluginFor(delimiter,
+				() -> String.format("No plugin found for delimiter %s! Registered plugins: %s.", delimiter, getPlugins()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.plugin.core.PluginRegistry#getRequiredPluginFor(java.lang.Object, java.util.function.Supplier)
+	 */
+	@Override
+	public T getRequiredPluginFor(S delimiter, Supplier<String> message) throws IllegalArgumentException {
+
+		Assert.notNull(message, "Message must not be null!");
+
+		return getPluginFor(delimiter, () -> new IllegalArgumentException(message.get()));
 	}
 
 	/*

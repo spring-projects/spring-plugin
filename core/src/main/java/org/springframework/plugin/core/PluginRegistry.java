@@ -37,6 +37,27 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	Optional<T> getPluginFor(S delimiter);
 
 	/**
+	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
+	 * ignored.
+	 * 
+	 * @param delimiter
+	 * @return a {@link Plugin} for the given originating system or {@link Optional#empty()} if none found.
+	 * @throws IllegalArgumentException in case no {@link Plugin} for the given delimiter
+	 */
+	T getRequiredPluginFor(S delimiter) throws IllegalArgumentException;
+
+	/**
+	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
+	 * ignored.
+	 * 
+	 * @param delimiter
+	 * @param message a {@link Supplier} to produce an exception message in case no plugin is found.
+	 * @return a {@link Plugin} for the given originating system or {@link Optional#empty()} if none found.
+	 * @throws IllegalArgumentException in case no {@link Plugin} for the given delimiter
+	 */
+	T getRequiredPluginFor(S delimiter, Supplier<String> message) throws IllegalArgumentException;
+
+	/**
 	 * Returns all plugins for the given delimiter.
 	 * 
 	 * @param delimiter

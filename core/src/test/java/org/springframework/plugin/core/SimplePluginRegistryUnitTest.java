@@ -25,7 +25,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
@@ -37,6 +39,8 @@ public class SimplePluginRegistryUnitTest {
 	SamplePlugin plugin;
 
 	SimplePluginRegistry<SamplePlugin, String> registry;
+
+	public @Rule ExpectedException o_O = ExpectedException.none();
 
 	/**
 	 * Initializes a {@code PluginRegistry} and equips it with an {@code EmailNotificationProvider}.
@@ -141,5 +145,30 @@ public class SimplePluginRegistryUnitTest {
 		registry = SimplePluginRegistry.create(Collections.<SamplePlugin> emptyList());
 
 		registry.getPluginFor("FOO", () -> new IllegalStateException());
+	}
+
+	/**
+	 * @see #41
+	 */
+	public void throwsExceptionIfRequiredPluginIsNotFound() {
+
+		registry = SimplePluginRegistry.create(Collections.emptyList());
+
+		o_O.expect(IllegalArgumentException.class);
+
+		registry.getRequiredPluginFor("FOO");
+	}
+
+	/**
+	 * @see #41
+	 */
+	public void throwsExceptionWithMessafeIfRequiredPluginIsNotFound() {
+
+		registry = SimplePluginRegistry.create(Collections.emptyList());
+
+		o_O.expect(IllegalArgumentException.class);
+		o_O.expectMessage("message");
+
+		registry.getRequiredPluginFor("FOO", () -> "message");
 	}
 }
