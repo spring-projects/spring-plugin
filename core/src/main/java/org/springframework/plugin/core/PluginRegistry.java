@@ -20,19 +20,21 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Registry for plugins. Allows sophisticated typesafe access to implementations of interfaces extending {link Plugin}.
+ * Registry for {@link Plugin}s. Allows sophisticated typesafe access to implementations of interfaces extending {link
+ * Plugin}.
  * 
- * @param <T> the concrete plugin interface
+ * @param <T> the concrete {@link Plugin} interface
  * @param <S> the delimiter type
  * @author Oliver Gierke
  */
 public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 
 	/**
-	 * Returns the first plugin found for the given originating system. Thus, further configured plugins are ignored.
+	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
+	 * ignored.
 	 * 
-	 * @param originatingSystem
-	 * @return a plugin for the given originating system or {@code null} if none found
+	 * @param delimiter
+	 * @return a plugin for the given delimiter or {@link Optional#empty()} if none found.
 	 */
 	Optional<T> getPluginFor(S delimiter);
 
@@ -102,7 +104,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * found.
 	 * 
 	 * @param delimiter can be {@literal null}.
-	 * @param plugin must not be {@literal null}.
+	 * @param defaultSupplier must not be {@literal null}.
 	 * @return a single {@link Plugin} supporting the given delimiter or the given lazily provided {@link Plugin} if none
 	 *         found.
 	 */

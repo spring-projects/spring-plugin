@@ -28,8 +28,6 @@ import org.springframework.util.Assert;
  * Basic implementation of {@link PluginRegistry}. Simply holds all given plugins in a list dropping {@literal null}
  * values silently on adding.
  * 
- * @param <T> the concrete plugin interface
- * @param <S> the delimiter type
  * @author Oliver Gierke
  */
 public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport<T, S> {
@@ -46,8 +44,6 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	/**
 	 * Creates a new {@link SimplePluginRegistry}.
 	 * 
-	 * @param <T> the plugin type
-	 * @param <S> the delimiter type
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
@@ -57,8 +53,6 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	/**
 	 * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin} s.
 	 * 
-	 * @param <T> the plugin type
-	 * @param <S> the delimiter type
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create(List<? extends T> plugins) {

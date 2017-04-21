@@ -65,8 +65,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} using the {@code #DEFAULT_COMPARATOR}.
 	 * 
-	 * @param <T>
-	 * @param <S>
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
@@ -77,8 +75,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * Creates a new {@link OrderAwarePluginRegistry} using the given {@link Comparator} for ordering contained
 	 * {@link Plugin}s.
 	 * 
-	 * @param <T>
-	 * @param <S>
 	 * @return
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(Comparator<? super T> comparator) {
@@ -88,8 +84,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
 	 * 
-	 * @param <S>
-	 * @param <T>
 	 * @param plugins
 	 * @return
 	 */
@@ -100,8 +94,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins and the order of the plugins reverted.
 	 * 
-	 * @param <S>
-	 * @param <T>
 	 * @param plugins
 	 * @return
 	 */
@@ -112,8 +104,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
 	 * 
-	 * @param <S>
-	 * @param <T>
 	 * @param plugins
 	 * @return
 	 */
