@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.springframework.plugin.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -37,12 +38,12 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * Comparator regarding {@link org.springframework.core.Ordered} interface or
 	 * {@link org.springframework.core.annotation.Order} annotation.
 	 */
-	private static final Comparator<Object> DEFAULT_COMPARATOR = new AnnotationAwareOrderComparator();
+	static final Comparator<Object> DEFAULT_COMPARATOR = new AnnotationAwareOrderComparator();
 
 	/**
 	 * Comparator reverting the {@value #DEFAULT_COMPARATOR}.
 	 */
-	private static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR = DEFAULT_COMPARATOR.reversed();
+	static final Comparator<Object> DEFAULT_REVERSE_COMPARATOR = DEFAULT_COMPARATOR.reversed();
 
 	private final Comparator<? super T> comparator;
 
@@ -67,8 +68,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * Creates a new {@link OrderAwarePluginRegistry} using the {@code #DEFAULT_COMPARATOR}.
 	 * 
 	 * @return
+	 * @since 2.0
 	 */
-	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> empty() {
 		return create(Collections.emptyList());
 	}
 
@@ -78,8 +80,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * 
 	 * @param comparator must not be {@literal null}.
 	 * @return
+	 * @since 2.0
 	 */
-	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(Comparator<? super T> comparator) {
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(Comparator<? super T> comparator) {
 
 		Assert.notNull(comparator, "Comparator must not be null!");
 
@@ -88,11 +91,23 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
-	 * 
 	 * @param plugins must not be {@literal null}.
 	 * @return
+	 * @since 2.0
 	 */
-	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins) {
+	@SafeVarargs
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(T... plugins) {
+		return create(Arrays.asList(plugins), DEFAULT_COMPARATOR);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @since 2.0
+	 */
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(List<? extends T> plugins) {
 		return create(plugins, DEFAULT_COMPARATOR);
 	}
 
@@ -102,8 +117,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * 
 	 * @param plugins must not be {@literal null}.
 	 * @return
+	 * @since 2.0
 	 */
-	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> createReverse(List<? extends T> plugins) {
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> ofReverse(List<? extends T> plugins) {
 		return create(plugins, DEFAULT_REVERSE_COMPARATOR);
 	}
 
@@ -112,8 +128,9 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * 
 	 * @param plugins
 	 * @return
+	 * @since 2.0
 	 */
-	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins,
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(List<? extends T> plugins,
 			Comparator<? super T> comparator) {
 
 		Assert.notNull(plugins, "Plugins must not be null!");
@@ -122,7 +139,73 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 		return new OrderAwarePluginRegistry<>(plugins, comparator);
 	}
 
-	/* 
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} using the {@code #DEFAULT_COMPARATOR}.
+	 *
+	 * @return
+	 * @deprecated since 2.0, for removal in 2.1. Prefer {@link PluginRegistry#empty()}.
+	 */
+	@Deprecated
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create() {
+		return empty();
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} using the given {@link Comparator} for ordering contained
+	 * {@link Plugin}s.
+	 *
+	 * @param comparator must not be {@literal null}.
+	 * @return
+	 * @deprecated since 2.0, for removal in 2.1. Prefer {@link PluginRegistry#of(Comparator)}.
+	 */
+	@Deprecated
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(Comparator<? super T> comparator) {
+
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		return of(Collections.emptyList(), comparator);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @deprecated since 2.0, for removal in 2.1. Prefer {@link PluginRegistry#of(List)}.
+	 */
+	@Deprecated
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins) {
+		return of(plugins, DEFAULT_COMPARATOR);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given {@link Plugin}s and the order of the {@link Plugin}s
+	 * reverted.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @deprecated since 2.0, for removal in 2.1. Prefer {@link OrderAwarePluginRegistry#ofReverse(List)}
+	 */
+	@Deprecated
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> createReverse(List<? extends T> plugins) {
+		return of(plugins, DEFAULT_REVERSE_COMPARATOR);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @deprecated since 2.0, for removal in 2.1. Prefer {@link PluginRegistry#of(List, Comparator)}.
+	 */
+	@Deprecated
+	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> create(List<? extends T> plugins,
+			Comparator<? super T> comparator) {
+
+		return of(plugins, comparator);
+	}
+
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistrySupport#initialize(java.util.List)
 	 */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2017 the original author or authors.
+ * Copyright 2008-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,14 @@
  */
 package org.springframework.plugin.core;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.springframework.util.Assert;
 
 /**
  * Registry for {@link Plugin}s. Allows sophisticated typesafe access to implementations of interfaces extending {link
@@ -28,6 +33,69 @@ import java.util.function.Supplier;
  * @author Oliver Gierke
  */
 public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
+
+	/**
+	 * Creates a new {@link PluginRegistry} using the {@code #DEFAULT_COMPARATOR}.
+	 *
+	 * @return
+	 * @since 2.0
+	 */
+	public static <S, T extends Plugin<S>> PluginRegistry<T, S> empty() {
+		return of(Collections.emptyList());
+	}
+
+	/**
+	 * Creates a new {@link PluginRegistry} using the given {@link Comparator} for ordering contained {@link Plugin}s.
+	 *
+	 * @param comparator must not be {@literal null}.
+	 * @return
+	 * @since 2.0
+	 */
+	public static <S, T extends Plugin<S>> PluginRegistry<T, S> of(Comparator<? super T> comparator) {
+
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		return of(Collections.emptyList(), comparator);
+	}
+
+	/**
+	 * Creates a new {@link PluginRegistry} with the given plugins.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @since 2.0
+	 */
+	@SafeVarargs
+	public static <S, T extends Plugin<S>> PluginRegistry<T, S> of(T... plugins) {
+		return of(Arrays.asList(plugins), OrderAwarePluginRegistry.DEFAULT_COMPARATOR);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
+	 * @param plugins must not be {@literal null}.
+	 * @return
+	 * @since 2.0
+	 */
+	public static <S, T extends Plugin<S>> PluginRegistry<T, S> of(List<? extends T> plugins) {
+		return of(plugins, OrderAwarePluginRegistry.DEFAULT_COMPARATOR);
+	}
+
+	/**
+	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
+	 * @param plugins
+	 * @return
+	 * @since 2.0
+	 */
+	public static <S, T extends Plugin<S>> PluginRegistry<T, S> of(List<? extends T> plugins,
+			Comparator<? super T> comparator) {
+
+		Assert.notNull(plugins, "Plugins must not be null!");
+		Assert.notNull(comparator, "Comparator must not be null!");
+
+		return OrderAwarePluginRegistry.of(plugins, comparator);
+	}
 
 	/**
 	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
