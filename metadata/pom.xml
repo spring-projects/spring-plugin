@@ -12,6 +12,10 @@
 		<version>2.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<java-module-name>spring.plugin.metadata</java-module-name>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

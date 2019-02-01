@@ -13,18 +13,16 @@
 		<version>2.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<java-module-name>spring.plugin.core</java-module-name>
+	</properties>
+
 	<dependencies>
 	
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 		<dependency>
