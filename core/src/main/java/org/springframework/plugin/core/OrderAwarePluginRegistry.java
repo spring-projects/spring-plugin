@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
  * orders {@link Plugin}s by regarding {@link org.springframework.core.Ordered} interface or
  * {@link org.springframework.core.annotation.Order} annotation. To alter ordering behaviour use one of the factory
  * methods accepting a {@link Comparator} as parameter.
- * 
+ *
  * @author Oliver Gierke
  */
 public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePluginRegistry<T, S> {
@@ -49,7 +49,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given {@link Plugin}s and {@link Comparator}.
-	 * 
+	 *
 	 * @param plugins the {@link Plugin}s to be contained in the registry or {@literal null} if the registry shall be
 	 *          empty initally.
 	 * @param comparator the {@link Comparator} to be used for ordering the {@link Plugin}s or {@literal null} if the
@@ -66,7 +66,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} using the {@code #DEFAULT_COMPARATOR}.
-	 * 
+	 *
 	 * @return
 	 * @since 2.0
 	 */
@@ -77,7 +77,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} using the given {@link Comparator} for ordering contained
 	 * {@link Plugin}s.
-	 * 
+	 *
 	 * @param comparator must not be {@literal null}.
 	 * @return
 	 * @since 2.0
@@ -91,6 +91,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
+	 *
 	 * @param plugins must not be {@literal null}.
 	 * @return
 	 * @since 2.0
@@ -114,7 +115,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given {@link Plugin}s and the order of the {@link Plugin}s
 	 * reverted.
-	 * 
+	 *
 	 * @param plugins must not be {@literal null}.
 	 * @return
 	 * @since 2.0
@@ -125,7 +126,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Creates a new {@link OrderAwarePluginRegistry} with the given plugins.
-	 * 
+	 *
 	 * @param plugins
 	 * @return
 	 * @since 2.0
@@ -219,7 +220,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 	/**
 	 * Returns a new {@link OrderAwarePluginRegistry} with the order of the plugins reverted.
-	 * 
+	 *
 	 * @return
 	 */
 	public OrderAwarePluginRegistry<T, S> reverse() {
