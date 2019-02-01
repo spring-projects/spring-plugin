@@ -5,7 +5,7 @@
 
 	<name>Spring Plugin - Metadata Extension</name>
 	<description>Extension package for metadata based plugins</description>
-	
+
 	<parent>
 		<groupId>org.springframework.plugin</groupId>
 		<artifactId>spring-plugin</artifactId>
@@ -17,6 +17,7 @@
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>spring-plugin-core</artifactId>
