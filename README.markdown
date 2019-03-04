@@ -47,7 +47,7 @@ public interface MyPluginInterface {
 
 
 /**
- * A host application class working with instances of the plugin 
+ * A host application class working with instances of the plugin
  * interface.
  */
 public class HostImpl implements Host {
@@ -70,7 +70,7 @@ public class HostImpl implements Host {
 }
 ```
 
-This is the way you would typically construct a host component in general. Leveraging dependency injection via setters allows flexible usage in a variety of environments. Thus you could easily provide a factory class that is able to lookup `MyPluginInterface` 
+This is the way you would typically construct a host component in general. Leveraging dependency injection via setters allows flexible usage in a variety of environments. Thus you could easily provide a factory class that is able to lookup `MyPluginInterface`
 implementations from the classpath, instantiate them and inject them into `HostImpl`.
 
 Using Spring as component container you could configure something like this:
@@ -201,15 +201,14 @@ cases Spring Plugin provides a `PluginRegistry<T extends Plugin<S>, S>` interfac
 **Example 1.7. Usage of the PluginRegistry**
 
 ```java
-PluginRegistry<ProductProcessor, ProductType> registry = SimplePluginRegistry.create();
-// Add plugin instances
-registry.add(new FooImplementation());
-// Returns the first plugin supporting SOFTWARE
-registry.getPluginFor(ProductType.SOFTWARE);
+PluginRegistry<ProductProcessor, ProductType> registry = SimplePluginRegistry.of(new FooImplementation());
+
+// Returns the first plugin supporting SOFTWARE if available
+Optional<ProductProcessor> plugin = registry.getPluginFor(ProductType.SOFTWARE);
 // Returns the first plugin supporting SOFTWARE, or DefaultPlugin if none found
-registry.getPluginFor(ProductType.SOFTWARE, new DefaultPlugin());
+ProductProcessor plugin = registry.getPluginOrDefaultFor(ProductType.SOFTWARE, () -> new DefaultPlugin());
 // Returns all plugins supporting HARDWARE, throwing the given exception if none found
-registry.getPluginsFor(ProductType.HARDWARE, new MyException("Damn!");
+List<ProductProcessor> plugin = registry.getPluginsFor(ProductType.HARDWARE, () -> new MyException("Damn!");
 ```
 
 #### Configuration, XML namespace and @EnablePluginRegistries
@@ -276,15 +275,15 @@ The `MetadataProvider` interface is to be used in application plugin interfaces 
 ### O
 
 OSGi
-  
+
   * Open Services Gateway Initiative - a fully fledged plugin runtime environment on top of the Java VM - [http://en.wikipedia.org/wiki/OSGi](http://en.wikipedia.org/wiki/OSGi).
 
 ### X
 
 XML
-  
+
   * eXtensible Markup Language
 
 XSD
-  
+
   * Xml Schema Definition
