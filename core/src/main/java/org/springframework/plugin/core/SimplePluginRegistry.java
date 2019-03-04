@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2017 the original author or authors.
+ * Copyright 2008-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.springframework.plugin.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,14 +28,14 @@ import org.springframework.util.Assert;
 /**
  * Basic implementation of {@link PluginRegistry}. Simply holds all given plugins in a list dropping {@literal null}
  * values silently on adding.
- * 
+ *
  * @author Oliver Gierke
  */
 public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport<T, S> {
 
 	/**
 	 * Creates a new {@code SimplePluginRegistry}. Will create an empty registry if {@literal null} is provided.
-	 * 
+	 *
 	 * @param plugins must not be {@literal null}.
 	 */
 	protected SimplePluginRegistry(List<? extends T> plugins) {
@@ -43,20 +44,52 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 
 	/**
 	 * Creates a new {@link SimplePluginRegistry}.
-	 * 
+	 *
 	 * @return
 	 */
+	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> empty() {
+		return of(Collections.emptyList());
+	}
+
+	/**
+	 * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin} s.
+	 *
+	 * @return
+	 */
+	@SafeVarargs
+	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> of(T... plugins) {
+		return of(Arrays.asList(plugins));
+	}
+
+	/**
+	 * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin} s.
+	 *
+	 * @return
+	 */
+	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> of(List<? extends T> plugins) {
+		return new SimplePluginRegistry<>(plugins);
+	}
+
+	/**
+	 * Creates a new {@link SimplePluginRegistry}.
+	 *
+	 * @return
+	 * @deprecated use {@link #empty()} instead.
+	 */
+	@Deprecated
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
 		return create(Collections.<T> emptyList());
 	}
 
 	/**
 	 * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin} s.
-	 * 
+	 *
 	 * @return
+	 * @deprecated use {@link #of(List)} instead.
 	 */
+	@Deprecated
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create(List<? extends T> plugins) {
-		return new SimplePluginRegistry<T, S>(plugins);
+		return new SimplePluginRegistry<>(plugins);
 	}
 
 	/* (non-Javadoc)
@@ -114,7 +147,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 				.collect(Collectors.toList());
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistry#getPluginFor(java.lang.Object, org.springframework.plugin.core.PluginRegistry.Supplier)
 	 */
@@ -123,7 +156,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 		return getPluginFor(delimiter).orElseThrow(ex);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistry#getPluginsFor(java.lang.Object, org.springframework.plugin.core.PluginRegistry.ExceptionProvider)
 	 */
@@ -139,7 +172,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 		return result;
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistry#getPluginOrDefaultFor(java.lang.Object, org.springframework.plugin.core.Plugin)
 	 */
@@ -148,7 +181,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 		return getPluginOrDefaultFor(delimiter, () -> plugin);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistry#getPluginOrDefaultFor(java.lang.Object, java.util.function.Supplier)
 	 */

@@ -30,7 +30,7 @@ import org.junit.rules.ExpectedException;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
- * 
+ *
  * @author Oliver Gierke
  */
 public class SimplePluginRegistryUnitTest {
@@ -48,18 +48,18 @@ public class SimplePluginRegistryUnitTest {
 	public void setUp() {
 
 		plugin = new SamplePluginImplementation();
-		registry = SimplePluginRegistry.create();
+		registry = SimplePluginRegistry.empty();
 	}
 
 	/**
 	 * Asserts that the registry contains the plugin it was initialized with.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void assertRegistryInitialized() throws Exception {
 
-		registry = SimplePluginRegistry.create(Arrays.asList(plugin));
+		registry = SimplePluginRegistry.of(plugin);
 
 		assertThat(registry.countPlugins(), is(1));
 		assertTrue(registry.contains(plugin));
@@ -71,7 +71,7 @@ public class SimplePluginRegistryUnitTest {
 	@Test
 	public void assertFindsEmailNotificationProvider() {
 
-		registry = SimplePluginRegistry.create(Arrays.asList(plugin));
+		registry = SimplePluginRegistry.of(plugin);
 
 		String delimiter = "FOO";
 
@@ -130,7 +130,7 @@ public class SimplePluginRegistryUnitTest {
 		List<SamplePlugin> plugins = new ArrayList<SamplePlugin>();
 		plugins.add(null);
 
-		registry = SimplePluginRegistry.create(plugins);
+		registry = SimplePluginRegistry.of(plugins);
 
 		assertThat(registry.countPlugins(), is(0));
 	}
@@ -139,9 +139,9 @@ public class SimplePluginRegistryUnitTest {
 	 * @see #19
 	 */
 	@Test(expected = IllegalStateException.class)
-	public void testname() throws Exception {
+	public void throwsExceptionFromSupplier() throws Exception {
 
-		registry = SimplePluginRegistry.create(Collections.<SamplePlugin> emptyList());
+		registry = SimplePluginRegistry.empty();
 
 		registry.getPluginFor("FOO", () -> new IllegalStateException());
 	}
@@ -151,7 +151,7 @@ public class SimplePluginRegistryUnitTest {
 	 */
 	public void throwsExceptionIfRequiredPluginIsNotFound() {
 
-		registry = SimplePluginRegistry.create(Collections.emptyList());
+		registry = SimplePluginRegistry.empty();
 
 		o_O.expect(IllegalArgumentException.class);
 
@@ -163,7 +163,7 @@ public class SimplePluginRegistryUnitTest {
 	 */
 	public void throwsExceptionWithMessafeIfRequiredPluginIsNotFound() {
 
-		registry = SimplePluginRegistry.create(Collections.emptyList());
+		registry = SimplePluginRegistry.of(Collections.emptyList());
 
 		o_O.expect(IllegalArgumentException.class);
 		o_O.expectMessage("message");

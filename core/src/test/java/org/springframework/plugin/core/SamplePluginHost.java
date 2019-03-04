@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,17 @@
  */
 package org.springframework.plugin.core;
 
-import org.springframework.plugin.core.PluginRegistry;
-import org.springframework.plugin.core.SimplePluginRegistry;
-
 /**
  * @author Oliver Gierke
  */
 public class SamplePluginHost {
 
-	private PluginRegistry<SamplePlugin, String> registry = SimplePluginRegistry.create();
+	private PluginRegistry<SamplePlugin, String> registry = SimplePluginRegistry.empty();
 
 	/**
 	 * @param registry the registry to set
 	 */
 	public void setRegistry(PluginRegistry<SamplePlugin, String> registry) {
-
 		this.registry = registry;
 	}
 
@@ -37,7 +33,6 @@ public class SamplePluginHost {
 	 * @return the registry
 	 */
 	public PluginRegistry<SamplePlugin, String> getRegistry() {
-
 		return registry;
 	}
 }
