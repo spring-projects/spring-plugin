@@ -78,7 +78,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	@Deprecated
 	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
-		return create(Collections.<T> emptyList());
+		return of(Collections.<T> emptyList());
 	}
 
 	/**
@@ -107,6 +107,8 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	@Override
 	public Optional<T> getPluginFor(S delimiter) {
 
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+
 		return super.getPlugins().stream()//
 				.filter(it -> it.supports(delimiter))//
 				.findFirst();
@@ -119,6 +121,8 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	@Override
 	public T getRequiredPluginFor(S delimiter) {
 
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+
 		return getRequiredPluginFor(delimiter,
 				() -> String.format("No plugin found for delimiter %s! Registered plugins: %s.", delimiter, getPlugins()));
 	}
@@ -130,6 +134,7 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	@Override
 	public T getRequiredPluginFor(S delimiter, Supplier<String> message) throws IllegalArgumentException {
 
+		Assert.notNull(delimiter, "Delimiter must not be null!");
 		Assert.notNull(message, "Message must not be null!");
 
 		return getPluginFor(delimiter, () -> new IllegalArgumentException(message.get()));
@@ -142,6 +147,8 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	@Override
 	public List<T> getPluginsFor(S delimiter) {
 
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+
 		return super.getPlugins().stream()//
 				.filter(it -> it.supports(delimiter))//
 				.collect(Collectors.toList());
@@ -153,6 +160,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	@Override
 	public <E extends Exception> T getPluginFor(S delimiter, Supplier<E> ex) throws E {
+
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+		Assert.notNull(ex, "Exception supplier must not be null!");
+
 		return getPluginFor(delimiter).orElseThrow(ex);
 	}
 
@@ -162,6 +173,9 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	@Override
 	public <E extends Exception> List<T> getPluginsFor(S delimiter, Supplier<E> ex) throws E {
+
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+		Assert.notNull(ex, "Exception supplier must not be null!");
 
 		List<T> result = getPluginsFor(delimiter);
 
@@ -187,6 +201,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	@Override
 	public T getPluginOrDefaultFor(S delimiter, Supplier<T> defaultSupplier) {
+
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+		Assert.notNull(defaultSupplier, "Default supplier must not be null!");
+
 		return getPluginFor(delimiter).orElseGet(defaultSupplier);
 	}
 
@@ -196,6 +214,9 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 */
 	@Override
 	public List<T> getPluginsFor(S delimiter, List<? extends T> plugins) {
+
+		Assert.notNull(delimiter, "Delimiter must not be null!");
+		Assert.notNull(plugins, "Plugins must not be null!");
 
 		List<T> candidates = getPluginsFor(delimiter);
 

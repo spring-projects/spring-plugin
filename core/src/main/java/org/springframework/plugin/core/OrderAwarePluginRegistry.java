@@ -86,7 +86,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 
 		Assert.notNull(comparator, "Comparator must not be null!");
 
-		return create(Collections.emptyList(), comparator);
+		return of(Collections.emptyList(), comparator);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 */
 	@SafeVarargs
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(T... plugins) {
-		return create(Arrays.asList(plugins), DEFAULT_COMPARATOR);
+		return of(Arrays.asList(plugins), DEFAULT_COMPARATOR);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @since 2.0
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> of(List<? extends T> plugins) {
-		return create(plugins, DEFAULT_COMPARATOR);
+		return of(plugins, DEFAULT_COMPARATOR);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	 * @since 2.0
 	 */
 	public static <S, T extends Plugin<S>> OrderAwarePluginRegistry<T, S> ofReverse(List<? extends T> plugins) {
-		return create(plugins, DEFAULT_REVERSE_COMPARATOR);
+		return of(plugins, DEFAULT_REVERSE_COMPARATOR);
 	}
 
 	/**
@@ -226,6 +226,6 @@ public class OrderAwarePluginRegistry<T extends Plugin<S>, S> extends SimplePlug
 	public OrderAwarePluginRegistry<T, S> reverse() {
 
 		List<T> copy = new ArrayList<>(getPlugins());
-		return create(copy, comparator.reversed());
+		return of(copy, comparator.reversed());
 	}
 }

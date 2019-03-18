@@ -101,7 +101,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
 	 * ignored.
 	 *
-	 * @param delimiter
+	 * @param delimiter must not be {@literal null}.
 	 * @return a plugin for the given delimiter or {@link Optional#empty()} if none found.
 	 */
 	Optional<T> getPluginFor(S delimiter);
@@ -110,7 +110,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
 	 * ignored.
 	 *
-	 * @param delimiter
+	 * @param delimiter must not be {@literal null}.
 	 * @return a {@link Plugin} for the given originating system or {@link Optional#empty()} if none found.
 	 * @throws IllegalArgumentException in case no {@link Plugin} for the given delimiter
 	 */
@@ -120,7 +120,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Returns the first {@link Plugin} found for the given delimiter. Thus, further configured {@link Plugin}s are
 	 * ignored.
 	 *
-	 * @param delimiter
+	 * @param delimiter must not be {@literal null}.
 	 * @param message a {@link Supplier} to produce an exception message in case no plugin is found.
 	 * @return a {@link Plugin} for the given originating system or {@link Optional#empty()} if none found.
 	 * @throws IllegalArgumentException in case no {@link Plugin} for the given delimiter
@@ -130,7 +130,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	/**
 	 * Returns all plugins for the given delimiter.
 	 *
-	 * @param delimiter
+	 * @param delimiter must not be {@literal null}.
 	 * @return a list of plugins or an empty list if none found
 	 */
 	List<T> getPluginsFor(S delimiter);
@@ -140,8 +140,9 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * plugins are found the first one will be returned.
 	 *
 	 * @param <E> the exception type to be thrown in case no plugin can be found.
-	 * @param delimiter
-	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found.
+	 * @param delimiter must not be {@literal null}.
+	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found, must not be
+	 *          {@literal null}.
 	 * @return a single plugin for the given delimiter
 	 * @throws E if no plugin can be found for the given delimiter
 	 */
@@ -151,8 +152,9 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Retrieves all plugins for the given delimiter or throws an exception if no plugin can be found.
 	 *
 	 * @param <E> the exception type to be thrown.
-	 * @param delimiter
-	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found.
+	 * @param delimiter must not be {@literal null}.
+	 * @param ex a lazy {@link Supplier} to produce an exception in case no plugin can be found, must not be
+	 *          {@literal null}.
 	 * @return all plugins for the given delimiter
 	 * @throws E if no plugin can be found
 	 */
@@ -161,8 +163,8 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	/**
 	 * Returns the first {@link Plugin} supporting the given delimiter or the given plugin if none can be found.
 	 *
-	 * @param delimiter
-	 * @param plugin
+	 * @param delimiter must not be {@literal null}.
+	 * @param plugin must not be {@literal null}.
 	 * @return a single {@link Plugin} supporting the given delimiter or the given {@link Plugin} if none found
 	 */
 	T getPluginOrDefaultFor(S delimiter, T plugin);
@@ -181,9 +183,10 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	/**
 	 * Returns all {@link Plugin}s supporting the given delimiter or the given plugins if none found.
 	 *
-	 * @param delimiter
-	 * @param plugins
-	 * @return all {@link Plugin}s supporting the given delimiter or the given {@link Plugin}s if none found
+	 * @param delimiter must not be {@literal null}.
+	 * @param plugins must not be {@literal null}.
+	 * @return all {@link Plugin}s supporting the given delimiter or the given {@link Plugin}s if none found, will never
+	 *         be {@literal null}.
 	 */
 	List<T> getPluginsFor(S delimiter, List<? extends T> plugins);
 
@@ -197,7 +200,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	/**
 	 * Returns whether the registry contains a given plugin.
 	 *
-	 * @param plugin
+	 * @param plugin must not be {@literal null}.
 	 * @return
 	 */
 	boolean contains(T plugin);
@@ -205,7 +208,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	/**
 	 * Returns whether the registry contains a {@link Plugin} matching the given delimiter.
 	 *
-	 * @param delimiter
+	 * @param delimiter must not be {@literal null}.
 	 * @return
 	 */
 	boolean hasPluginFor(S delimiter);
@@ -214,7 +217,7 @@ public interface PluginRegistry<T extends Plugin<S>, S> extends Iterable<T> {
 	 * Returns all {@link Plugin}s contained in this registry. Will return an immutable {@link List} to prevent outside
 	 * modifications of the {@link PluginRegistry} content.
 	 *
-	 * @return
+	 * @return will never be {@literal null}.
 	 */
 	List<T> getPlugins();
 }

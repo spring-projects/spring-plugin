@@ -18,6 +18,7 @@ package org.springframework.plugin.core;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.util.Assert;
 
@@ -73,15 +74,10 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	protected synchronized List<T> initialize(List<T> plugins) {
 
 		Assert.notNull(plugins, "Plugins must not be null!");
-		List<T> result = new ArrayList<T>();
 
-		for (T plugin : this.plugins) {
-			if (plugin != null) {
-				result.add(plugin);
-			}
-		}
-
-		return result;
+		return plugins.stream() //
+				.filter(it -> it != null) //
+				.collect(Collectors.toList());
 	}
 
 	/* 

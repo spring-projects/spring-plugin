@@ -16,6 +16,7 @@
 package org.springframework.plugin.core.support;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.lang.NonNull;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.PluginRegistry;
@@ -32,6 +33,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends AbstractT
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
+	@NonNull
 	public OrderAwarePluginRegistry<T, S> getObject() {
 		return OrderAwarePluginRegistry.of(getBeans());
 	}
@@ -40,6 +42,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends AbstractT
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.FactoryBean#getObjectType()
 	 */
+	@NonNull
 	public Class<?> getObjectType() {
 		return OrderAwarePluginRegistry.class;
 	}

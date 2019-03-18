@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@ package org.springframework.plugin.core;
  * Its core responsibility is to define a delimiter type and a selection callback with the delimiter as parameter. The
  * delimiter is some kind of decision object concrete plugin implementations can use to decide if they are capable to be
  * executed.
- * 
+ *
  * @author Oliver Gierke
  */
 public interface Plugin<S> {
 
 	/**
 	 * Returns if a plugin should be invoked according to the given delimiter.
-	 * 
-	 * @param delimiter
+	 *
+	 * @param delimiter must not be {@literal null}.
 	 * @return if the plugin should be invoked
 	 */
 	boolean supports(S delimiter);

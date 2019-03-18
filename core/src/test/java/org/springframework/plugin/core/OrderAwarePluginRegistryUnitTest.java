@@ -100,7 +100,7 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 
 	private static void assertOrder(PluginRegistry<TestPlugin, String> registry, TestPlugin... plugins) {
 
-		List<TestPlugin> result = registry.getPluginsFor(null);
+		List<TestPlugin> result = registry.getPluginsFor("delimiter");
 
 		assertThat(plugins.length, is(result.size()));
 
@@ -108,7 +108,7 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 			assertThat(result.get(i), is(plugins[i]));
 		}
 
-		assertThat(registry.getPluginFor(null), is(Optional.of(plugins[0])));
+		assertThat(registry.getPluginFor("delimiter"), is(Optional.of(plugins[0])));
 	}
 
 	private static void assertDefaultComparator(OrderAwarePluginRegistry<?, ?> registry) {

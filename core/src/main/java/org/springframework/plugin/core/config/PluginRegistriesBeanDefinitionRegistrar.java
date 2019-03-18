@@ -15,6 +15,10 @@
  */
 package org.springframework.plugin.core.config;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.support.AutowireCandidateQualifier;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -39,15 +43,24 @@ import org.springframework.util.StringUtils;
  */
 public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
-	/* 
+	private static final Logger LOG = LoggerFactory.getLogger(PluginRegistriesBeanDefinitionRegistrar.class);
+
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata, org.springframework.beans.factory.support.BeanDefinitionRegistry)
 	 */
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 
-		Class<?>[] types = (Class<?>[]) importingClassMetadata
-				.getAnnotationAttributes(EnablePluginRegistries.class.getName()).get("value");
+		Map<String, Object> annotationAttributes = importingClassMetadata
+				.getAnnotationAttributes(EnablePluginRegistries.class.getName());
+
+		if (annotationAttributes == null) {
+			LOG.info("No EnablePluginRegistries annotation found on type {}!", importingClassMetadata.getClassName());
+			return;
+		}
+
+		Class<?>[] types = (Class<?>[]) annotationAttributes.get("value");
 
 		for (Class<?> type : types) {
 
@@ -67,8 +80,10 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 			}
 
 			// Default
-			String beanName = annotation == null ? StringUtils.uncapitalize(type.getSimpleName() + "Registry")
+			String beanName = annotation == null //
+					? StringUtils.uncapitalize(type.getSimpleName() + "Registry") //
 					: annotation.value();
+
 			registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 		}
 	}

@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.lang.NonNull;
 
 /**
  * Factory to create bean lists for a given type. Exposes all beans of the configured type that can be found in the
@@ -37,6 +38,7 @@ public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T> implemen
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
+	@NonNull
 	public List<T> getObject() {
 
 		List<T> beans = new ArrayList<T>();
@@ -50,6 +52,7 @@ public class BeanListFactoryBean<T> extends AbstractTypeAwareSupport<T> implemen
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.FactoryBean#getObjectType()
 	 */
+	@NonNull
 	public Class<?> getObjectType() {
 		return List.class;
 	}

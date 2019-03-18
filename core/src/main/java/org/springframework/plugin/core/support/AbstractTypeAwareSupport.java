@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
@@ -30,6 +31,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
@@ -41,10 +44,10 @@ import org.springframework.util.Assert;
 public abstract class AbstractTypeAwareSupport<T>
 		implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent>, InitializingBean {
 
-	private ApplicationContext context;
-	private Class<T> type;
-	private BeansOfTypeTargetSource targetSource;
-	private Collection<Class<?>> exclusions;
+	private @Nullable ApplicationContext context;
+	private @Nullable Class<T> type;
+	private @Nullable BeansOfTypeTargetSource targetSource;
+	private Collection<Class<?>> exclusions = Collections.emptySet();
 
 	/*
 	 * (non-Javadoc)
@@ -80,7 +83,14 @@ public abstract class AbstractTypeAwareSupport<T>
 	@SuppressWarnings("unchecked")
 	protected List<T> getBeans() {
 
+		TargetSource targetSource = this.targetSource;
+
+		if (targetSource == null) {
+			throw new IllegalStateException("Traget source not initialized!");
+		}
+
 		ProxyFactory factory = new ProxyFactory(List.class, targetSource);
+
 		return (List<T>) factory.getProxy();
 	}
 
@@ -89,6 +99,19 @@ public abstract class AbstractTypeAwareSupport<T>
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	public void afterPropertiesSet() {
+
+		ApplicationContext context = this.context;
+
+		if (context == null) {
+			throw new IllegalStateException("ApplicationContext not set!");
+		}
+
+		Class<?> type = this.type;
+
+		if (type == null) {
+			throw new IllegalStateException("No type configured!");
+		}
+
 		this.targetSource = new BeansOfTypeTargetSource(context, type, false, exclusions);
 	}
 
@@ -98,7 +121,7 @@ public abstract class AbstractTypeAwareSupport<T>
 	 */
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
-		if (context.equals(event.getApplicationContext())) {
+		if (event.getApplicationContext().equals(context) && targetSource != null) {
 			targetSource.freeze();
 		}
 	}
@@ -119,7 +142,7 @@ public abstract class AbstractTypeAwareSupport<T>
 		private final Collection<Class<?>> exclusions;
 
 		private boolean frozen = false;
-		private Collection<Object> components;
+		private @Nullable Collection<Object> components;
 
 		/**
 		 * Creates a new {@link BeansOfTypeTargetSource} using the given {@link ListableBeanFactory} to lookup beans of the
@@ -134,11 +157,13 @@ public abstract class AbstractTypeAwareSupport<T>
 
 			Assert.notNull(context, "ListableBeanFactory must not be null!");
 			Assert.notNull(type, "Type must not be null!");
+			Assert.notNull(exclusions, "Exclusions must not be null!");
 
 			this.context = context;
 			this.type = type;
 			this.eagerInit = eagerInit;
-			this.exclusions = exclusions == null ? Collections.<Class<?>> emptySet() : exclusions;
+			this.exclusions = exclusions;
+			this.components = null;
 		}
 
 		/**
@@ -153,6 +178,7 @@ public abstract class AbstractTypeAwareSupport<T>
 		 * (non-Javadoc)
 		 * @see org.springframework.aop.TargetSource#getTargetClass()
 		 */
+		@NonNull
 		public Class<?> getTargetClass() {
 			return List.class;
 		}
@@ -169,10 +195,12 @@ public abstract class AbstractTypeAwareSupport<T>
 		 * (non-Javadoc)
 		 * @see org.springframework.aop.TargetSource#getTarget()
 		 */
+		@NonNull
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public synchronized Object getTarget() throws Exception {
 
-			Collection<Object> components = this.components == null ? getBeansOfTypeExcept(type, exclusions)
+			Collection<Object> components = this.components == null //
+					? getBeansOfTypeExcept(type, exclusions) //
 					: this.components;
 
 			if (frozen && this.components == null) {
@@ -186,22 +214,14 @@ public abstract class AbstractTypeAwareSupport<T>
 		 * (non-Javadoc)
 		 * @see org.springframework.aop.TargetSource#releaseTarget(java.lang.Object)
 		 */
-		public void releaseTarget(Object target) throws Exception {
-
-		}
+		public void releaseTarget(Object target) throws Exception {}
 
 		private Collection<Object> getBeansOfTypeExcept(Class<?> type, Collection<Class<?>> exceptions) {
 
-			List<Object> result = new ArrayList<Object>();
-
-			for (String beanName : context.getBeanNamesForType(type, false, eagerInit)) {
-				if (exceptions.contains(context.getType(beanName))) {
-					continue;
-				}
-				result.add(context.getBean(beanName));
-			}
-
-			return result;
+			return Arrays.stream(context.getBeanNamesForType(type, false, eagerInit)) //
+					.filter(it -> !exceptions.contains(context.getType(it))) //
+					.map(it -> context.getBean(it)) //
+					.collect(Collectors.toList());
 		}
 	}
 }
