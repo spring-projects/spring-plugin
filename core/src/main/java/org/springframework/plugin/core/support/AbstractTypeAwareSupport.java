@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
 /**
  * Abstract base class to implement types that need access to all beans of a given type from the
  * {@link ApplicationContext}.
- * 
+ *
  * @author Oliver Gierke
  */
 public abstract class AbstractTypeAwareSupport<T>
@@ -59,7 +59,7 @@ public abstract class AbstractTypeAwareSupport<T>
 
 	/**
 	 * Configures the type of beans to be looked up.
-	 * 
+	 *
 	 * @param type the type to set
 	 */
 	public void setType(Class<T> type) {
@@ -68,7 +68,7 @@ public abstract class AbstractTypeAwareSupport<T>
 
 	/**
 	 * Configures the types to be excluded from the lookup.
-	 * 
+	 *
 	 * @param exclusions
 	 */
 	public void setExclusions(Class<?>[] exclusions) {
@@ -77,7 +77,7 @@ public abstract class AbstractTypeAwareSupport<T>
 
 	/**
 	 * Returns all beans from the {@link ApplicationContext} that match the given type.
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -131,7 +131,7 @@ public abstract class AbstractTypeAwareSupport<T>
 	 * {@link ListableBeanFactory} the instance was set up with. Allows freezing the lookup as calls to
 	 * {@link ListableBeanFactory#getBeansOfType(Class, boolean, boolean)} are potentially expensive as the entire factory
 	 * has to be scanned for type information.
-	 * 
+	 *
 	 * @author Oliver Gierke
 	 */
 	static class BeansOfTypeTargetSource implements TargetSource {
@@ -147,10 +147,11 @@ public abstract class AbstractTypeAwareSupport<T>
 		/**
 		 * Creates a new {@link BeansOfTypeTargetSource} using the given {@link ListableBeanFactory} to lookup beans of the
 		 * given type.
-		 * 
+		 *
 		 * @param context must not be {@literal null}.
 		 * @param type must not be {@literal null}.
 		 * @param eagerInit whether to eagerly init {@link FactoryBean}s, defaults to {@literal false}.
+		 * @param exclusions which types to exclude from the lookup, must not be {@literal null}.
 		 */
 		public BeansOfTypeTargetSource(ListableBeanFactory context, Class<?> type, boolean eagerInit,
 				Collection<Class<?>> exclusions) {

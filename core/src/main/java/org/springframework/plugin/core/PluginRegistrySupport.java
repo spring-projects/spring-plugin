@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 /**
  * Base class for {@link PluginRegistry} implementations. Implements an initialization mechanism triggered on forst
  * invocation of {@link #getPlugins()}.
- * 
+ *
  * @author Oliver Gierke
  */
 public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements PluginRegistry<T, S>, Iterable<T> {
@@ -35,7 +35,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 
 	/**
 	 * Creates a new {@link PluginRegistrySupport} instance using the given plugins.
-	 * 
+	 *
 	 * @param plugins must not be {@literal null}.
 	 */
 	@SuppressWarnings("unchecked")
@@ -51,7 +51,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	 * Returns all registered plugins. Only use this method if you really need to access all plugins. For distinguished
 	 * access to certain plugins favour accessor methods like {link #getPluginFor} over this one. This method should only
 	 * be used for testing purposes to check registry configuration.
-	 * 
+	 *
 	 * @return all plugins of the registry
 	 */
 	public List<T> getPlugins() {
@@ -67,7 +67,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	/**
 	 * Callback to initialize the plugin {@link List}. Will create a defensive copy of the {@link List} to potentially
 	 * unwrap a {@link List} proxy. Will filter {@literal null} values from the source list as well.
-	 * 
+	 *
 	 * @param plugins must not be {@literal null}.
 	 * @return
 	 */
@@ -80,7 +80,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 				.collect(Collectors.toList());
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
 	 */

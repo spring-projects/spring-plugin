@@ -130,7 +130,6 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		 * @see org.springframework.plugin.core.Plugin#supports(java.lang.Object)
 		 */
 		public boolean supports(String delimiter) {
-
 			return true;
 		}
 	}
@@ -144,7 +143,6 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 		 * @see org.springframework.plugin.core.Plugin#supports(java.lang.Object)
 		 */
 		public boolean supports(String delimiter) {
-
 			return true;
 		}
 	}

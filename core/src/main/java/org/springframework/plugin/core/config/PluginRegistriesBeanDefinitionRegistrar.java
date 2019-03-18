@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
  * {@link ImportBeanDefinitionRegistrar} to register {@link PluginRegistryFactoryBean} instances for type listed in
  * {@link EnablePluginRegistries}. Picks up {@link Qualifier} annotations used on the plugin interface and forwards them
  * to the bean definition for the factory.
- * 
+ *
  * @author Oliver Gierke
  */
 public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
@@ -90,7 +90,7 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 
 	/**
 	 * Returns the target type of the {@link PluginRegistry} for the given plugin type.
-	 * 
+	 *
 	 * @param pluginType must not be {@literal null}.
 	 * @return
 	 */
