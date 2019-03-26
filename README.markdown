@@ -138,8 +138,8 @@ Actually this already serves a lot of requirements we listed in [Section “Cont
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:plugin="http://www.springframework.org/schema/plugin"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/plugin http://www.springframework.org/schema/plugin/spring-plugin.xsd">
+  xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/plugin https://www.springframework.org/schema/plugin/spring-plugin.xsd">
 
   <import resource="classpath*:com/acme/**/plugins.xml" />
 
@@ -239,7 +239,7 @@ This configuration snippet will register a `OrderAwarePluginRegistry` for `MyPlu
 
 Declaring plugin beans sometimes it is necessary to preserve a certain order of plugins. Suppose you have a plugin host that already defines one plugin that shall always be executed after all plugins declared by extensions. Actually the Spring container typically returns beans in the order they were declared, so that you could import you wildcarded config files right before declaring the default plugin. Unfortunately the order of the beans is not contracted to be preserved for the Spring container. Thus we need a different solution.
 
-Spring provides two ways to order beans. First, you can implement `Ordered` interface and implement `getOrder` to place a plugin at a certain point in the list. Secondly you can user the `@Order` annotation. For more information on ordering capabilities of Spring see the [section on this topic in the Spring reference documentation](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/core/Ordered.html).
+Spring provides two ways to order beans. First, you can implement `Ordered` interface and implement `getOrder` to place a plugin at a certain point in the list. Secondly you can user the `@Order` annotation. For more information on ordering capabilities of Spring see the [section on this topic in the Spring reference documentation](https://docs.spring.io/spring/docs/3.1.x/javadoc-api/org/springframework/core/Ordered.html).
 
 Using the Spring Plugin namespace you will get a `PluginRegistry` instance that is capable of preserving the order defined by the mentioned means. Using Spring Plugin
 programmatically use `OrderAwarePluginRegistry`.
@@ -277,7 +277,7 @@ The `MetadataProvider` interface is to be used in application plugin interfaces 
 
 OSGi
   
-  * Open Services Gateway Initiative - a fully fledged plugin runtime environment on top of the Java VM - [http://en.wikipedia.org/wiki/OSGi](http://en.wikipedia.org/wiki/OSGi).
+  * Open Services Gateway Initiative - a fully fledged plugin runtime environment on top of the Java VM - [https://en.wikipedia.org/wiki/OSGi](https://en.wikipedia.org/wiki/OSGi).
 
 ### X
 
