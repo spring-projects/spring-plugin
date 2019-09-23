@@ -12,7 +12,7 @@
 		<name>Pivotal Software, Inc.</name>
 		<url>https://www.spring.io</url>
 	</organization>
-	<inceptionYear>2008-2017</inceptionYear>
+	<inceptionYear>2008-2019</inceptionYear>
 	<url>https://github.com/spring-projects/spring-plugin</url>
 
 	<licenses>
@@ -52,9 +52,9 @@
 
 	<developers>
 		<developer>
-			<id>gierke</id>
-			<name>Oliver Gierke</name>
-			<email>ogierke@pivotal.io</email>
+			<id>drotbohm</id>
+			<name>Oliver Drotbohm</name>
+			<email>odrotbohm@pivotal.io</email>
 			<organization>Pivotal</organization>
 			<organizationUrl>https://www.pivotal.io</organizationUrl>
 			<roles>
