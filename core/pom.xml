@@ -17,6 +17,20 @@
 		<java-module-name>spring.plugin.core</java-module-name>
 	</properties>
 
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>../src/main/resources</directory>
+				<filtering>true</filtering>
+				<targetPath>META-INF</targetPath>
+			</resource>
+		</resources>
+	</build>
+
 	<dependencies>
 
 		<dependency>
