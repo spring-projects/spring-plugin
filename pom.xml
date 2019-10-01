@@ -20,7 +20,7 @@
 			<name>Apache License, Version 2.0</name>
 			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 			<comments>
-			Copyright 2010 the original author or authors.
+			Copyright 2010-2019 the original author or authors.
 
 			Licensed under the Apache License, Version 2.0 (the "License");
 			you may not use this file except in compliance with the License.
@@ -65,10 +65,11 @@
 	</developers>
 
 	<profiles>
+
 		<profile>
 			<id>spring5-next</id>
 			<properties>
-				<spring.version>5.2.0.BUILD-SNAPSHOT</spring.version>
+				<spring.version>5.2.1.BUILD-SNAPSHOT</spring.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -77,6 +78,155 @@
 				</repository>
 			</repositories>
 		</profile>
+
+		<profile>
+			<!-- Profile to be run on the CI server, JARs JavaDocs -->
+			<id>ci</id>
+
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>create-javadoc-jar</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>snapshot</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jfrog.buildinfo</groupId>
+						<artifactId>artifactory-maven-plugin</artifactId>
+						<version>2.6.1</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>build-info</id>
+								<goals>
+									<goal>publish</goal>
+								</goals>
+								<configuration>
+									<buildInfo>
+										<buildUrl>{{BUILD_URL}}</buildUrl>
+									</buildInfo>
+									<deployProperties>
+										<zip.name>spring-plugin</zip.name>
+										<zip.displayname>spring-plugin</zip.displayname>
+										<zip.deployed>false</zip.deployed>
+										<archives>*:*:*:*@zip</archives>
+									</deployProperties>
+									<publisher>
+										<contextUrl>https://repo.spring.io</contextUrl>
+										<username>{{ARTIFACTORY_USR}}</username>
+										<password>{{ARTIFACTORY_PSW}}</password>
+										<repoKey>libs-snapshot-local</repoKey>
+										<snapshotRepoKey>libs-snapshot-local</snapshotRepoKey>
+									</publisher>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>milestone</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jfrog.buildinfo</groupId>
+						<artifactId>artifactory-maven-plugin</artifactId>
+						<version>2.6.1</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>build-info</id>
+								<goals>
+									<goal>publish</goal>
+								</goals>
+								<configuration>
+									<buildInfo>
+										<buildUrl>{{BUILD_URL}}</buildUrl>
+									</buildInfo>
+									<deployProperties>
+										<zip.name>spring-plugin</zip.name>
+										<zip.displayname>spring-plugin</zip.displayname>
+										<zip.deployed>false</zip.deployed>
+										<archives>*:*:*:*@zip</archives>
+									</deployProperties>
+									<publisher>
+										<contextUrl>https://repo.spring.io</contextUrl>
+										<username>{{ARTIFACTORY_USR}}</username>
+										<password>{{ARTIFACTORY_PSW}}</password>
+										<repoKey>libs-milestone-local</repoKey>
+										<snapshotRepoKey>libs-milestone-local</snapshotRepoKey>
+									</publisher>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>release</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jfrog.buildinfo</groupId>
+						<artifactId>artifactory-maven-plugin</artifactId>
+						<version>2.6.1</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>build-info</id>
+								<goals>
+									<goal>publish</goal>
+								</goals>
+								<configuration>
+									<buildInfo>
+										<buildUrl>{{BUILD_URL}}</buildUrl>
+									</buildInfo>
+									<deployProperties>
+										<zip.name>spring-plugin</zip.name>
+										<zip.displayname>spring-plugin</zip.displayname>
+										<zip.deployed>false</zip.deployed>
+										<archives>*:*:*:*@zip</archives>
+									</deployProperties>
+									<publisher>
+										<contextUrl>https://repo.spring.io</contextUrl>
+										<username>{{ARTIFACTORY_USR}}</username>
+										<password>{{ARTIFACTORY_PSW}}</password>
+										<repoKey>libs-release-local</repoKey>
+										<snapshotRepoKey>libs-release-local</snapshotRepoKey>
+									</publisher>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 	<dependencies>
