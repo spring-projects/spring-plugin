@@ -150,36 +150,6 @@ pipeline {
 				}
 			}
 		}
-		stage('Release documentation') {
-			when {
-				anyOf {
-					branch '2.0.x'
-					branch 'release-2.0'
-				}
-			}
-			agent {
-				docker {
-					image 'adoptopenjdk/openjdk8:latest'
-					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-				}
-			}
-			options { timeout(time: 20, unit: 'MINUTES') }
-
-			environment {
-				ARTIFACTORY = credentials('02bd1690-b54f-4c9f-819d-a77cb7a9822c')
-			}
-
-			steps {
-				script {
-					sh 'MAVEN_OPTS="-Duser.name=jenkins -Duser.home=/tmp/jenkins-home" ./mvnw -Pci,distribute ' +
-							'-Dartifactory.server=https://repo.spring.io ' +
-							"-Dartifactory.username=${ARTIFACTORY_USR} " +
-							"-Dartifactory.password=${ARTIFACTORY_PSW} " +
-							"-Dartifactory.distribution-repository=temp-private-local " +
-							'-Dmaven.test.skip=true deploy -B'
-				}
-			}
-		}
 		stage('Promote to Bintray') {
 			when {
 				branch 'release'
