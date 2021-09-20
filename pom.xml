@@ -50,7 +50,7 @@
 		<junit.version>5.8.0</junit.version>
 		<logback.version>1.2.6</logback.version>
 		<mockito.version>3.12.4</mockito.version>
-		<spring.version>5.3.10</spring.version>
+		<spring.version>6.0.0-SNAPSHOT</spring.version>
 		<slf4j.version>1.7.32</slf4j.version>
 
 		<java-module-name>spring.plugin</java-module-name>
@@ -73,9 +73,9 @@
 	<profiles>
 
 		<profile>
-			<id>spring5-next</id>
+			<id>spring-next</id>
 			<properties>
-				<spring.version>5.2.1.BUILD-SNAPSHOT</spring.version>
+				<spring.version>6.0.0-SNAPSHOT</spring.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -381,10 +381,20 @@
 		<url>https://github.com/spring-projects/spring-plugin/issues</url>
 	</issueManagement>
 
+	<repositories>
+		<repository>
+			<id>spring-libs-snapshot</id>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
-			<id>spring-plugins-release</id>
-			<url>https://repo.spring.io/plugins-release</url>
+			<id>spring-plugin-release</id>
+			<url>https://repo.spring.io/plugin-release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
