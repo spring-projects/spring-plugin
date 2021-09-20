@@ -11,10 +11,10 @@ pipeline {
 	}
 
 	stages {
-		stage("test: baseline (jdk8)") {
+		stage("test: baseline (JDK 17)") {
 			agent {
 				docker {
-					image 'adoptopenjdk/openjdk8:latest'
+					image 'openjdk:17'
 					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
 				}
 			}
@@ -25,80 +25,10 @@ pipeline {
 			}
 		}
 
-		stage("Test other configurations") {
-			parallel {
-				stage("test: baseline (jdk11)") {
-					agent {
-						docker {
-							image 'adoptopenjdk/openjdk11:latest'
-							args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-						}
-					}
-					options { timeout(time: 30, unit: 'MINUTES') }
-					steps {
-						sh 'rm -rf ?'
-						sh 'PROFILE=none ci/test.sh'
-					}
-				}
-				stage("test: baseline (jdk13)") {
-					agent {
-						docker {
-							image 'adoptopenjdk/openjdk13:latest'
-							args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-						}
-					}
-					options { timeout(time: 30, unit: 'MINUTES') }
-					steps {
-						sh 'rm -rf ?'
-						sh 'PROFILE=none ci/test.sh'
-					}
-				}
-				stage("test: spring-next (jdk8)") {
-					agent {
-						docker {
-							image 'adoptopenjdk/openjdk8:latest'
-							args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-						}
-					}
-					options { timeout(time: 30, unit: 'MINUTES') }
-					steps {
-						sh 'rm -rf ?'
-						sh 'PROFILE=spring5-next ci/test.sh'
-					}
-				}
-				stage("test: spring-next (jdk11)") {
-					agent {
-						docker {
-							image 'adoptopenjdk/openjdk11:latest'
-							args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-						}
-					}
-					options { timeout(time: 30, unit: 'MINUTES') }
-					steps {
-						sh 'rm -rf ?'
-						sh 'PROFILE=spring5-next ci/test.sh'
-					}
-				}
-				stage("test: spring-next (jdk13)") {
-					agent {
-						docker {
-							image 'adoptopenjdk/openjdk13:latest'
-							args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-						}
-					}
-					options { timeout(time: 30, unit: 'MINUTES') }
-					steps {
-						sh 'rm -rf ?'
-						sh 'PROFILE=spring5-next ci/test.sh'
-					}
-				}
-			}
-		}
-
 		stage('Deploy to Artifactory') {
 			agent {
 				docker {
-					image 'adoptopenjdk/openjdk8:latest'
+					image 'openjdk:17'
 					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
 				}
 			}
@@ -156,7 +86,7 @@ pipeline {
 			}
 			agent {
 				docker {
-					image 'adoptopenjdk/openjdk8:latest'
+					image 'openjdk:17'
 					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
 				}
 			}
@@ -193,7 +123,7 @@ pipeline {
 			}
 			agent {
 				docker {
-					image 'adoptopenjdk/openjdk8:latest'
+					image 'openjdk:17'
 					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
 				}
 			}
