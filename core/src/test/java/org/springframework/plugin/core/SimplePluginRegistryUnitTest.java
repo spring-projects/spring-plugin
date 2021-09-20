@@ -15,37 +15,32 @@
  */
 package org.springframework.plugin.core;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for {@link SimplePluginRegistry}.
  *
  * @author Oliver Gierke
  */
-public class SimplePluginRegistryUnitTest {
+class SimplePluginRegistryUnitTest {
 
 	SamplePlugin plugin;
 
 	SimplePluginRegistry<SamplePlugin, String> registry;
 
-	public @Rule ExpectedException o_O = ExpectedException.none();
-
 	/**
 	 * Initializes a {@code PluginRegistry} and equips it with an {@code EmailNotificationProvider}.
 	 */
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 
 		plugin = new SamplePluginImplementation();
 		registry = SimplePluginRegistry.empty();
@@ -57,117 +52,111 @@ public class SimplePluginRegistryUnitTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void assertRegistryInitialized() throws Exception {
+	void assertRegistryInitialized() throws Exception {
 
 		registry = SimplePluginRegistry.of(plugin);
 
-		assertThat(registry.countPlugins(), is(1));
-		assertTrue(registry.contains(plugin));
+		assertThat(registry.countPlugins()).isEqualTo(1);
+		assertThat(registry.contains(plugin)).isTrue();
 	}
 
 	/**
 	 * Asserts asking for a plugin with the {@code PluginMetadata} provided by the {@link EmailNotificationProvider}.
 	 */
 	@Test
-	public void assertFindsEmailNotificationProvider() {
+	void assertFindsEmailNotificationProvider() {
 
 		registry = SimplePluginRegistry.of(plugin);
 
 		String delimiter = "FOO";
 
 		List<SamplePlugin> plugins = registry.getPluginsFor(delimiter);
-		assertThat(plugins, is(notNullValue()));
-		assertThat(plugins.size(), is(1));
+		assertThat(plugins).isNotNull();
+		assertThat(plugins).hasSize(1);
 
 		SamplePlugin provider = plugins.get(0);
-		assertThat(provider, is(instanceOf(SamplePluginImplementation.class)));
+		assertThat(provider).isInstanceOf(SamplePluginImplementation.class);
 	}
 
 	/**
 	 * Expects the given exception to be thrown if no {@link Plugin} found.
 	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void throwsExceptionIfNoPluginFound() {
+	@Test
+	void throwsExceptionIfNoPluginFound() {
 
-		registry.getPluginFor("BAR", () -> new IllegalArgumentException());
+		assertThatIllegalArgumentException()
+				.isThrownBy(() -> registry.getPluginFor("BAR", () -> new IllegalArgumentException()));
 	}
 
 	/**
 	 * Expects the given exception to be thrown if no {@link Plugin}s found.
 	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void throwsExceptionIfNoPluginsFound() {
+	@Test
+	void throwsExceptionIfNoPluginsFound() {
 
-		registry.getPluginsFor("BAR", () -> new IllegalArgumentException());
+		assertThatIllegalArgumentException()
+				.isThrownBy(() -> registry.getPluginsFor("BAR", () -> new IllegalArgumentException()));
 	}
 
 	/**
 	 * Expect the defualt plugin to be returned if none found.
 	 */
 	@Test
-	public void returnsDefaultIfNoneFound() {
+	void returnsDefaultIfNoneFound() {
 
 		SamplePlugin defaultPlugin = new SamplePluginImplementation();
 
-		assertThat(registry.getPluginOrDefaultFor("BAR", defaultPlugin), is(defaultPlugin));
+		assertThat(registry.getPluginOrDefaultFor("BAR", defaultPlugin)).isEqualTo(defaultPlugin);
 	}
 
 	/**
 	 * Expect the given default plugins to be returned if none found.
 	 */
 	@Test
-	public void returnsDefaultsIfNoneFound() {
+	void returnsDefaultsIfNoneFound() {
 
 		List<? extends SamplePlugin> defaultPlugins = Arrays.asList(new SamplePluginImplementation());
 
 		List<SamplePlugin> result = registry.getPluginsFor("BAR", defaultPlugins);
-		assertTrue(result.containsAll(defaultPlugins));
+		assertThat(result).containsAll(defaultPlugins);
 	}
 
 	@Test
-	public void handlesAddingNullPluginsCorrecty() throws Exception {
+	void handlesAddingNullPluginsCorrecty() throws Exception {
 
 		List<SamplePlugin> plugins = new ArrayList<SamplePlugin>();
 		plugins.add(null);
 
 		registry = SimplePluginRegistry.of(plugins);
 
-		assertThat(registry.countPlugins(), is(0));
+		assertThat(registry.countPlugins()).isEqualTo(0);
 	}
 
-	/**
-	 * @see #19
-	 */
-	@Test(expected = IllegalStateException.class)
-	public void throwsExceptionFromSupplier() throws Exception {
+	@Test // #19
+	void throwsExceptionFromSupplier() throws Exception {
 
 		registry = SimplePluginRegistry.empty();
 
-		registry.getPluginFor("FOO", () -> new IllegalStateException());
+		assertThatIllegalStateException()
+				.isThrownBy(() -> registry.getPluginFor("FOO", () -> new IllegalStateException()));
 	}
 
-	/**
-	 * @see #41
-	 */
-	public void throwsExceptionIfRequiredPluginIsNotFound() {
+	@Test // #41
+	void throwsExceptionIfRequiredPluginIsNotFound() {
 
 		registry = SimplePluginRegistry.empty();
 
-		o_O.expect(IllegalArgumentException.class);
-
-		registry.getRequiredPluginFor("FOO");
+		assertThatIllegalArgumentException()
+				.isThrownBy(() -> registry.getRequiredPluginFor("FOO"));
 	}
 
-	/**
-	 * @see #41
-	 */
-	public void throwsExceptionWithMessafeIfRequiredPluginIsNotFound() {
+	@Test // #41
+	void throwsExceptionWithMessafeIfRequiredPluginIsNotFound() {
 
 		registry = SimplePluginRegistry.of(Collections.emptyList());
 
-		o_O.expect(IllegalArgumentException.class);
-		o_O.expectMessage("message");
-
-		registry.getRequiredPluginFor("FOO", () -> "message");
+		assertThatIllegalArgumentException()
+				.isThrownBy(() -> registry.getRequiredPluginFor("FOO", () -> "message"))
+				.withMessage("message");
 	}
 }

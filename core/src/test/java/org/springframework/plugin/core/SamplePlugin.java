@@ -15,12 +15,9 @@
  */
 package org.springframework.plugin.core;
 
-import org.springframework.plugin.core.Plugin;
-
 /**
  * @author Oliver Gierke
  */
 public interface SamplePlugin extends Plugin<String> {
-
 	void pluginMethod();
 }

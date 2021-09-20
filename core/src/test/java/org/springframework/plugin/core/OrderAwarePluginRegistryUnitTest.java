@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2019 the original author or authors.
+ * Copyright 2008-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,14 @@
  */
 package org.springframework.plugin.core;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.plugin.core.PluginRegistry.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,14 +33,14 @@ import org.springframework.test.util.ReflectionTestUtils;
  *
  * @author Oliver Gierke
  */
-public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTest {
+class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTest {
 
 	TestPlugin firstPlugin;
 	TestPlugin secondPlugin;
 
 	@Override
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 
 		super.setUp();
 
@@ -51,14 +49,14 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 	}
 
 	@Test
-	public void honorsOrderOnAddPlugins() throws Exception {
+	void honorsOrderOnAddPlugins() throws Exception {
 
 		PluginRegistry<TestPlugin, String> registry = of(firstPlugin, secondPlugin);
 		assertOrder(registry, secondPlugin, firstPlugin);
 	}
 
 	@Test
-	public void createsRevertedRegistryCorrectly() throws Exception {
+	void createsRevertedRegistryCorrectly() throws Exception {
 
 		OrderAwarePluginRegistry<TestPlugin, String> registry = OrderAwarePluginRegistry.of(firstPlugin, secondPlugin);
 		PluginRegistry<TestPlugin, String> reverse = registry.reverse();
@@ -71,7 +69,7 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 	 * @see #1
 	 */
 	@Test
-	public void considersJdkProxiedOrderedImplementation() {
+	void considersJdkProxiedOrderedImplementation() {
 
 		ThirdImplementation plugin = new ThirdImplementation();
 		TestPlugin thirdPlugin = (TestPlugin) new ProxyFactory(plugin).getProxy();
@@ -84,37 +82,37 @@ public class OrderAwarePluginRegistryUnitTest extends SimplePluginRegistryUnitTe
 	}
 
 	@Test
-	public void defaultSetupUsesDefaultComparator() {
+	void defaultSetupUsesDefaultComparator() {
 		assertDefaultComparator(OrderAwarePluginRegistry.empty());
 	}
 
 	@Test
-	public void defaultSetupUsesDefaultReverseComparator() {
+	void defaultSetupUsesDefaultReverseComparator() {
 
 		OrderAwarePluginRegistry<Plugin<Object>, Object> registry = OrderAwarePluginRegistry
 				.ofReverse(Collections.emptyList());
 		Object field = ReflectionTestUtils.getField(registry, "comparator");
 
-		assertThat(field, is(ReflectionTestUtils.getField(registry, "DEFAULT_REVERSE_COMPARATOR")));
+		assertThat(field).isEqualTo(ReflectionTestUtils.getField(registry, "DEFAULT_REVERSE_COMPARATOR"));
 	}
 
 	private static void assertOrder(PluginRegistry<TestPlugin, String> registry, TestPlugin... plugins) {
 
 		List<TestPlugin> result = registry.getPluginsFor("delimiter");
 
-		assertThat(plugins.length, is(result.size()));
+		assertThat(plugins.length).isEqualTo(result.size());
 
 		for (int i = 0; i < plugins.length; i++) {
-			assertThat(result.get(i), is(plugins[i]));
+			assertThat(result.get(i)).isEqualTo(plugins[i]);
 		}
 
-		assertThat(registry.getPluginFor("delimiter"), is(Optional.of(plugins[0])));
+		assertThat(registry.getPluginFor("delimiter")).hasValue(plugins[0]);
 	}
 
 	private static void assertDefaultComparator(OrderAwarePluginRegistry<?, ?> registry) {
 
 		Object field = ReflectionTestUtils.getField(registry, "comparator");
-		assertThat(field, is(ReflectionTestUtils.getField(registry, "DEFAULT_COMPARATOR")));
+		assertThat(field).isEqualTo(ReflectionTestUtils.getField(registry, "DEFAULT_COMPARATOR"));
 	}
 
 	private static interface TestPlugin extends Plugin<String> {

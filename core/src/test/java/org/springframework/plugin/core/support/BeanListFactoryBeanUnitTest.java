@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,34 +15,34 @@
  */
 package org.springframework.plugin.core.support;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 
 /**
  * Unit test for {@link BeanListFactoryBean}.
- * 
+ *
  * @author Oliver Gierke
  */
-@RunWith(MockitoJUnitRunner.class)
-public class BeanListFactoryBeanUnitTest {
+@ExtendWith(MockitoExtension.class)
+class BeanListFactoryBeanUnitTest {
 
 	BeanListFactoryBean<Ordered> factory;
 
 	@Mock ApplicationContext context;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 
 		factory = new BeanListFactoryBean<Ordered>();
 		factory.setApplicationContext(context);
@@ -52,7 +52,7 @@ public class BeanListFactoryBeanUnitTest {
 
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void regardsOrderOfBeans() throws Exception {
+	void regardsOrderOfBeans() throws Exception {
 
 		// They shall be switched in the result.
 		Ordered first = () -> 5;
@@ -64,28 +64,20 @@ public class BeanListFactoryBeanUnitTest {
 		when(context.getBean("second")).thenReturn(second);
 
 		Object result = factory.getObject();
-		assertTrue(result instanceof List<?>);
+		assertThat(result).isInstanceOfSatisfying(List.class, it -> {
 
-		List<Ordered> members = type(result);
-
-		assertEquals(0, members.indexOf(second));
-		assertEquals(1, members.indexOf(first));
+			assertThat(it.indexOf(second)).isEqualByComparingTo(0);
+			assertThat(it.indexOf(first)).isEqualTo(1);
+		});
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void returnsEmptyListIfNoBeansFound() throws Exception {
 
 		when(context.getBeanNamesForType(Ordered.class, false, false)).thenReturn(new String[0]);
 
 		Object result = factory.getObject();
-		assertTrue(result instanceof List<?>);
-
-		List<Ordered> members = type(result);
-		assertTrue(members.isEmpty());
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> List<T> type(Object list) {
-		return (List<T>) list;
+		assertThat(result).isInstanceOfSatisfying(List.class, it -> assertThat(it).isEmpty());
 	}
 }

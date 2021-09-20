@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 the original author or authors.
+ * Copyright 2012-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package org.springframework.plugin.core.config;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -29,16 +28,16 @@ import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.plugin.core.SamplePlugin;
 import org.springframework.plugin.core.SamplePluginImplementation;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Integration tests for {@link EnablePluginRegistries}.
- * 
+ *
  * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class EnablePluginRegistriesIntegrationTest {
+@ExtendWith(SpringExtension.class)
+class EnablePluginRegistriesIntegrationTest {
 
 	@Configuration
 	@EnablePluginRegistries({ SamplePlugin.class, AnotherPlugin.class })
@@ -53,8 +52,8 @@ public class EnablePluginRegistriesIntegrationTest {
 	@Autowired PluginRegistry<SamplePlugin, String> registry;
 
 	@Test
-	public void registersPluginRegistries() {
-		assertThat(registry, is(notNullValue()));
+	void registersPluginRegistries() {
+		assertThat(registry).isNotNull();
 	}
 
 	@Qualifier("myQualifier")

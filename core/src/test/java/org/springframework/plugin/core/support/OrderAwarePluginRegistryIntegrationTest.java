@@ -1,13 +1,11 @@
 package org.springframework.plugin.core.support;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import org.hamcrest.Matchers;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -18,16 +16,16 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Integration test for {@link OrderAwarePluginRegistry}.
- * 
+ *
  * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration
-public class OrderAwarePluginRegistryIntegrationTest {
+class OrderAwarePluginRegistryIntegrationTest {
 
 	@Configuration
 	@EnablePluginRegistries(TestPlugin.class)
@@ -49,34 +47,29 @@ public class OrderAwarePluginRegistryIntegrationTest {
 		}
 	}
 
-	@Autowired
-	ApplicationContext context;
+	@Autowired ApplicationContext context;
 
-	@Autowired
-	FirstImplementation first;
-	@Autowired
-	SecondImplementation second;
-	@Autowired
-	ThirdImplementation third;
+	@Autowired FirstImplementation first;
+	@Autowired SecondImplementation second;
+	@Autowired ThirdImplementation third;
 
-	@Autowired
-	OrderAwarePluginRegistry<TestPlugin, String> registry;
+	@Autowired OrderAwarePluginRegistry<TestPlugin, String> registry;
 
 	@Test
-	public void considersJdkProxiedOrderedImplementation() {
+	void considersJdkProxiedOrderedImplementation() {
 
 		List<TestPlugin> plugins = registry.getPlugins();
 
-		assertThat(plugins, Matchers.hasSize(3));
-		assertThat(plugins.get(0), is((TestPlugin) second));
-		assertThat(plugins.get(1), is((TestPlugin) third));
-		assertThat(plugins.get(2), is((TestPlugin) first));
+		assertThat(plugins).hasSize(3);
+		assertThat(plugins.get(0)).isEqualTo(second);
+		assertThat(plugins.get(1)).isEqualTo(third);
+		assertThat(plugins.get(2)).isEqualTo(first);
 
 		plugins = registry.reverse().getPlugins();
 
-		assertThat(plugins.get(2), is((TestPlugin) second));
-		assertThat(plugins.get(1), is((TestPlugin) third));
-		assertThat(plugins.get(0), is((TestPlugin) first));
+		assertThat(plugins.get(2)).isEqualTo(second);
+		assertThat(plugins.get(1)).isEqualTo(third);
+		assertThat(plugins.get(0)).isEqualTo(first);
 	}
 
 	private static interface TestPlugin extends Plugin<String> {
