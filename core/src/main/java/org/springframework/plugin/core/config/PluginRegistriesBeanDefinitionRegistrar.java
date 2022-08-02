@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.support.AutowireCandidateQualifier;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -64,11 +63,10 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 
 		for (Class<?> type : types) {
 
-			BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(PluginRegistryFactoryBean.class);
-			builder.addPropertyValue("type", type);
-
-			RootBeanDefinition beanDefinition = (RootBeanDefinition) builder.getBeanDefinition();
-			beanDefinition.setTargetType(getTargetType(type));
+			RootBeanDefinition beanDefinition = new RootBeanDefinition(getTargetType(type, PluginRegistryFactoryBean.class));
+			beanDefinition.setTargetType(getTargetType(type, OrderAwarePluginRegistry.class));
+			beanDefinition.setBeanClass(PluginRegistryFactoryBean.class);
+			beanDefinition.getPropertyValues().addPropertyValue("type", type);
 
 			Qualifier annotation = type.getAnnotation(Qualifier.class);
 
@@ -84,7 +82,7 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 					? StringUtils.uncapitalize(type.getSimpleName() + "Registry") //
 					: annotation.value();
 
-			registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
+			registry.registerBeanDefinition(beanName, beanDefinition);
 		}
 	}
 
@@ -94,13 +92,13 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 	 * @param pluginType must not be {@literal null}.
 	 * @return
 	 */
-	private static ResolvableType getTargetType(Class<?> pluginClass) {
+	private static ResolvableType getTargetType(Class<?> pluginClass, Class<?> wrapper) {
 
 		Assert.notNull(pluginClass, "Plugin type must not be null!");
 
 		ResolvableType delimiterType = ResolvableType.forClass(Plugin.class, pluginClass).getGeneric(0);
 		ResolvableType pluginType = ResolvableType.forClass(pluginClass);
 
-		return ResolvableType.forClassWithGenerics(OrderAwarePluginRegistry.class, pluginType, delimiterType);
+		return ResolvableType.forClassWithGenerics(wrapper, pluginType, delimiterType);
 	}
 }
