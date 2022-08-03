@@ -23,8 +23,6 @@ import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.core.DecoratingProxy;
 import org.springframework.plugin.core.support.AbstractTypeAwareSupport;
-import org.springframework.plugin.core.support.PluginRegistryFactoryBean;
-import org.springframework.util.ReflectionUtils;
 
 /**
  * Registers proxy runtime hints to make sure {@link AbstractTypeAwareSupport} can create a {@link List} proxy as
@@ -40,11 +38,7 @@ class PluginRegistryRuntimeHints implements RuntimeHintsRegistrar {
 	 * @see org.springframework.aot.hint.RuntimeHintsRegistrar#registerHints(org.springframework.aot.hint.RuntimeHints, java.lang.ClassLoader)
 	 */
 	@Override
-	@SuppressWarnings("null")
 	public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-
-		hints.reflection() //
-				.registerMethod(ReflectionUtils.findMethod(PluginRegistryFactoryBean.class, "setType", Class.class));
 
 		hints.proxies() //
 				.registerJdkProxy(List.class, SpringProxy.class, Advised.class, DecoratingProxy.class);
