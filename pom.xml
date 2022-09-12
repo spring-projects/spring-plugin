@@ -245,6 +245,9 @@
 	</dependencies>
 
 	<build>
+
+		<defaultGoal>verify</defaultGoal>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
