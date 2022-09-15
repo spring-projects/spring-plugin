@@ -50,7 +50,7 @@
 		<junit.version>5.8.0</junit.version>
 		<logback.version>1.2.6</logback.version>
 		<mockito.version>3.12.4</mockito.version>
-		<spring.version>6.0.0-SNAPSHOT</spring.version>
+		<spring.version>6.0.0-M6</spring.version>
 		<slf4j.version>1.7.32</slf4j.version>
 
 		<artifactory-maven-plugin.version>3.4.0</artifactory-maven-plugin.version>
@@ -368,11 +368,11 @@
 
 	<repositories>
 		<repository>
-			<id>spring-snapshot</id>
-			<url>https://repo.spring.io/snapshot</url>
-			<releases>
+			<id>spring-milestone</id>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
 				<enabled>false</enabled>
-			</releases>
+			</snapshots>
 		</repository>
 	</repositories>
 
