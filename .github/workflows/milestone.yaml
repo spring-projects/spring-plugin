@@ -29,6 +29,3 @@ jobs:
         ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
         ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
       run: ./mvnw -B clean deploy -Pci,artifactory
-
-    - name: Setup Graphviz
-      uses: ts-graphviz/setup-graphviz@v1
