@@ -5,7 +5,7 @@
 	<artifactId>spring-plugin</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring Plugin</name>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0-M2</version>
 	<description>Simple plugin infrastructure</description>
 
 	<organization>
@@ -367,7 +367,8 @@
 		<url>https://github.com/spring-projects/spring-plugin</url>
 		<connection>scm:git:git://github.com/spring-projects/spring-plugin.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:spring-projects/spring-plugin.git</developerConnection>
-	</scm>
+	  <tag>3.0.0-M2</tag>
+  </scm>
 
 	<ciManagement>
 		<system>Bamboo</system>
