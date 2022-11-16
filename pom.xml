@@ -50,7 +50,7 @@
 		<junit.version>5.9.1</junit.version>
 		<logback.version>1.4.4</logback.version>
 		<mockito.version>4.9.0</mockito.version>
-		<spring.version>6.0.0-RC4</spring.version>
+		<spring.version>6.0.0</spring.version>
 		<slf4j.version>2.0.3</slf4j.version>
 
 		<artifactory-maven-plugin.version>3.4.0</artifactory-maven-plugin.version>
@@ -77,12 +77,12 @@
 		<profile>
 			<id>spring-next</id>
 			<properties>
-				<spring.version>6.0.0-SNAPSHOT</spring.version>
+				<spring.version>6.0.1-SNAPSHOT</spring.version>
 			</properties>
 			<repositories>
 				<repository>
-					<id>spring-libs-snapshot</id>
-					<url>https://repo.spring.io/libs-snapshot</url>
+					<id>spring-snapshots</id>
+					<url>https://repo.spring.io/snapshot</url>
 				</repository>
 			</repositories>
 		</profile>
@@ -347,8 +347,8 @@
 		<url>https://github.com/spring-projects/spring-plugin</url>
 		<connection>scm:git:git://github.com/spring-projects/spring-plugin.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:spring-projects/spring-plugin.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<ciManagement>
 		<system>Bamboo</system>
@@ -359,25 +359,5 @@
 		<system>Github</system>
 		<url>https://github.com/spring-projects/spring-plugin/issues</url>
 	</issueManagement>
-
-	<repositories>
-		<repository>
-			<id>spring-milestone</id>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-plugin-release</id>
-			<url>https://repo.spring.io/plugin-release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 </project>
