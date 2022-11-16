@@ -47,7 +47,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<assertj.version>3.23.1</assertj.version>
-		<junit.version>5.9.0</junit.version>
+		<junit.version>5.9.1</junit.version>
 		<logback.version>1.4.4</logback.version>
 		<mockito.version>4.9.0</mockito.version>
 		<spring.version>6.0.0-RC4</spring.version>
@@ -197,7 +197,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.8.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
