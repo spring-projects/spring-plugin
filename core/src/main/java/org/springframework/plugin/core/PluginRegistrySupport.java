@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import org.springframework.util.Assert;
 
 /**
- * Base class for {@link PluginRegistry} implementations. Implements an initialization mechanism triggered on forst
+ * Base class for {@link PluginRegistry} implementations. Implements an initialization mechanism triggered on first
  * invocation of {@link #getPlugins()}.
  *
  * @author Oliver Gierke
