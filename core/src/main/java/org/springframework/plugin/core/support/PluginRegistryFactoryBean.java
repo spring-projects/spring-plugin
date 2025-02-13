@@ -15,8 +15,20 @@
  */
 package org.springframework.plugin.core.support;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.PluginRegistry;
@@ -26,8 +38,44 @@ import org.springframework.plugin.core.PluginRegistry;
  *
  * @author Oliver Gierke
  */
-public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends AbstractTypeAwareSupport<T>
-		implements FactoryBean<PluginRegistry<T, S>> {
+public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
+		implements FactoryBean<PluginRegistry<T, S>>, BeanFactoryAware {
+
+	private Collection<Class<?>> exclusions = Collections.emptySet();
+	private @Nullable Class<T> type;
+	private ListableBeanFactory factory;
+
+	/**
+	 * Configures the type of beans to be looked up.
+	 *
+	 * @param type the type to set
+	 */
+	public void setType(Class<T> type) {
+		this.type = type;
+	}
+
+	/**
+	 * Configures the types to be excluded from the lookup.
+	 *
+	 * @param exclusions
+	 */
+	public void setExclusions(Class<?>[] exclusions) {
+		this.exclusions = Arrays.asList(exclusions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
+	 */
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+
+		if (!(beanFactory instanceof ListableBeanFactory factory)) {
+			throw new IllegalArgumentException("Expected a ListableBeanFactory!");
+		}
+
+		this.factory = factory;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -35,7 +83,18 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S> extends AbstractT
 	 */
 	@NonNull
 	public OrderAwarePluginRegistry<T, S> getObject() {
-		return OrderAwarePluginRegistry.of(getBeans());
+
+		var type = this.type;
+
+		if (type == null) {
+			throw new IllegalStateException("No plugin type configured!");
+		}
+
+		Supplier<List<? extends T>> plugins = () -> factory.getBeanProvider(type, false)
+				.stream(Predicate.not(exclusions::contains))
+				.toList();
+
+		return OrderAwarePluginRegistry.of(plugins);
 	}
 
 	/*

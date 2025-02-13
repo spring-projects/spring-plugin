@@ -28,7 +28,6 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
-import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.plugin.core.support.PluginRegistryFactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -63,9 +62,8 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 
 		for (Class<?> type : types) {
 
-			RootBeanDefinition beanDefinition = new RootBeanDefinition(getTargetType(type, PluginRegistryFactoryBean.class));
+			RootBeanDefinition beanDefinition = new RootBeanDefinition(PluginRegistryFactoryBean.class);
 			beanDefinition.setTargetType(getTargetType(type, OrderAwarePluginRegistry.class));
-			beanDefinition.setBeanClass(PluginRegistryFactoryBean.class);
 			beanDefinition.getPropertyValues().addPropertyValue("type", type);
 
 			Qualifier annotation = type.getAnnotation(Qualifier.class);

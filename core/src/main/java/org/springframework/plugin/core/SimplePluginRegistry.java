@@ -31,7 +31,7 @@ import org.springframework.util.Assert;
  *
  * @author Oliver Gierke
  */
-public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport<T, S> {
+class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport<T, S> {
 
 	/**
 	 * Creates a new {@code SimplePluginRegistry}. Will create an empty registry if {@literal null} is provided.
@@ -39,6 +39,10 @@ public class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistry
 	 * @param plugins must not be {@literal null}.
 	 */
 	protected SimplePluginRegistry(List<? extends T> plugins) {
+		super(plugins);
+	}
+
+	protected SimplePluginRegistry(Supplier<List<? extends T>> plugins) {
 		super(plugins);
 	}
 

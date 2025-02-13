@@ -15,12 +15,12 @@
  */
 package org.springframework.plugin.core;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 
 import org.springframework.util.Assert;
+import org.springframework.util.function.SingletonSupplier;
 
 /**
  * Base class for {@link PluginRegistry} implementations. Implements an initialization mechanism triggered on forst
@@ -28,10 +28,9 @@ import org.springframework.util.Assert;
  *
  * @author Oliver Gierke
  */
-public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements PluginRegistry<T, S>, Iterable<T> {
+abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements PluginRegistry<T, S>, Iterable<T> {
 
-	private List<T> plugins;
-	private boolean initialized;
+	private final Supplier<List<T>> plugins;
 
 	/**
 	 * Creates a new {@link PluginRegistrySupport} instance using the given plugins.
@@ -43,8 +42,15 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 
 		Assert.notNull(plugins, "Plugins must not be null!");
 
-		this.plugins = plugins == null ? new ArrayList<>() : (List<T>) plugins;
-		this.initialized = false;
+		this.plugins = SingletonSupplier.of((List<T>) plugins.stream().filter(it -> it != null).toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	protected PluginRegistrySupport(Supplier<List<? extends T>> plugins) {
+
+		this.plugins = () -> (List<T>) plugins.get().stream()
+				.filter(it -> it != null)
+				.toList();
 	}
 
 	/**
@@ -55,29 +61,7 @@ public abstract class PluginRegistrySupport<T extends Plugin<S>, S> implements P
 	 * @return all plugins of the registry
 	 */
 	public List<T> getPlugins() {
-
-		if (!initialized) {
-			this.plugins = initialize(this.plugins);
-			this.initialized = true;
-		}
-
-		return plugins;
-	}
-
-	/**
-	 * Callback to initialize the plugin {@link List}. Will create a defensive copy of the {@link List} to potentially
-	 * unwrap a {@link List} proxy. Will filter {@literal null} values from the source list as well.
-	 *
-	 * @param plugins must not be {@literal null}.
-	 * @return
-	 */
-	protected synchronized List<T> initialize(List<T> plugins) {
-
-		Assert.notNull(plugins, "Plugins must not be null!");
-
-		return plugins.stream() //
-				.filter(it -> it != null) //
-				.collect(Collectors.toList());
+		return plugins.get();
 	}
 
 	/*
