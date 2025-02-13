@@ -17,16 +17,15 @@ package org.springframework.plugin.core.config;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.plugin.core.SamplePlugin;
 import org.springframework.plugin.core.SamplePluginHost;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.plugin.core.SamplePluginImplementation;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -35,28 +34,35 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author Oliver Gierke
  */
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = "classpath:application-context.xml")
 class PluginConfigurationIntegrationTest {
 
-	@Autowired List<SamplePlugin> samplePlugins;
+	@Configuration
+	@EnablePluginRegistries(SamplePlugin.class)
+	static class Config {
 
-	@Autowired @Qualifier("bar") PluginRegistry<SamplePlugin, String> pluginRegistry;
+		@Bean
+		SamplePluginHost samplePluginHost(PluginRegistry<SamplePlugin, String> registry) {
 
-	@Autowired @Qualifier("host") SamplePluginHost host;
+			var host = new SamplePluginHost();
+			host.setRegistry(registry);
 
-	@Autowired @Qualifier("otherHost") SamplePluginHost otherHost;
+			return host;
+		}
 
+		@Bean
+		SamplePluginImplementation samplePluginImplementation() {
+			return new SamplePluginImplementation();
+		}
+	}
+
+	@Autowired PluginRegistry<SamplePlugin, String> pluginRegistry;
+	@Autowired SamplePluginHost host;
 	@Autowired SamplePlugin plugin;
 
 	@Test
 	void test() throws Exception {
 
-		assertThat(samplePlugins).isNotNull();
-
 		assertThat(pluginRegistry).isSameAs(host.getRegistry());
-		assertThat(pluginRegistry).isNotSameAs(otherHost.getRegistry());
-
-		assertThat(samplePlugins).contains(plugin);
 		assertThat(pluginRegistry).contains(plugin);
 	}
 }

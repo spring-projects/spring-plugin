@@ -1,4 +1,0 @@
-# Tooling related information for the Spring Plugin namespace
-http\://www.springframework.org/schema/plugin@name=Spring Plugin Namespace
-http\://www.springframework.org/schema/plugin@prefix=plugin
-http\://www.springframework.org/schema/plugin@icon=org/springframework/beans/factory/xml/spring-beans.gif
