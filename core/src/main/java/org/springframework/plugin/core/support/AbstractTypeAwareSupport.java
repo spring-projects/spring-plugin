@@ -20,11 +20,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -219,10 +218,10 @@ public abstract class AbstractTypeAwareSupport<T>
 
 		private Collection<Object> getBeansOfTypeExcept(Class<?> type, Collection<Class<?>> exceptions) {
 
-			return Arrays.stream(context.getBeanNamesForType(type, false, eagerInit)) //
-					.filter(it -> !exceptions.contains(context.getType(it))) //
-					.map(it -> context.getBean(it)) //
-					.collect(Collectors.toList());
+			return context.getBeanProvider(type, eagerInit)
+					.stream(Predicate.not(exceptions::contains))
+					.map(Object.class::cast)
+					.toList();
 		}
 	}
 }
