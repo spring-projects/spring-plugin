@@ -40,7 +40,6 @@
 
 	<modules>
 		<module>core</module>
-		<module>metadata</module>
 	</modules>
 
 	<properties>
