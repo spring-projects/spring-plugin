@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<assertj.version>3.23.1</assertj.version>
+		<assertj.version>3.27.3</assertj.version>
 		<errorprone.version>2.36.0</errorprone.version>
 		<junit.version>5.9.1</junit.version>
 		<logback.version>1.4.4</logback.version>
