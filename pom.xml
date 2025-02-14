@@ -46,10 +46,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<assertj.version>3.23.1</assertj.version>
+		<errorprone.version>2.36.0</errorprone.version>
 		<junit.version>5.9.1</junit.version>
 		<logback.version>1.4.4</logback.version>
 		<mockito.version>4.9.0</mockito.version>
+		<nullaway.version>0.12.3</nullaway.version>
 		<spring.version>7.0.0-SNAPSHOT</spring.version>
+		<source.level>17</source.level>
 		<slf4j.version>2.0.3</slf4j.version>
 
 		<artifactory-maven-plugin.version>3.4.0</artifactory-maven-plugin.version>
@@ -187,6 +190,65 @@
 			</distributionManagement>
 		</profile>
 
+		<profile>
+			<id>nullaway</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<release>${source.level}</release>
+							<showWarnings>true</showWarnings>
+							<annotationProcessorPaths>
+								<path>
+									<groupId>com.google.errorprone</groupId>
+									<artifactId>error_prone_core</artifactId>
+									<version>${errorprone.version}</version>
+								</path>
+								<path>
+									<groupId>com.uber.nullaway</groupId>
+									<artifactId>nullaway</artifactId>
+									<version>${nullaway.version}</version>
+								</path>
+							</annotationProcessorPaths>
+						</configuration>
+						<executions>
+							<execution>
+								<id>default-compile</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>default-testCompile</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>java-compile</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+								<configuration>
+								<compilerArgs>
+									<arg>-XDcompilePolicy=simple</arg>
+									<arg>--should-stop=ifError=FLOW</arg>
+									<arg>-Xplugin:ErrorProne -XepDisableAllChecks -Xep:NullAway:ERROR -XepOpt:NullAway:OnlyNullMarked=true -XepOpt:NullAway:CustomContractAnnotations=org.springframework.lang.Contract</arg>
+								</compilerArgs>
+								</configuration>
+							</execution>
+							<execution>
+								<id>java-test-compile</id>
+								<phase>test-compile</phase>
+								<goals>
+									<goal>testCompile</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 	<dependencies>
@@ -226,6 +288,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>

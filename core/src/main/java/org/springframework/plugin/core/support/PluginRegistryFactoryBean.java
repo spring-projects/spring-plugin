@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -30,8 +32,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.PluginRegistry;
@@ -46,7 +46,7 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
 
 	private Collection<Class<?>> exclusions = Collections.emptySet();
 	private @Nullable Class<T> type;
-	private ListableBeanFactory factory;
+	private @Nullable ListableBeanFactory factory;
 
 	/**
 	 * Configures the type of beans to be looked up.
@@ -101,6 +101,12 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
 
 		if (type == null) {
 			throw new IllegalStateException("No plugin type configured!");
+		}
+
+		var factory = this.factory;
+
+		if (factory == null) {
+			throw new IllegalStateException("No ListableBeanFactory configured!");
 		}
 
 		Supplier<List<? extends T>> plugins = () -> factory.getBeanProvider(type, false)

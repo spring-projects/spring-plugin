@@ -17,6 +17,7 @@ package org.springframework.plugin.core.config;
 
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,7 +59,12 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 			return;
 		}
 
+		@Nullable
 		Class<?>[] types = (Class<?>[]) annotationAttributes.get("value");
+
+		if (types == null) {
+			return;
+		}
 
 		for (Class<?> type : types) {
 
