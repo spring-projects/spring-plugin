@@ -23,10 +23,7 @@ jobs:
         java-version: 23
         cache: 'maven'
 
-    - name: Build with Maven
-      run: ./mvnw -B clean verify
-
-    - name: Deploy to Artifactory
+    - name: Build and deploy to Artifactory
       env:
         ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
         ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
