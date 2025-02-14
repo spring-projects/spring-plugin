@@ -26,7 +26,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
@@ -39,7 +42,7 @@ import org.springframework.plugin.core.PluginRegistry;
  * @author Oliver Gierke
  */
 public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
-		implements FactoryBean<PluginRegistry<T, S>>, BeanFactoryAware {
+		implements FactoryBean<PluginRegistry<T, S>>, BeanFactoryAware, ApplicationContextAware, InitializingBean {
 
 	private Collection<Class<?>> exclusions = Collections.emptySet();
 	private @Nullable Class<T> type;
@@ -77,6 +80,16 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
 		this.factory = factory;
 	}
 
+	/**
+	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
+	 * @deprecated since 4.0, in favor of {@link #setBeanFactory(BeanFactory)}.
+	 */
+	@Override
+	@Deprecated
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		setBeanFactory(applicationContext);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
@@ -112,5 +125,15 @@ public class PluginRegistryFactoryBean<T extends Plugin<S>, S>
 	 */
 	public boolean isSingleton() {
 		return true;
+	}
+
+	/**
+	 * @see InitializingBean#afterPropertiesSet()
+	 * @deprecated since 4.0, not needed anymore.
+	 */
+	@Override
+	@Deprecated
+	public void afterPropertiesSet() {
+		// Only here for backwards-compatibility
 	}
 }
