@@ -74,28 +74,6 @@ class SimplePluginRegistry<T extends Plugin<S>, S> extends PluginRegistrySupport
 		return new SimplePluginRegistry<>(plugins);
 	}
 
-	/**
-	 * Creates a new {@link SimplePluginRegistry}.
-	 *
-	 * @return
-	 * @deprecated use {@link #empty()} instead.
-	 */
-	@Deprecated
-	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create() {
-		return of(Collections.<T> emptyList());
-	}
-
-	/**
-	 * Creates a new {@link SimplePluginRegistry} with the given {@link Plugin} s.
-	 *
-	 * @return
-	 * @deprecated use {@link #of(List)} instead.
-	 */
-	@Deprecated
-	public static <S, T extends Plugin<S>> SimplePluginRegistry<T, S> create(List<? extends T> plugins) {
-		return new SimplePluginRegistry<>(plugins);
-	}
-
 	/* (non-Javadoc)
 	 * @see org.springframework.plugin.core.PluginRegistrySupport#getPlugins()
 	 */

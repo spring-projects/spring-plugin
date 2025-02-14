@@ -37,7 +37,7 @@ import org.springframework.plugin.core.Plugin;
 import org.springframework.plugin.core.PluginRegistry;
 
 /**
- * {@link FactoryBean} to create {@link PluginRegistry} instances. Wraps a {@link BeanListFactoryBean}.
+ * {@link FactoryBean} to create {@link PluginRegistry} instances.
  *
  * @author Oliver Gierke
  */
