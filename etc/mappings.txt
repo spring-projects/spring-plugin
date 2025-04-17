@@ -1,0 +1,4 @@
+junit=JUnit
+logback=Logback
+mockito=Mockito
+slf4j=Slf4j
