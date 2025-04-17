@@ -48,7 +48,7 @@
 		<assertj.version>3.27.3</assertj.version>
 		<errorprone.version>2.36.0</errorprone.version>
 		<junit.version>5.12.2</junit.version>
-		<logback.version>1.5.16</logback.version>
+		<logback.version>1.5.18</logback.version>
 		<mockito.version>5.15.2</mockito.version>
 		<nullaway.version>0.12.3</nullaway.version>
 		<spring.version>7.0.0-M2</spring.version>
