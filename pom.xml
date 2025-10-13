@@ -46,11 +46,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<assertj.version>3.27.3</assertj.version>
-		<errorprone.version>2.36.0</errorprone.version>
+		<errorprone.version>2.42.0</errorprone.version>
 		<junit.version>6.0.0</junit.version>
 		<logback.version>1.5.19</logback.version>
 		<mockito.version>5.20.0</mockito.version>
-		<nullaway.version>0.12.3</nullaway.version>
+		<nullaway.version>0.12.10</nullaway.version>
 		<spring.version>7.0.0-M4</spring.version>
 		<source.level>17</source.level>
 		<slf4j.version>2.0.17</slf4j.version>
