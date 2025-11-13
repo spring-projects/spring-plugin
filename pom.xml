@@ -47,7 +47,7 @@
 
 		<assertj.version>3.27.6</assertj.version>
 		<errorprone.version>2.42.0</errorprone.version>
-		<junit.version>6.0.0</junit.version>
+		<junit.version>6.0.1</junit.version>
 		<logback.version>1.5.19</logback.version>
 		<mockito.version>5.20.0</mockito.version>
 		<nullaway.version>0.12.10</nullaway.version>
