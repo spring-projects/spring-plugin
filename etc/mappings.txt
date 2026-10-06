@@ -4,4 +4,3 @@ logback=Logback
 mockito=Mockito
 nullaway=NullAway
 slf4j=Slf4j
-spring=Spring Framework

@@ -54,7 +54,7 @@
 		<logback.version>1.6.3</logback.version>
 		<mockito.version>5.23.0</mockito.version>
 		<nullaway.version>0.12.10</nullaway.version>
-		<spring.version>7.1.0-M2</spring.version>
+		<spring-framework.version>7.1.0-M2</spring-framework.version>
 		<source.level>17</source.level>
 		<slf4j.version>2.0.18</slf4j.version>
 
