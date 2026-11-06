@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.plugin</groupId>
 	<artifactId>spring-plugin</artifactId>
@@ -54,7 +53,7 @@
 		<logback.version>1.6.3</logback.version>
 		<mockito.version>5.23.0</mockito.version>
 		<nullaway.version>0.12.10</nullaway.version>
-		<spring-framework.version>7.1.0-RC1</spring-framework.version>
+		<spring-framework.version>7.1.0-SNAPSHOT</spring-framework.version>
 		<source.level>17</source.level>
 		<slf4j.version>2.0.18</slf4j.version>
 
