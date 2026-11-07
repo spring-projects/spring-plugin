@@ -29,6 +29,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.Plugin;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.plugin.core.support.PluginRegistryFactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -39,6 +40,7 @@ import org.springframework.util.StringUtils;
  * to the bean definition for the factory.
  *
  * @author Oliver Gierke
+ * @author Gabriel Hall
  */
 public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
@@ -67,36 +69,46 @@ public class PluginRegistriesBeanDefinitionRegistrar implements ImportBeanDefini
 		}
 
 		for (Class<?> type : types) {
-
-			RootBeanDefinition beanDefinition = new RootBeanDefinition(PluginRegistryFactoryBean.class);
-			beanDefinition.setTargetType(getTargetType(type, OrderAwarePluginRegistry.class));
-			beanDefinition.getPropertyValues().addPropertyValue("type", type);
-
-			Qualifier annotation = type.getAnnotation(Qualifier.class);
-
-			// If the plugin interface has a Qualifier annotation, propagate that to the bean definition of the registry
-			if (annotation != null) {
-				AutowireCandidateQualifier qualifierMetadata = new AutowireCandidateQualifier(Qualifier.class);
-				qualifierMetadata.setAttribute(AutowireCandidateQualifier.VALUE_KEY, annotation.value());
-				beanDefinition.addQualifier(qualifierMetadata);
-			}
-
-			// Default
-			String beanName = annotation == null //
-					? StringUtils.uncapitalize(type.getSimpleName() + "Registry") //
-					: annotation.value();
-
-			registry.registerBeanDefinition(beanName, beanDefinition);
+			registerPluginRegistry(type, registry);
 		}
+	}
+
+	/**
+	 * Registers a {@link PluginRegistryFactoryBean} for the given plugin type.
+	 *
+	 * @param type the plugin type to register.
+	 * @param registry the bean definition registry.
+	 */
+	public static void registerPluginRegistry(Class<?> type, BeanDefinitionRegistry registry) {
+
+		RootBeanDefinition beanDefinition = new RootBeanDefinition(PluginRegistryFactoryBean.class);
+		beanDefinition.setTargetType(getTargetType(type, OrderAwarePluginRegistry.class));
+		beanDefinition.getPropertyValues().addPropertyValue("type", type);
+
+		Qualifier annotation = type.getAnnotation(Qualifier.class);
+
+		// If the plugin interface has a Qualifier annotation, propagate that to the bean definition of the registry
+		if (annotation != null) {
+			AutowireCandidateQualifier qualifierMetadata = new AutowireCandidateQualifier(Qualifier.class);
+			qualifierMetadata.setAttribute(AutowireCandidateQualifier.VALUE_KEY, annotation.value());
+			beanDefinition.addQualifier(qualifierMetadata);
+		}
+
+		String beanName = annotation == null //
+				? StringUtils.uncapitalize(type.getSimpleName() + "Registry") //
+				: annotation.value();
+
+		registry.registerBeanDefinition(beanName, beanDefinition);
 	}
 
 	/**
 	 * Returns the target type of the {@link PluginRegistry} for the given plugin type.
 	 *
-	 * @param pluginType must not be {@literal null}.
-	 * @return
+	 * @param pluginClass must not be {@literal null}.
+	 * @param wrapper the registry implementation type.
+	 * @return the registry target type.
 	 */
-	private static ResolvableType getTargetType(Class<?> pluginClass, Class<?> wrapper) {
+	public static ResolvableType getTargetType(Class<?> pluginClass, Class<?> wrapper) {
 
 		Assert.notNull(pluginClass, "Plugin type must not be null!");
 
